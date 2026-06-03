@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Afterthought — A Design &amp; Creative Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=JetBrains+Mono:wght@300..800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+<style>
+  /* Home-only tweaks */
+  .home-hero { padding-top: 88px; padding-bottom: 64px; }
+  .home-hero__title { max-width: 1100px; margin-bottom: 48px; }
+  .home-hero__title em { font-family: var(--font-serif); font-style: italic; font-weight: 400; letter-spacing: -2px; }
+  .home-hero__meta { margin-top: 40px; padding-top: 28px; border-top: 1px solid var(--c-hairline); display: flex; align-items: flex-end; justify-content: space-between; gap: 32px; flex-wrap: wrap; }
+  .home-hero__lead { max-width: 460px; }
+  .home-hero__lead .caption { color: var(--c-ink); opacity: 0.55; margin-bottom: 12px; display: block; }
+  .home-hero__cta-row { display: flex; gap: 12px; flex-wrap: wrap; }
+
+  /* Section bridge text (between work and capabilities) */
+  .bridge {
+    padding: 96px 0 32px;
+    max-width: 900px;
+  }
+  .bridge .caption { color: var(--c-ink); opacity: 0.55; margin-bottom: 16px; display: block; }
+
+  /* Numbers (navy) */
+  .numbers-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px; margin-top: 40px; }
+  .number { border-top: 1px solid rgba(255,255,255,0.20); padding-top: 22px; }
+  .number__value { font-size: clamp(64px, 8vw, 96px); line-height: 1; letter-spacing: -2px; font-variation-settings: "wght" 340; font-weight: 340; }
+  .number__value sup { font-size: 0.4em; font-variation-settings: "wght" 480; font-weight: 480; vertical-align: super; opacity: 0.75; margin-left: 6px; }
+  .number__label { margin-top: 18px; font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.8px; text-transform: uppercase; opacity: 0.70; }
+  .numbers-foot { margin-top: 56px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 24px; padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.20); }
+
+  /* Capabilities preview */
+  .capabilities { display: grid; grid-template-columns: minmax(0, 480px) 1fr; gap: 80px; align-items: flex-start; }
+  .capabilities__intro .cb-title { font-size: 56px; line-height: 1.05; letter-spacing: -1.20px; font-variation-settings: "wght" 340; font-weight: 340; }
+
+  /* Latest thinking strip */
+  .thinking-strip { margin-top: 48px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  .think-card { background: var(--c-canvas); border-radius: var(--r-md); padding: 24px; text-decoration: none; color: var(--c-ink); display: flex; flex-direction: column; justify-content: space-between; min-height: 320px; transition: transform .2s ease; }
+  .think-card:hover { transform: translateY(-3px); }
+  .think-card__top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+  .think-card__cat { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.8px; text-transform: uppercase; opacity: 0.55; }
+  .think-card__date { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.8px; opacity: 0.45; }
+  .think-card__title { font-size: 24px; line-height: 1.20; letter-spacing: -0.40px; font-variation-settings: "wght" 480; font-weight: 480; margin-bottom: 16px; }
+  .think-card__desc { font-size: 15px; opacity: 0.75; line-height: 1.5; }
+  .think-card__cta { margin-top: 24px; display: inline-flex; align-items: center; gap: 8px; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.8px; text-transform: uppercase; }
+
+  /* Contact teaser (lilac) */
+  .contact-block { padding: 96px 80px; }
+  .contact-block__grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 64px; align-items: flex-start; }
+  .contact-block__title { font-size: clamp(56px, 7vw, 96px); line-height: 1.00; letter-spacing: -2.0px; font-variation-settings: "wght" 340; font-weight: 340; }
+  .contact-block__title em { font-family: var(--font-serif); font-style: italic; font-weight: 400; }
+  .contact-block__sub { margin-top: 32px; max-width: 480px; }
+  .contact-block__cta { margin-top: 40px; display: flex; gap: 12px; flex-wrap: wrap; }
+  .contact-meta { border-top: 1px solid rgba(0,0,0,0.25); padding-top: 24px; display: flex; flex-direction: column; gap: 24px; }
+  .contact-meta__row { display: flex; align-items: flex-start; gap: 16px; }
+  .contact-meta__row .caption { width: 80px; opacity: 0.55; }
+  .contact-meta__row a { color: var(--c-ink); text-decoration: none; border-bottom: 1px solid rgba(0,0,0,0.4); padding-bottom: 1px; font-size: 18px; font-variation-settings: "wght" 420; font-weight: 420; }
+
+  @media (max-width: 960px) {
+    .capabilities { grid-template-columns: 1fr; gap: 48px; }
+    .numbers-grid { grid-template-columns: repeat(2, 1fr); }
+    .thinking-strip { grid-template-columns: 1fr; }
+    .contact-block__grid { grid-template-columns: 1fr; }
+    .contact-block { padding: 64px 32px; }
+  }
+  @media (max-width: 560px) {
+    .numbers-grid { grid-template-columns: 1fr 1fr; }
+    .home-hero__cta-row { width: 100%; }
+    .home-hero__cta-row .btn { flex: 1; }
+  }
+</style>
+</head>
+<body>
+<div id="at-curtain" aria-hidden="true"></div>
+<div id="at-cursor-dot" aria-hidden="true"></div>
+<div id="at-cursor-ring" aria-hidden="true"></div>
+
+
+<!-- NAV -->
+<nav class="top-nav" aria-label="Primary">
+  <div class="top-nav__inner">
+    <a href="index.html" class="wordmark" aria-label="Afterthought home">
+      <span class="dot" aria-hidden="true"></span>
+      <span>Afterthought</span>
+    </a>
+    <ul class="nav-links" role="list">
+      <li><a class="nav-link" href="work.html">Work</a></li>
+      <li><a class="nav-link" href="studio.html">Studio</a></li>
+      <li><a class="nav-link" href="thinking.html">Thinking</a></li>
+      <li><a class="nav-link" href="contact.html">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- MARQUEE -->
+<div class="marquee" aria-hidden="true">
+  <div class="marquee__track">
+    <span class="marquee__item">Now reading briefs for Autumn 2026 — Currently with Sundial, Helio, Northgate &amp; The Library Forum — Studios in New York and Lisbon — Open hires, two — Now reading briefs for Autumn 2026 — Currently with Sundial, Helio, Northgate &amp; The Library Forum — Studios in New York and Lisbon — Open hires, two</span>
+    <span class="marquee__item">Now reading briefs for Autumn 2026 — Currently with Sundial, Helio, Northgate &amp; The Library Forum — Studios in New York and Lisbon — Open hires, two — Now reading briefs for Autumn 2026 — Currently with Sundial, Helio, Northgate &amp; The Library Forum — Studios in New York and Lisbon — Open hires, two</span>
+  </div>
+</div>
+
+<!-- HERO -->
+<header class="home-hero">
+  <div class="container">
+    <div class="page-head__eyebrow eyebrow">
+      <span class="pulse" aria-hidden="true"></span>
+      <span>Independent design &amp; creative studio — Est. 2014 — NY · LX</span>
+    </div>
+    <h1 class="display-xl home-hero__title">
+      We make the second&nbsp;thoughts that brands wish they'd had <em>first</em>.
+    </h1>
+    <div class="home-hero__meta">
+      <div class="home-hero__lead">
+        <span class="caption">What we do</span>
+        <p class="body-lg">A multidisciplinary studio building identities, products and campaigns for founders, institutions, and the occasional well-meaning monopoly.</p>
+      </div>
+      <div class="home-hero__cta-row">
+        <a class="btn btn-primary" href="contact.html">Start a project</a>
+        <a class="btn btn-secondary" href="work.html">See selected work →</a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- CLIENT MOSAIC -->
+<section class="container">
+  <div class="clients">
+    <div class="clients__head">
+      <span class="caption">A short list of friends, past and present</span>
+      <a class="caption" href="work.html" style="color: var(--c-ink); text-decoration: none; border-bottom: 1px solid var(--c-ink); padding-bottom: 2px;">See full archive →</a>
+    </div>
+    <div class="clients__grid">
+      <div class="clients__item">Helio</div>
+      <div class="clients__item">Sundial &amp; Co.</div>
+      <div class="clients__item">Marina Pacific</div>
+      <div class="clients__item">Querida</div>
+      <div class="clients__item">Bookbinder Press</div>
+      <div class="clients__item">Northgate AC</div>
+      <div class="clients__item">Glasshouse</div>
+      <div class="clients__item">The Library Forum</div>
+      <div class="clients__item">Heron Bank</div>
+      <div class="clients__item">Field Notes Lab</div>
+      <div class="clients__item">Parallel Coffee</div>
+      <div class="clients__item">Atlas Civic</div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURED WORK -->
+<section class="container section">
+  <div class="section-head">
+    <div class="section-head__left">
+      <span class="caption">Featured — 2025 / 2026</span>
+      <h2 class="display-lg section-head__title">A small number of careful things.</h2>
+    </div>
+    <div class="section-head__right">
+      <p class="body-sm">We take on roughly twelve engagements a year. Four from the most recent cycle.</p>
+    </div>
+  </div>
+
+  <div class="work-grid">
+
+    <!-- Helio -->
+    <a class="tile tile--lime tile-wide" href="case-helio.html" aria-label="Helio case study">
+      <div class="tile__visual">
+        <div class="vis-helio">
+          <div class="vis-helio__left">
+            <div class="vis-helio__caption"><span>Naming · Identity · Web</span><span>2025</span></div>
+            <div class="vis-helio__line"></div>
+            <div class="vis-helio__wordmark">Helio</div>
+            <div class="vis-helio__line"></div>
+            <div class="vis-helio__caption"><span>A climate-tech holding company</span><span>R0 — R3</span></div>
+          </div>
+          <div class="vis-helio__right">
+            <div class="vis-helio__sun" aria-hidden="true"></div>
+          </div>
+        </div>
+      </div>
+      <div class="tile__meta">
+        <div class="tile__title-block">
+          <span class="caption">Case 001 / Helio</span>
+          <div class="tile__title">From a brief about heat pumps to a brand about hope.</div>
+        </div>
+        <div class="tile__tags">
+          <span class="tile__tag">Identity</span>
+          <span class="tile__tag">Naming</span>
+          <span class="tile__tag">Web</span>
+        </div>
+      </div>
+    </a>
+
+    <!-- Marina Pacific -->
+    <a class="tile tile--cream" href="work.html#marina" aria-label="Marina Pacific case study">
+      <div class="tile__visual">
+        <div class="vis-marina">
+          <div class="vis-marina__small">Est. MCMXIV — Sea &amp; Suite</div>
+          <div class="vis-marina__mark">Marina Pacific</div>
+          <div class="vis-marina__rule"></div>
+          <div class="vis-marina__monogram">M&nbsp;·&nbsp;P</div>
+          <div class="vis-marina__small">A hotel of small consequence</div>
+        </div>
+      </div>
+      <div class="tile__meta">
+        <div class="tile__title-block">
+          <span class="caption">Case 002 / Marina Pacific</span>
+          <div class="tile__title">A century-old hotel, re-introduced.</div>
+        </div>
+        <div class="tile__tags">
+          <span class="tile__tag">Hospitality</span>
+          <span class="tile__tag">Wordmark</span>
+        </div>
+      </div>
+    </a>
+
+    <!-- Querida -->
+    <a class="tile tile--coral" href="work.html#querida" aria-label="Querida case study">
+      <div class="tile__visual">
+        <div class="vis-querida">
+          <div class="vis-querida__name">Querida</div>
+          <div class="vis-querida__menu" aria-hidden="true">
+            <div class="vis-querida__menu-row"><span>Pan con tomate</span><span class="dots"></span><span>06</span></div>
+            <div class="vis-querida__menu-row"><span>Boquerones, sherry</span><span class="dots"></span><span>09</span></div>
+            <div class="vis-querida__menu-row"><span>Tortilla, dressed leaves</span><span class="dots"></span><span>11</span></div>
+            <div class="vis-querida__menu-row"><span>Almond cake, citrus</span><span class="dots"></span><span>08</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="tile__meta">
+        <div class="tile__title-block">
+          <span class="caption">Case 003 / Querida</span>
+          <div class="tile__title">A neighbourhood place that takes itself seriously, but only just.</div>
+        </div>
+        <div class="tile__tags">
+          <span class="tile__tag">Restaurant</span>
+          <span class="tile__tag">Menu</span>
+        </div>
+      </div>
+    </a>
+
+    <!-- The Library Forum -->
+    <a class="tile tile--lilac tile-wide" href="work.html#library" aria-label="The Library Forum case study">
+      <div class="tile__visual">
+        <div class="vis-library" aria-hidden="true">
+          <div class="vis-library__row"><span>The Library Forum</span><span>Volume XII</span></div>
+          <div class="vis-library__rule"></div>
+          <div class="vis-library__row italic"><span><em>An evening on lateness</em></span><span>Thu · 19:30</span></div>
+          <div class="vis-library__rule"></div>
+          <div class="vis-library__row italic"><span><em>A reading by the printer</em></span><span>Sat · 16:00</span></div>
+          <div class="vis-library__rule"></div>
+          <div class="vis-library__row"><span>Programme &amp; tickets</span><span>members &amp; guests</span></div>
+        </div>
+      </div>
+      <div class="tile__meta">
+        <div class="tile__title-block">
+          <span class="caption">Case 007 / The Library Forum</span>
+          <div class="tile__title">An identity for a 96-year-old reading room with new opinions.</div>
+        </div>
+        <div class="tile__tags">
+          <span class="tile__tag">Cultural</span>
+          <span class="tile__tag">Editorial</span>
+          <span class="tile__tag">Web</span>
+        </div>
+      </div>
+    </a>
+
+  </div>
+
+  <div style="margin-top: 48px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 24px;">
+    <p class="body-sm" style="max-width: 480px; opacity: 0.7;">A longer archive — including the bits we don't show on the home page — lives in the studio index.</p>
+    <a class="btn btn-secondary" href="work.html">Open the full index →</a>
+  </div>
+</section>
+
+<!-- CAPABILITIES (LIME) -->
+<section class="container" style="padding-bottom: var(--s-section);">
+  <div class="color-block color-block--lime">
+    <span class="eyebrow cb-eyebrow">What we make</span>
+    <div class="capabilities">
+      <div class="capabilities__intro">
+        <h2 class="cb-title">Seven things, more or less, done with attention.</h2>
+        <p class="body-lg" style="max-width: 460px;">We're a small group of designers, writers, and one stubborn strategist. We don't have a "department." We have a desk, and a long list of people we trust when the work outgrows it.</p>
+        <a class="btn btn-primary" href="studio.html#capabilities" style="margin-top: 32px;">How we work →</a>
+      </div>
+      <ul class="cap-list">
+        <li class="cap-list__item"><span class="cap-list__num">01</span><span class="cap-list__name">Brand identity &amp; strategy</span><span class="cap-list__details">Lead · Verbal · Visual</span></li>
+        <li class="cap-list__item"><span class="cap-list__num">02</span><span class="cap-list__name">Naming &amp; verbal identity</span><span class="cap-list__details">Names · Voice · Stories</span></li>
+        <li class="cap-list__item"><span class="cap-list__num">03</span><span class="cap-list__name">Packaging &amp; retail systems</span><span class="cap-list__details">CPG · Hospitality</span></li>
+        <li class="cap-list__item"><span class="cap-list__num">04</span><span class="cap-list__name">Digital product design</span><span class="cap-list__details">Web · iOS · Tools</span></li>
+        <li class="cap-list__item"><span class="cap-list__num">05</span><span class="cap-list__name">Editorial &amp; publication</span><span class="cap-list__details">Book · Annual · Catalog</span></li>
+        <li class="cap-list__item"><span class="cap-list__num">06</span><span class="cap-list__name">Campaigns &amp; creative direction</span><span class="cap-list__details">Launch · Brand films · OOH</span></li>
+        <li class="cap-list__item"><span class="cap-list__num">07</span><span class="cap-list__name">Custom typefaces, when asked</span><span class="cap-list__details">Display · Wordmark · Mono</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- NUMBERS (NAVY) -->
+<section class="container" style="padding-bottom: var(--s-section);">
+  <div class="color-block color-block--navy">
+    <span class="eyebrow cb-eyebrow">By the numbers</span>
+    <h2 class="cb-title display-lg">Twelve years, kept small on purpose.</h2>
+    <p class="body-lg cb-body" style="opacity: 0.85;">Afterthought has been independent since 2014. We've grown about as much as we ever plan to — a single studio across two cities, a dependable shortlist of collaborators, and a calendar we don't break.</p>
+    <div class="numbers-grid">
+      <div class="number"><div class="number__value">12</div><div class="number__label">Years independent</div></div>
+      <div class="number"><div class="number__value">240<sup>+</sup></div><div class="number__label">Projects shipped</div></div>
+      <div class="number"><div class="number__value">17</div><div class="number__label">Countries the work has gone</div></div>
+      <div class="number"><div class="number__value">14</div><div class="number__label">People on the desk today</div></div>
+    </div>
+    <div class="numbers-foot">
+      <span class="caption" style="opacity: 0.7;">Studios — New York · Lisbon</span>
+      <a class="btn btn-secondary-dark" href="studio.html">Meet the studio →</a>
+    </div>
+  </div>
+</section>
+
+<!-- LATEST THINKING -->
+<section class="container section">
+  <div class="section-head">
+    <div class="section-head__left">
+      <span class="caption">Notes from the desk — recently</span>
+      <h2 class="display-lg section-head__title">We're slow writers. Here are the latest three.</h2>
+    </div>
+    <div class="section-head__right">
+      <a class="btn btn-secondary" href="thinking.html">All journal entries →</a>
+    </div>
+  </div>
+  <div class="thinking-strip">
+    <a class="think-card" href="thinking.html#brief">
+      <div>
+        <div class="think-card__top"><span class="think-card__cat">Essay · 9 min</span><span class="think-card__date">04 / 26</span></div>
+        <h3 class="think-card__title">The brief is always wrong, and that's the part of the job we love most.</h3>
+        <p class="think-card__desc">A short defence of the first month, the one nobody schedules for, and what we do with it.</p>
+      </div>
+      <span class="think-card__cta">Read the essay →</span>
+    </a>
+    <a class="think-card" href="thinking.html#wordmark">
+      <div>
+        <div class="think-card__top"><span class="think-card__cat">Process · 6 min</span><span class="think-card__date">02 / 26</span></div>
+        <h3 class="think-card__title">On making a wordmark you'll still like in eleven years.</h3>
+        <p class="think-card__desc">Drawn from the Marina Pacific re-launch — how we settle on a single letterform when there are four good ones.</p>
+      </div>
+      <span class="think-card__cta">Read the post →</span>
+    </a>
+    <a class="think-card" href="thinking.html#rebrand">
+      <div>
+        <div class="think-card__top"><span class="think-card__cat">Opinion · 4 min</span><span class="think-card__date">11 / 25</span></div>
+        <h3 class="think-card__title">A modest argument against rebrands.</h3>
+        <p class="think-card__desc">Most brands we meet need a quieter, slower thing than the one they came in asking for.</p>
+      </div>
+      <span class="think-card__cta">Read the note →</span>
+    </a>
+  </div>
+</section>
+
+<!-- CONTACT (LILAC) -->
+<section class="container" style="padding-bottom: var(--s-section);">
+  <div class="color-block color-block--lilac contact-block">
+    <span class="eyebrow cb-eyebrow">Get in touch — Autumn 2026 reading</span>
+    <div class="contact-block__grid">
+      <div>
+        <h2 class="contact-block__title">Tell us the thing you keep <em>almost</em> saying out loud.</h2>
+        <p class="contact-block__sub body-lg">If you've been circling a brief for a while, this is usually the right time. We read every note. We answer within a week — sometimes with a meeting, sometimes with a short, honest "not us, but try them."</p>
+        <div class="contact-block__cta">
+          <a class="btn btn-primary" href="contact.html">Open the contact page →</a>
+          <a class="btn btn-magenta" href="mailto:hello@afterthought.studio">Send a note · hello@afterthought.studio</a>
+        </div>
+      </div>
+      <div class="contact-meta">
+        <div class="contact-meta__row"><span class="caption">New work</span><a href="mailto:hello@afterthought.studio">hello@afterthought.studio</a></div>
+        <div class="contact-meta__row"><span class="caption">Press</span><a href="mailto:press@afterthought.studio">press@afterthought.studio</a></div>
+        <div class="contact-meta__row"><span class="caption">Careers</span><a href="contact.html#careers">Two open hires</a></div>
+        <div class="contact-meta__row"><span class="caption">New York</span><a href="#">132 Crosby St, 4F · NY 10012</a></div>
+        <div class="contact-meta__row"><span class="caption">Lisbon</span><a href="#">R. da Boavista 84 · 1200-067</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer__inner">
+    <div class="footer__wordmark">After<em>thought</em>.</div>
+    <div class="footer__cols">
+      <div class="footer__col footer__about">
+        <h5>The studio</h5>
+        <p>Afterthought is an independent design and creative studio in New York and Lisbon. We work with founders, institutions, and the occasional well-meaning monopoly on brand identity, naming, packaging, and digital product.</p>
+        <p>We take on roughly twelve engagements a year. New work for Autumn 2026 is open until the end of summer.</p>
+      </div>
+      <div class="footer__col">
+        <h5>Work</h5>
+        <ul>
+          <li><a href="work.html">Selected</a></li>
+          <li><a href="work.html#archive">Archive</a></li>
+          <li><a href="studio.html#capabilities">Capabilities</a></li>
+          <li><a href="work.html#clients">Clients</a></li>
+        </ul>
+      </div>
+      <div class="footer__col">
+        <h5>Studio</h5>
+        <ul>
+          <li><a href="studio.html">About</a></li>
+          <li><a href="studio.html#team">Team</a></li>
+          <li><a href="contact.html#careers">Careers (2)</a></li>
+          <li><a href="studio.html#process">Process</a></li>
+        </ul>
+      </div>
+      <div class="footer__col">
+        <h5>Thinking</h5>
+        <ul>
+          <li><a href="thinking.html">Journal</a></li>
+          <li><a href="thinking.html#talks">Talks</a></li>
+          <li><a href="studio.html#press">Press</a></li>
+          <li><a href="thinking.html#newsletter">Newsletter</a></li>
+        </ul>
+      </div>
+      <div class="footer__col">
+        <h5>Connect</h5>
+        <ul>
+          <li><a href="mailto:hello@afterthought.studio">Email</a></li>
+          <li><a href="#">Instagram</a></li>
+          <li><a href="#">Are.na</a></li>
+          <li><a href="#">LinkedIn</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <span>© 2026 Afterthought Studio LLC</span>
+      <span>NY · LX — Made on second thought.</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Mark current nav item
+  (function() {
+    const path = location.pathname.split('/').pop() || 'index.html';
+    document.querySelectorAll('.nav-link').forEach(a => {
+      if (a.getAttribute('href') === path) a.setAttribute('aria-current', 'page');
+    });
+  })();
+</script>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="animations.js"></script>
+</body>
+</html>

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Thinking — Afterthought</title>
+<meta name="description" content="The Afterthought journal — slow essays from the desk." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=JetBrains+Mono:wght@300..800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+<link rel="icon" type="image/png" href="assets/favicon.png" />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<div id="at-curtain" aria-hidden="true"></div>
+<div id="at-cursor-dot" aria-hidden="true"></div>
+<div id="at-cursor-ring" aria-hidden="true"></div>
+
+
+<nav class="top-nav">
+  <div class="top-nav__inner">
+    <a href="Afterthought.html" class="wordmark" aria-label="Afterthought home"><img src="assets/logo-horizontal.png" alt="Afterthought" /></a>
+    <ul class="nav-links" role="list">
+      <li><a class="nav-link" href="work.html">Work</a></li>
+      <li><a class="nav-link" href="studio.html">Studio</a></li>
+      <li><a class="nav-link is-active" href="thinking.html">Thinking</a></li>
+      <li><a class="nav-link" href="contact.html">Contact</a></li>
+    </ul>
+    <button class="mobile-toggle" data-drawer-toggle aria-label="Open menu"><span></span><span></span><span></span></button>
+  </div>
+  <div class="mobile-drawer" id="drawer">
+    <ul>
+      <li><a href="work.html">Work</a></li>
+      <li><a href="studio.html">Studio</a></li>
+      <li><a href="thinking.html">Thinking</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <a class="btn btn-primary" href="contact.html">Start a project</a>
+  </div>
+</nav>
+
+<section class="page-header container">
+  <div class="page-header__eyebrow eyebrow"><span>The journal · Vol. 01 · Quarterly</span></div>
+  <h1 class="display-xl page-header__title">Notes from the desk — slow essays, the occasional <em>opinion</em>.</h1>
+  <p class="page-header__sub body-lg">We write four times a year, roughly. Short essays, the odd process post, and the kind of view of the industry you'd usually only hear at the end of a kickoff. Subscribe and you'll get one a quarter, in the post box and in the inbox.</p>
+</section>
+
+<section class="container" style="padding-bottom: 32px;">
+  <a class="journal-feature" href="#" style="text-decoration: none; color: inherit;">
+    <div>
+      <span class="journal-feature__cat">Essay · Anurag &amp; Tina · 11 min read</span>
+      <h2 class="journal-feature__title">A modest argument against <em>the rebrand</em>.</h2>
+      <p class="journal-feature__excerpt">Most brands we meet need a quieter, slower thing than the one they came in asking for. Here is the conversation we now start with — and the four signals we listen for before we agree to redraw a single line.</p>
+      <div class="journal-feature__meta">
+        <span class="caption" style="opacity: 0.55;">04 / 2026 · Issue 02</span>
+        <span class="btn btn-on-color" style="background: var(--c-ink); color: var(--c-canvas);">Read the essay →</span>
+      </div>
+    </div>
+    <div class="journal-feature__visual">
+      <div style="text-align: center;">
+        <div style="font-family: var(--font-serif); font-style: italic; font-size: clamp(48px, 7vw, 96px); line-height: 1; letter-spacing: -2px;">Are you sure<br/>you want a <span style="text-decoration: line-through; text-decoration-color: var(--c-accent-magenta); text-decoration-thickness: 3px;">rebrand</span>?</div>
+        <div style="margin-top: 32px; font-family: var(--font-mono); font-size: 11px; letter-spacing: 1.4px; text-transform: uppercase; opacity: 0.55;">Issue 02 cover · April 2026</div>
+      </div>
+    </div>
+  </a>
+</section>
+
+<section class="container section-tight">
+  <div class="section-head">
+    <div class="section-head__left">
+      <span class="caption">Recent</span>
+      <h2 class="display-md section-head__title">A few we wrote earlier.</h2>
+    </div>
+    <div class="section-head__right">
+      <p class="body-sm">We don't publish often, so this is more or less the archive.</p>
+    </div>
+  </div>
+
+  <div class="thinking-grid">
+    <a class="think-card think-card--cream" href="#">
+      <div>
+        <div class="think-card__top">
+          <span class="think-card__cat">Essay · 9 min</span>
+          <span class="think-card__date">02 / 26</span>
+        </div>
+        <h3 class="think-card__title">The brief is always wrong, and that's the part of the job we love most.</h3>
+        <p class="think-card__desc">A short defence of the first month — the one nobody schedules for, and what we tend to do with it.</p>
+      </div>
+      <span class="think-card__cta">Read the essay →</span>
+    </a>
+    <a class="think-card think-card--cream" href="#">
+      <div>
+        <div class="think-card__top">
+          <span class="think-card__cat">Process · 6 min</span>
+          <span class="think-card__date">12 / 25</span>
+        </div>
+        <h3 class="think-card__title">On making a wordmark you'll still like in eleven years.</h3>
+        <p class="think-card__desc">Drawn from the Helio re-launch — how we settle on a single letterform when there are four good ones.</p>
+      </div>
+      <span class="think-card__cta">Read the post →</span>
+    </a>
+    <a class="think-card think-card--cream" href="#">
+      <div>
+        <div class="think-card__top">
+          <span class="think-card__cat">Opinion · 4 min</span>
+          <span class="think-card__date">10 / 25</span>
+        </div>
+        <h3 class="think-card__title">Don't design the menu. Design the way the menu changes.</h3>
+        <p class="think-card__desc">A short rule we now apply to every restaurant brief — and the project that taught it to us.</p>
+      </div>
+      <span class="think-card__cta">Read the note →</span>
+    </a>
+  </div>
+</section>
+
+<section class="container section">
+  <div class="section-head">
+    <div class="section-head__left">
+      <span class="caption">The archive</span>
+      <h2 class="display-md section-head__title">Everything we've published so far.</h2>
+    </div>
+    <div class="section-head__right">
+      <p class="body-sm">A short list, kept honest by being short. We add to it about four times a year.</p>
+    </div>
+  </div>
+
+  <ul class="journal-list">
+    <li><a href="#"><span class="journal-list__num">№ 006</span><span class="journal-list__title">Don't design the menu. Design the way the menu changes.</span><span class="journal-list__cat">Opinion</span><span class="journal-list__date">10 · 25</span></a></li>
+    <li><a href="#"><span class="journal-list__num">№ 005</span><span class="journal-list__title">A modest argument against the rebrand.</span><span class="journal-list__cat">Essay</span><span class="journal-list__date">04 · 26</span></a></li>
+    <li><a href="#"><span class="journal-list__num">№ 004</span><span class="journal-list__title">On making a wordmark you'll still like in eleven years.</span><span class="journal-list__cat">Process</span><span class="journal-list__date">12 · 25</span></a></li>
+    <li><a href="#"><span class="journal-list__num">№ 003</span><span class="journal-list__title">The brief is always wrong, and that's the part of the job we love most.</span><span class="journal-list__cat">Essay</span><span class="journal-list__date">02 · 26</span></a></li>
+    <li><a href="#"><span class="journal-list__num">№ 002</span><span class="journal-list__title">Two founders, no department: a small studio's first six months.</span><span class="journal-list__cat">Studio</span><span class="journal-list__date">11 · 25</span></a></li>
+    <li><a href="#"><span class="journal-list__num">№ 001</span><span class="journal-list__title">An afterthought on naming the studio "Afterthought."</span><span class="journal-list__cat">Studio</span><span class="journal-list__date">07 · 25</span></a></li>
+  </ul>
+</section>
+
+<section class="container" id="newsletter" style="padding-bottom: var(--s-section);">
+  <div class="color-block color-block--lime">
+    <span class="eyebrow cb-eyebrow">The newsletter</span>
+    <h2 class="cb-title display-lg">Once a quarter. Not a minute earlier.</h2>
+    <p class="body-lg cb-body">We send a short letter four times a year — one of the essays above, two or three sentences about what we're making, and the occasional book recommendation. We don't sell the list, run a tracker, or write a tenth note about Q4 trends.</p>
+    <form style="margin-top: 32px; display: flex; gap: 12px; flex-wrap: wrap; max-width: 540px;" onsubmit="event.preventDefault(); this.querySelector('button').textContent = 'Welcome →';">
+      <input type="email" required placeholder="your@email.com" style="flex: 1; min-width: 220px; background: var(--c-canvas); border: 1px solid rgba(0,0,0,0.18); border-radius: var(--r-pill); padding: 12px 20px; font-family: inherit; font-size: 16px; color: var(--c-ink); outline: none;" />
+      <button type="submit" class="btn btn-primary">Subscribe →</button>
+    </form>
+    <p class="caption" style="opacity: 0.6; margin-top: 16px;">Four notes a year. Unsubscribe in one click. Currently 217 readers.</p>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer__inner">
+    <img class="footer__logo" src="assets/logo-horizontal.png" alt="Afterthought" />
+    <div class="footer__cols">
+      <div class="footer__col footer__about">
+        <h5>The studio</h5>
+        <p>Afterthought is a two-founder design and creative studio based in Bangalore, working internationally on brand identity, naming, packaging and digital.</p>
+        <p>Founded in 2025 by Anurag Gautam and Tina Gidwani.</p>
+      </div>
+      <div class="footer__col"><h5>Work</h5><ul><li><a href="work.html">All projects</a></li><li><a href="work-helio.html">Helio</a></li><li><a href="work-querida.html">Querida</a></li></ul></div>
+      <div class="footer__col"><h5>Studio</h5><ul><li><a href="studio.html">About</a></li><li><a href="studio.html#founders">Founders</a></li><li><a href="studio.html#capabilities">Capabilities</a></li></ul></div>
+      <div class="footer__col"><h5>Thinking</h5><ul><li><a href="thinking.html">Journal</a></li><li><a href="thinking.html#newsletter">Newsletter</a></li></ul></div>
+      <div class="footer__col"><h5>Connect</h5><ul><li><a href="mailto:hello@afterthought.studio">Email</a></li><li><a href="#">Instagram</a></li><li><a href="#">Are.na</a></li><li><a href="#">LinkedIn</a></li></ul></div>
+    </div>
+    <div class="footer__bottom">
+      <span>© 2026 Afterthought Studio</span>
+      <span>Bangalore — Working internationally — Made on second thought.</span>
+    </div>
+  </div>
+</footer>
+
+<script>document.querySelectorAll('[data-drawer-toggle]').forEach(b => b.addEventListener('click', () => document.getElementById('drawer').classList.toggle('is-open')));</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="animations.js"></script>
+</body>
+</html>

@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Contact — Afterthought</title>
+<meta name="description" content="Start a project with Afterthought. We read every note ourselves." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=JetBrains+Mono:wght@300..800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+<link rel="icon" type="image/png" href="assets/favicon.png" />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<div id="at-curtain" aria-hidden="true"></div>
+<div id="at-cursor-dot" aria-hidden="true"></div>
+<div id="at-cursor-ring" aria-hidden="true"></div>
+
+
+<nav class="top-nav">
+  <div class="top-nav__inner">
+    <a href="Afterthought.html" class="wordmark" aria-label="Afterthought home"><img src="assets/logo-horizontal.png" alt="Afterthought" /></a>
+    <ul class="nav-links" role="list">
+      <li><a class="nav-link" href="work.html">Work</a></li>
+      <li><a class="nav-link" href="studio.html">Studio</a></li>
+      <li><a class="nav-link" href="thinking.html">Thinking</a></li>
+      <li><a class="nav-link is-active" href="contact.html">Contact</a></li>
+    </ul>
+    <button class="mobile-toggle" data-drawer-toggle aria-label="Open menu"><span></span><span></span><span></span></button>
+  </div>
+  <div class="mobile-drawer" id="drawer">
+    <ul>
+      <li><a href="work.html">Work</a></li>
+      <li><a href="studio.html">Studio</a></li>
+      <li><a href="thinking.html">Thinking</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <a class="btn btn-primary" href="#start">Start a project</a>
+  </div>
+</nav>
+
+<section class="page-header container">
+  <div class="page-header__eyebrow eyebrow"><span class="pulse" style="background: var(--c-semantic-success); width: 8px; height: 8px; border-radius: 50%; display: inline-block;"></span><span>Currently reading briefs for Summer 2026</span></div>
+  <h1 class="display-xl page-header__title">Tell us the thing you keep <em>almost</em> saying out loud.</h1>
+  <p class="page-header__sub body-lg">We read every note ourselves and reply within a week — sometimes with a meeting, sometimes with a short, honest "not us, but try them." Either way, you'll hear from one of us, not a form-letter.</p>
+</section>
+
+<section id="start" class="container">
+  <div class="contact-grid">
+
+    <form class="contact-form" onsubmit="event.preventDefault(); document.getElementById('thanks').style.display='block'; this.style.display='none';">
+      <h3>Start a brief.</h3>
+      <div class="form-row">
+        <label for="name">Your name</label>
+        <input id="name" type="text" required placeholder="First &amp; last" />
+      </div>
+      <div class="form-row">
+        <label for="email">Email</label>
+        <input id="email" type="email" required placeholder="you@company.com" />
+      </div>
+      <div class="form-row">
+        <label for="company">Company / project</label>
+        <input id="company" type="text" placeholder="The thing you're making" />
+      </div>
+      <div class="form-row">
+        <label>What might this be about? <span style="opacity:0.5; text-transform: none; letter-spacing: 0;">— pick a few</span></label>
+        <div class="chip-row">
+          <label class="chip"><input type="checkbox" /> Identity</label>
+          <label class="chip"><input type="checkbox" /> Naming</label>
+          <label class="chip"><input type="checkbox" /> Packaging</label>
+          <label class="chip"><input type="checkbox" /> Digital &amp; web</label>
+          <label class="chip"><input type="checkbox" /> Editorial</label>
+          <label class="chip"><input type="checkbox" /> Campaign</label>
+          <label class="chip"><input type="checkbox" /> Not sure yet</label>
+        </div>
+      </div>
+      <div class="form-row">
+        <label for="budget">Budget — a rough sense is fine</label>
+        <select id="budget">
+          <option>I'd rather discuss</option>
+          <option>Under ₹15L / $20k</option>
+          <option>₹15–40L / $20–50k</option>
+          <option>₹40L–1Cr / $50–125k</option>
+          <option>Above ₹1Cr / $125k</option>
+          <option>Pro bono / cultural</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <label for="when">When are you hoping to start?</label>
+        <select id="when">
+          <option>Summer 2026 (we're reading)</option>
+          <option>Autumn 2026</option>
+          <option>Winter 2026 / 27</option>
+          <option>Whenever the right answer arrives</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <label for="msg">A paragraph or two. The brief, the question, the half-formed thing.</label>
+        <textarea id="msg" placeholder="No length minimum. Plain English is better than headings."></textarea>
+      </div>
+      <div class="submit-row">
+        <button type="submit" class="btn btn-primary">Send the note →</button>
+        <span class="caption">We reply within a week. Promise.</span>
+      </div>
+    </form>
+
+    <div id="thanks" style="display:none; background: var(--c-block-lime); padding: 48px; border-radius: var(--r-lg);">
+      <h3 style="font-size: 32px; letter-spacing: -0.5px; font-variation-settings: 'wght' 480; font-weight: 480; margin-bottom: 16px;">Got it — thank you.</h3>
+      <p class="body-lg">One of us will read it tomorrow morning over coffee, and write back within the week. If the brief looks like a fit, we'll suggest a 30-minute call.</p>
+      <p class="body-sm" style="margin-top: 16px; opacity: 0.7;">In the meantime, there's <a href="work.html" style="color: inherit; border-bottom: 1px solid currentColor;">a little more of our work over here</a>.</p>
+    </div>
+
+    <aside class="contact-side">
+      <h3>Or, more directly.</h3>
+      <div class="contact-meta">
+        <div class="contact-meta__row"><span class="caption">New work</span><a href="mailto:hello@afterthought.studio">hello@afterthought.studio</a></div>
+        <div class="contact-meta__row"><span class="caption">Press</span><a href="mailto:press@afterthought.studio">press@afterthought.studio</a></div>
+        <div class="contact-meta__row"><span class="caption">Anurag</span><a href="mailto:anurag@afterthought.studio">anurag@afterthought.studio</a></div>
+        <div class="contact-meta__row"><span class="caption">Tina</span><a href="mailto:tina@afterthought.studio">tina@afterthought.studio</a></div>
+      </div>
+
+      <div class="contact-side__cities">
+        <div class="city-card">
+          <div class="city-card__name">Studio</div>
+          <div class="city-card__addr">100 Feet Road<br/>Indiranagar, Bangalore 560038<br/>India</div>
+          <div class="city-card__time">UTC +5:30 · By appointment</div>
+        </div>
+        <div class="city-card">
+          <div class="city-card__name">Working</div>
+          <div class="city-card__addr">Internationally — currently with clients in India, Europe and the US. Most meetings on a call.</div>
+          <div class="city-card__time">Travelling 2–3× a project</div>
+        </div>
+      </div>
+
+      <div style="margin-top: 32px; padding: 24px; background: var(--c-surface-soft); border-radius: var(--r-lg);">
+        <span class="caption" style="opacity: 0.55; display: block; margin-bottom: 10px;">A small note on fit</span>
+        <p class="body-sm" style="line-height: 1.55;">We take on roughly four engagements a year. If we can't say yes — usually because the calendar is full or the brief is better served by friends of ours — we'll tell you within the week, and almost always send you a name or two.</p>
+      </div>
+    </aside>
+
+  </div>
+</section>
+
+<section class="container" style="padding-bottom: var(--s-section);">
+  <div class="color-block color-block--cream">
+    <span class="eyebrow cb-eyebrow">FAQ — the four we get most</span>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 32px 48px; margin-top: 32px;" class="faq-grid">
+      <div>
+        <h3 style="font-size: 22px; line-height: 1.25; letter-spacing: -0.35px; font-variation-settings: 'wght' 480; font-weight: 480; margin-bottom: 10px;">Are you taking on new work?</h3>
+        <p class="body-sm" style="opacity: 0.8;">Yes — we're currently reading briefs for Summer 2026. We have room for roughly two more projects this year.</p>
+      </div>
+      <div>
+        <h3 style="font-size: 22px; line-height: 1.25; letter-spacing: -0.35px; font-variation-settings: 'wght' 480; font-weight: 480; margin-bottom: 10px;">Do you work outside India?</h3>
+        <p class="body-sm" style="opacity: 0.8;">Often — and increasingly. Roughly half our work to date has been for clients in another country. Most kickoffs happen on a call, with two or three working visits a project.</p>
+      </div>
+      <div>
+        <h3 style="font-size: 22px; line-height: 1.25; letter-spacing: -0.35px; font-variation-settings: 'wght' 480; font-weight: 480; margin-bottom: 10px;">What's a typical engagement worth?</h3>
+        <p class="body-sm" style="opacity: 0.8;">A full identity sits between ₹40L–1Cr (about $50–125k). Smaller pieces — naming, a single deliverable, a campaign — start lower. We share a clear estimate after the first call.</p>
+      </div>
+      <div>
+        <h3 style="font-size: 22px; line-height: 1.25; letter-spacing: -0.35px; font-variation-settings: 'wght' 480; font-weight: 480; margin-bottom: 10px;">Will we be working with you, or a team?</h3>
+        <p class="body-sm" style="opacity: 0.8;">Us. Always. We bring in collaborators for motion, illustration or production at scale, and tell you who they are at the kickoff.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer__inner">
+    <img class="footer__logo" src="assets/logo-horizontal.png" alt="Afterthought" />
+    <div class="footer__cols">
+      <div class="footer__col footer__about">
+        <h5>The studio</h5>
+        <p>Afterthought is a two-founder design and creative studio based in Bangalore, working internationally on brand identity, naming, packaging and digital.</p>
+        <p>Founded in 2025 by Anurag Gautam and Tina Gidwani.</p>
+      </div>
+      <div class="footer__col"><h5>Work</h5><ul><li><a href="work.html">All projects</a></li><li><a href="work-helio.html">Helio</a></li><li><a href="work-querida.html">Querida</a></li></ul></div>
+      <div class="footer__col"><h5>Studio</h5><ul><li><a href="studio.html">About</a></li><li><a href="studio.html#founders">Founders</a></li><li><a href="studio.html#capabilities">Capabilities</a></li></ul></div>
+      <div class="footer__col"><h5>Thinking</h5><ul><li><a href="thinking.html">Journal</a></li><li><a href="thinking.html#newsletter">Newsletter</a></li></ul></div>
+      <div class="footer__col"><h5>Connect</h5><ul><li><a href="mailto:hello@afterthought.studio">Email</a></li><li><a href="#">Instagram</a></li><li><a href="#">Are.na</a></li><li><a href="#">LinkedIn</a></li></ul></div>
+    </div>
+    <div class="footer__bottom">
+      <span>© 2026 Afterthought Studio</span>
+      <span>Bangalore — Working internationally — Made on second thought.</span>
+    </div>
+  </div>
+</footer>
+
+<style>
+  @media (max-width: 768px) { .faq-grid { grid-template-columns: 1fr !important; } }
+</style>
+
+<script>
+  // Chip toggle
+  document.querySelectorAll('.chip').forEach(c => {
+    const cb = c.querySelector('input');
+    cb.addEventListener('change', () => c.classList.toggle('is-on', cb.checked));
+  });
+  document.querySelectorAll('[data-drawer-toggle]').forEach(b => b.addEventListener('click', () => document.getElementById('drawer').classList.toggle('is-open')));
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="animations.js"></script>
+</body>
+</html>
