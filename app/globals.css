@@ -577,6 +577,43 @@ img { max-width: 100%; display: block; }
   height: 1px; transform: translateY(-3px);
 }
 
+/* ============== TILE VISUAL: JUSTACH ============== */
+.tile--purple { background: #541388; color: #F1E9DA; }
+.tile--purple .tile__meta  { border-top-color: rgba(241,233,218,0.15); color: #F1E9DA; }
+.tile--purple .tile__arrow { background: rgba(241,233,218,0.14); color: #F1E9DA; }
+.tile--purple .tile__eyebrow { color: #F1E9DA; }
+.tile--purple .tile__title { color: #F1E9DA; }
+
+.vis-justach {
+  width: 100%; height: 100%;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 28px;
+  padding: 40px;
+}
+.vis-justach__wordmark {
+  font-size: clamp(56px, 8vw, 112px);
+  line-height: 0.95; letter-spacing: -4px;
+  font-variation-settings: "wght" 560; font-weight: 560;
+  color: #F1E9DA;
+}
+
+/* ============== CASE STUDY HERO: JUSTACH ============== */
+.cs-hero-justach {
+  width: 100%; height: 100%;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 32px;
+  padding: 40px;
+  background: #541388;
+}
+.cs-hero-justach__wordmark {
+  font-size: clamp(72px, 11vw, 160px);
+  line-height: 0.92; letter-spacing: -5px;
+  font-variation-settings: "wght" 560; font-weight: 560;
+  color: #F1E9DA;
+}
+
 /* ============== COLOR-BLOCK SECTIONS ============== */
 .color-block {
   border-radius: var(--r-lg);

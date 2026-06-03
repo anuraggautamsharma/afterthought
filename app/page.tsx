@@ -82,53 +82,29 @@ export default function Home() {
       <section className="container section">
         <div className="section-head">
           <div className="section-head__left">
-            <span className="caption">Selected work — 2025 / 2026</span>
-            <h2 className="display-lg section-head__title">Two projects, so far. Both we&apos;d happily do again.</h2>
+            <span className="caption">Selected work — 2025</span>
+            <h2 className="display-lg section-head__title">One project, so far. Built to last.</h2>
           </div>
           <div className="section-head__right">
-            <p className="body-sm">We started Afterthought in 2025. Below are the first two engagements — one a young climate company, one an old neighbourhood place pretending to be young.</p>
+            <p className="body-sm">We started Afterthought in 2025. Below is the first engagement — a naming and complete brand identity for a modern men&apos;s salon. More work is on the way.</p>
           </div>
         </div>
 
         <div className="work-grid">
-          <a className="tile tile--lime tile-wide" href="/work/helio">
+          <a className="tile tile--purple tile-wide" href="/work/justach">
             <div className="tile__visual">
-              <div className="vis-helio">
-                <div className="vis-helio__left">
-                  <div className="vis-helio__caption"><span>Naming · Identity · Web</span><span>2025</span></div>
-                  <div className="vis-helio__line"></div>
-                  <div className="vis-helio__wordmark">Heli<span className="o">o</span></div>
-                  <div className="vis-helio__line"></div>
-                  <div className="vis-helio__caption"><span>A climate-tech holding company</span><span>R0 — R3</span></div>
-                </div>
-                <div className="vis-helio__right"><div className="vis-helio__sun"></div></div>
+              <div className="vis-justach">
+                <svg width="160" height="77" viewBox="0 0 200 96" fill="none" aria-hidden="true">
+                  <path d="M100 58 C88 58 72 52 56 42 C40 32 22 28 12 36 C5 41 4 50 10 56 C18 62 34 60 50 54 C64 48 80 52 100 58Z" fill="rgba(241,233,218,0.20)"/>
+                  <path d="M100 58 C120 52 136 48 150 54 C166 60 182 62 190 56 C196 50 195 41 188 36 C178 28 160 32 144 42 C128 52 112 58 100 58Z" fill="rgba(241,233,218,0.20)"/>
+                </svg>
+                <div className="vis-justach__wordmark">Justach</div>
               </div>
             </div>
             <div className="tile__meta">
               <div className="tile__meta-left">
-                <span className="tile__eyebrow">Case 001 · Helio · Identity · Naming · Web · 2025</span>
-                <div className="tile__title">From a brief about heat pumps to a brand about hope.</div>
-              </div>
-              <div className="tile__arrow">→</div>
-            </div>
-          </a>
-
-          <a className="tile tile--coral tile-wide" href="/work/querida">
-            <div className="tile__visual">
-              <div className="vis-querida">
-                <div className="vis-querida__name">Querida</div>
-                <div className="vis-querida__menu">
-                  <div className="vis-querida__menu-row"><span>Pan con tomate</span><span className="dots"></span><span>06</span></div>
-                  <div className="vis-querida__menu-row"><span>Boquerones, sherry</span><span className="dots"></span><span>09</span></div>
-                  <div className="vis-querida__menu-row"><span>Tortilla, dressed leaves</span><span className="dots"></span><span>11</span></div>
-                  <div className="vis-querida__menu-row"><span>Almond cake, citrus</span><span className="dots"></span><span>08</span></div>
-                </div>
-              </div>
-            </div>
-            <div className="tile__meta">
-              <div className="tile__meta-left">
-                <span className="tile__eyebrow">Case 002 · Querida · Identity · Print · Menu · 2026</span>
-                <div className="tile__title">A neighbourhood place that takes itself seriously, but only just.</div>
+                <span className="tile__eyebrow">Case 001 · Justach · Naming · Logo · Identity · 2025</span>
+                <div className="tile__title">A men&apos;s salon built around one unforgettable symbol.</div>
               </div>
               <div className="tile__arrow">→</div>
             </div>
@@ -140,7 +116,7 @@ export default function Home() {
         <div className="color-block color-block--navy">
           <span className="eyebrow cb-eyebrow">What we&apos;re after</span>
           <h2 className="cb-title display-lg">The brands that don&apos;t know what they look like <em>yet</em>.</h2>
-          <p className="body-lg cb-body" style={{ opacity: 0.85 }}>We&apos;re most interested in the moment before a category has a visual language — young companies, new products, institutions trying to mean something to a new generation. The brief that arrives without all the answers is the one we want. We&apos;re less useful when the solution is already obvious.</p>
+          <p className="body-lg cb-body" style={{ opacity: 0.85 }}>We&apos;re most interested in the moment before a category has a visual language — young companies, new products, and founders who know what they stand for but haven&apos;t yet found how it looks. The brief that arrives without all the answers is the one we want. We&apos;re less useful when the solution is already obvious.</p>
           <div style={{ marginTop: '56px', paddingTop: '24px', borderTop: '1px solid rgba(255,255,255,0.20)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '24px' }}>
             <span className="caption" style={{ opacity: 0.7 }}>Bangalore · Working internationally · Est. 2025</span>
             <a className="btn btn-secondary-dark" href="/work">See the work →</a>
