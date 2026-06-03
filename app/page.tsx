@@ -36,13 +36,8 @@ export default function Home() {
         </div>
       </header>
 
-      <section className="showreel" data-screen-label="Showreel">
+      <section className="showreel">
         <div className="container">
-          <div className="showreel__head">
-            <span className="caption">Showreel</span>
-            <span className="caption">2025 / 2026 · 02:34</span>
-          </div>
-
           <div className="showreel__stage" id="showreel-stage">
             <video
               id="showreel-video"
@@ -54,37 +49,36 @@ export default function Home() {
             ></video>
 
             <div className="showreel__poster" aria-hidden="true">
-              <div className="sr-gradient"></div>
-              <div className="sr-orb sr-orb--1"></div>
-              <div className="sr-orb sr-orb--2"></div>
-              <div className="sr-orb sr-orb--3"></div>
-              <div className="sr-name">Afterthought</div>
+              <div className="sr-vignette"></div>
+              <div className="sr-glow"></div>
+              <div className="sr-grain"></div>
             </div>
 
             <div className="showreel__overlay" id="showreel-overlay">
               <button className="showreel__play-btn" aria-label="Play showreel">
-                <svg width="20" height="24" viewBox="0 0 20 24" fill="none">
-                  <path d="M2 1.5L18 12L2 22.5V1.5Z" fill="currentColor"></path>
+                <svg width="18" height="22" viewBox="0 0 18 22" fill="none">
+                  <path d="M1 1L17 11L1 21V1Z" fill="currentColor"></path>
                 </svg>
               </button>
             </div>
 
-            <div className="showreel__bar">
-              <span className="caption showreel__dur">02 : 34</span>
+            <div className="showreel__hud">
+              <div className="showreel__progress-track">
+                <div className="showreel__progress-fill" id="showreel-progress"></div>
+              </div>
               <button className="showreel__mute" id="showreel-mute" aria-label="Toggle sound">
-                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                  <path d="M1 4.5H4L7.5 2V12L4 9.5H1V4.5Z" fill="currentColor"></path>
-                  <path d="M9 5C9.9 5.9 9.9 8.1 9 9" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round"></path>
-                  <path d="M10.5 3.5C12.3 5.3 12.3 8.7 10.5 10.5" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round"></path>
+                <svg className="sr-icon sr-icon--off" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <path d="M1 5H4.5L8 2.5V13.5L4.5 11H1V5Z" fill="currentColor"/>
+                  <line x1="11" y1="5.5" x2="15" y2="10.5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round"/>
+                  <line x1="15" y1="5.5" x2="11" y2="10.5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round"/>
                 </svg>
-                <span>Sound off</span>
+                <svg className="sr-icon sr-icon--on" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <path d="M1 5H4.5L8 2.5V13.5L4.5 11H1V5Z" fill="currentColor"/>
+                  <path d="M11 6C12.2 7.2 12.2 8.8 11 10" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round"/>
+                  <path d="M13 4C15.2 6.2 15.2 9.8 13 12" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round"/>
+                </svg>
               </button>
             </div>
-          </div>
-
-          <div className="showreel__foot">
-            <p className="body-sm showreel__desc">A glimpse of what we&apos;ve made — identities, naming, packaging, digital. Work that earns its place in the world by earning its place in the brief first.</p>
-            <a className="btn showreel__cta" href="/work">View all work →</a>
           </div>
         </div>
       </section>

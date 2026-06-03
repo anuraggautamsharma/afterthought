@@ -243,30 +243,24 @@ export default function GsapAnimations() {
          14 · SHOWREEL SECTION REVEAL
       ──────────────────────────────────────────────────────────── */
       ;(function () {
-        const sr = q('.showreel')
-        if (!sr) return
-
-        const head  = q('.showreel__head')
         const stage = q('.showreel__stage')
-        const foot  = q('.showreel__foot')
-
-        const tl = gsap.timeline({
-          scrollTrigger: { trigger: sr, start: 'top 82%', once: true }
-        })
-
-        if (head)  tl.fromTo(head,  { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.55, ease: 'power3.out' })
-        if (stage) tl.fromTo(stage, { opacity: 0, scale: 0.96, y: 24 }, { opacity: 1, scale: 1, y: 0, duration: 1.0, ease: 'expo.out' }, '-=0.3')
-        if (foot)  tl.fromTo(foot,  { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' }, '-=0.5')
+        if (!stage) return
+        gsap.fromTo(stage,
+          { opacity: 0, scale: 0.97 },
+          { opacity: 1, scale: 1, duration: 1.1, ease: 'expo.out',
+            scrollTrigger: { trigger: stage, start: 'top 88%', once: true } }
+        )
       }())
 
       /* ────────────────────────────────────────────────────────────
          SHOWREEL PLAYER
       ──────────────────────────────────────────────────────────── */
       ;(function () {
-        const stage   = document.getElementById('showreel-stage')
-        const video   = document.getElementById('showreel-video') as HTMLVideoElement | null
-        const overlay = document.getElementById('showreel-overlay')
-        const muteBtn = document.getElementById('showreel-mute')
+        const stage    = document.getElementById('showreel-stage')
+        const video    = document.getElementById('showreel-video') as HTMLVideoElement | null
+        const overlay  = document.getElementById('showreel-overlay')
+        const muteBtn  = document.getElementById('showreel-mute')
+        const progress = document.getElementById('showreel-progress')
         if (!stage || !video) return
 
         let playing = false
@@ -285,22 +279,25 @@ export default function GsapAnimations() {
           playing = false
         }
 
-        stage.addEventListener('click', function (e: Event) {
+        stage.addEventListener('click', (e: Event) => {
           if (muteBtn && (e.target === muteBtn || muteBtn.contains(e.target as Node))) return
           playing ? pause() : play()
         })
 
         if (muteBtn) {
-          muteBtn.addEventListener('click', function (e: Event) {
+          muteBtn.addEventListener('click', (e: Event) => {
             e.stopPropagation()
             video!.muted = !video!.muted
-            const label = muteBtn.querySelector('span')
-            if (label) label.textContent = video!.muted ? 'Sound off' : 'Sound on'
+            muteBtn.classList.toggle('is-on', !video!.muted)
           })
         }
 
-        video.addEventListener('loadeddata', function () {
-          video!.classList.add('is-loaded')
+        video.addEventListener('loadeddata', () => video!.classList.add('is-loaded'))
+
+        video.addEventListener('timeupdate', () => {
+          if (!progress || !video!.duration) return
+          const pct = (video!.currentTime / video!.duration) * 100
+          ;(progress as HTMLElement).style.width = pct + '%'
         })
       }())
 
