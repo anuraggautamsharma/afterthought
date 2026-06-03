@@ -45,8 +45,6 @@ export default function RootLayout({
     <html lang="en" className={`${inter.variable} ${jetbrainsMono.variable} ${instrumentSerif.variable}`}>
       <body>
         <div id="at-curtain" aria-hidden="true"></div>
-        <div id="at-cursor-dot" aria-hidden="true"></div>
-        <div id="at-cursor-ring" aria-hidden="true"></div>
         <Nav />
         {children}
         <Footer />

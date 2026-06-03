@@ -980,33 +980,6 @@ img { max-width: 100%; display: block; }
 
 /* ============== ANIMATIONS — Cursor + Curtain ============== */
 
-.has-custom-cursor,
-.has-custom-cursor * { cursor: none !important; }
-
-#at-cursor-dot,
-#at-cursor-ring {
-  position: fixed;
-  top: 0; left: 0;
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 9999;
-  will-change: transform;
-}
-
-#at-cursor-dot {
-  width: 8px; height: 8px;
-  margin-left: -4px; margin-top: -4px;
-  background: #fff;
-  mix-blend-mode: exclusion;
-}
-
-#at-cursor-ring {
-  width: 32px; height: 32px;
-  margin-left: -16px; margin-top: -16px;
-  border: 1.5px solid #fff;
-  background: transparent;
-  mix-blend-mode: exclusion;
-}
 
 #at-curtain {
   position: fixed;

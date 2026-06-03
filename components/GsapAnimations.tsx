@@ -14,50 +14,7 @@ export default function GsapAnimations() {
       const qa = (s: string) => [...document.querySelectorAll<Element>(s)]
 
       /* ────────────────────────────────────────────────────────────
-         1 · CUSTOM CURSOR
-      ──────────────────────────────────────────────────────────── */
-      ;(function initCursor() {
-        const dot  = q('#at-cursor-dot') as HTMLElement | null
-        const ring = q('#at-cursor-ring') as HTMLElement | null
-        if (!dot || !ring || !window.matchMedia('(pointer: fine)').matches) return
-
-        document.body.classList.add('has-custom-cursor')
-
-        let mx = innerWidth / 2, my = innerHeight / 2
-        let rx = mx, ry = my
-
-        gsap.set([dot, ring], { x: mx, y: my })
-
-        window.addEventListener('mousemove', (e: MouseEvent) => {
-          mx = e.clientX
-          my = e.clientY
-        }, { passive: true })
-
-        gsap.ticker.add(() => {
-          rx += (mx - rx) * 0.15
-          ry += (my - ry) * 0.15
-          gsap.set(dot,  { x: mx, y: my })
-          gsap.set(ring, { x: rx, y: ry })
-        })
-        gsap.ticker.lagSmoothing(0)
-
-        function onEnter() {
-          gsap.to(ring, { scale: 2.4, opacity: 0.6, duration: 0.3,  ease: 'power3.out' })
-          gsap.to(dot,  { scale: 0,               duration: 0.2,  ease: 'power2.out' })
-        }
-        function onLeave() {
-          gsap.to(ring, { scale: 1, opacity: 1, duration: 0.55, ease: 'elastic.out(1, 0.4)' })
-          gsap.to(dot,  { scale: 1,             duration: 0.3,  ease: 'power2.out' })
-        }
-
-        qa('a, button, .tile, .think-card').forEach(el => {
-          el.addEventListener('mouseenter', onEnter)
-          el.addEventListener('mouseleave', onLeave)
-        })
-      }())
-
-      /* ────────────────────────────────────────────────────────────
-         2 · PAGE CURTAIN TRANSITIONS
+         1 · PAGE CURTAIN TRANSITIONS
       ──────────────────────────────────────────────────────────── */
       ;(function initCurtain() {
         const curtain = q('#at-curtain') as HTMLElement | null
