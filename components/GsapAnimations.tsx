@@ -13,33 +13,6 @@ export default function GsapAnimations() {
       const q  = (s: string) => document.querySelector(s)
       const qa = (s: string) => [...document.querySelectorAll<Element>(s)]
 
-      /* ────────────────────────────────────────────────────────────
-         1 · PAGE CURTAIN TRANSITIONS
-      ──────────────────────────────────────────────────────────── */
-      ;(function initCurtain() {
-        const curtain = q('#at-curtain') as HTMLElement | null
-        if (!curtain) return
-
-        gsap.to(curtain, { yPercent: -100, duration: 0.72, ease: 'expo.inOut', delay: 0.05 })
-
-        qa('a[href]').forEach(link => {
-          const href = link.getAttribute('href') || ''
-          if (!href || href[0] === '#' || href.startsWith('mailto:') ||
-              href.startsWith('tel:') || href.startsWith('http')) return
-
-          link.addEventListener('click', (e: Event) => {
-            const me = e as MouseEvent
-            if (me.metaKey || me.ctrlKey || me.shiftKey || me.altKey) return
-            e.preventDefault()
-            const dest = href
-            gsap.fromTo(curtain,
-              { yPercent: 100 },
-              { yPercent: 0, duration: 0.46, ease: 'expo.in',
-                onComplete() { window.location.href = dest } }
-            )
-          })
-        })
-      }())
 
       /* ────────────────────────────────────────────────────────────
          3 · NAV ENTRANCE

@@ -1731,14 +1731,6 @@ img { max-width: 100%; display: block; }
 /* ============== ANIMATIONS — Cursor + Curtain ============== */
 
 
-#at-curtain {
-  position: fixed;
-  inset: 0;
-  background: var(--c-ink);
-  z-index: 8999;
-  pointer-events: none;
-  will-change: transform;
-}
 
 /* ============== MOBILE NAV DRAWER ============== */
 .mobile-drawer {
