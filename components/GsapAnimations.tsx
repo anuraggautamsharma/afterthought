@@ -171,7 +171,7 @@ export default function GsapAnimations() {
       /* ────────────────────────────────────────────────────────────
          7 · SCROLL REVEALS — individual large sections
       ──────────────────────────────────────────────────────────── */
-      ;['.section-head', '.color-block', '.journal-feature',
+      ;['.section-head', '.color-block', '.j-feat',
        '.case-pullquote', '.case-cover', '.clients', '.cs-image', '.cs-intro',
        '.post-hero-image', '.post-pullquote', '.post-image'].forEach(sel => {
         qa(sel).forEach(el => {
@@ -198,6 +198,7 @@ export default function GsapAnimations() {
         { sel: '.case-asset',     y: 32,  x: 0,   dur: 0.80, gap: 0.12 },
         { sel: '.cs-meta__item',       y: 16, x: 0, dur: 0.55, gap: 0.07 },
         { sel: '.post-related__item',  y: 20, x: 0, dur: 0.60, gap: 0.08 },
+        { sel: '.j-list__item',        y: 16, x: 0, dur: 0.50, gap: 0.06 },
       ]
 
       staggerGroups.forEach(({ sel, y, x, dur, gap }) => {
