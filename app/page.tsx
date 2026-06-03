@@ -105,11 +105,11 @@ export default function Home() {
               </div>
             </div>
             <div className="tile__meta">
-              <div className="tile__title-block">
-                <span className="caption">Case 001 / Helio</span>
+              <div className="tile__meta-left">
+                <span className="tile__eyebrow">Case 001 · Helio · Identity · Naming · Web · 2025</span>
                 <div className="tile__title">From a brief about heat pumps to a brand about hope.</div>
               </div>
-              <div className="tile__tags"><span className="tile__tag">Identity</span><span className="tile__tag">Naming</span><span className="tile__tag">Web</span></div>
+              <div className="tile__arrow">→</div>
             </div>
           </a>
 
@@ -126,11 +126,11 @@ export default function Home() {
               </div>
             </div>
             <div className="tile__meta">
-              <div className="tile__title-block">
-                <span className="caption">Case 002 / Querida</span>
+              <div className="tile__meta-left">
+                <span className="tile__eyebrow">Case 002 · Querida · Identity · Print · Menu · 2026</span>
                 <div className="tile__title">A neighbourhood place that takes itself seriously, but only just.</div>
               </div>
-              <div className="tile__tags"><span className="tile__tag">Restaurant</span><span className="tile__tag">Wordmark</span><span className="tile__tag">Print</span></div>
+              <div className="tile__arrow">→</div>
             </div>
           </a>
         </div>

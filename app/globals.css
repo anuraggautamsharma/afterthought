@@ -414,7 +414,7 @@ img { max-width: 100%; display: block; }
 .work-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 16px;
+  gap: 20px;
 }
 .work-grid .tile-wide { grid-column: span 2; }
 
@@ -422,44 +422,79 @@ img { max-width: 100%; display: block; }
   position: relative;
   border-radius: var(--r-lg);
   overflow: hidden;
-  padding: 24px;
-  min-height: 460px;
+  padding: 0;
+  min-height: 620px;
   display: flex; flex-direction: column;
   text-decoration: none;
   color: inherit;
-  transition: transform .25s ease;
+  transition: transform 0.40s cubic-bezier(0.25, 0, 0, 1),
+              box-shadow  0.40s cubic-bezier(0.25, 0, 0, 1);
   isolation: isolate;
+  will-change: transform;
 }
-.tile:hover { transform: translateY(-3px); }
+.tile:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 64px rgba(0,0,0,0.13);
+}
+
+/* Visual area — fills all space above the meta strip */
 .tile__visual {
   flex: 1;
   display: flex; align-items: center; justify-content: center;
   position: relative;
-  margin: 8px -8px 16px;
-  min-height: 240px;
+  overflow: hidden;
+  min-height: 400px;
 }
+
+/* Meta strip — clean bottom bar */
 .tile__meta {
-  display: flex; justify-content: space-between; align-items: flex-end;
-  gap: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 26px 32px;
+  border-top: 1px solid rgba(0,0,0,0.09);
 }
-.tile__title-block .caption { margin-bottom: 8px; display: block; }
+.tile__meta-left { flex: 1; min-width: 0; }
+.tile__eyebrow {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  opacity: 0.5;
+  margin-bottom: 10px;
+}
 .tile__title {
-  font-size: 30px;
-  line-height: 1.10;
-  letter-spacing: -0.50px;
-  font-variation-settings: "wght" 480; font-weight: 480;
+  font-size: 24px;
+  line-height: 1.14;
+  letter-spacing: -0.38px;
+  font-variation-settings: "wght" 500; font-weight: 500;
 }
-.tile__tags {
-  display: flex; gap: 6px; flex-wrap: wrap;
-  justify-content: flex-end;
-  max-width: 50%;
+
+/* Circular arrow CTA */
+.tile__arrow {
+  width: 48px; height: 48px;
+  border-radius: 50%;
+  background: var(--c-ink);
+  color: var(--c-canvas);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  font-size: 18px;
+  line-height: 1;
+  transition: transform 0.38s cubic-bezier(0.25, 0, 0, 1),
+              background 0.25s ease;
 }
+.tile:hover .tile__arrow { transform: rotate(-45deg); }
+
+/* Keep tags in CSS for potential future use */
+.tile__tags { display: flex; gap: 6px; flex-wrap: wrap; }
 .tile__tag {
   font-family: var(--font-mono);
   font-size: 10px; letter-spacing: 0.5px;
   text-transform: uppercase;
   padding: 5px 10px;
-  background: rgba(0,0,0,0.06);
+  background: rgba(0,0,0,0.07);
   border-radius: var(--r-pill);
   color: var(--c-ink);
 }
@@ -468,7 +503,9 @@ img { max-width: 100%; display: block; }
 .tile--cream { background: var(--c-block-cream); }
 .tile--coral { background: var(--c-block-coral); }
 .tile--navy  { background: var(--c-block-navy); color: var(--c-inverse-ink); }
-.tile--navy .tile__tag { background: rgba(255,255,255,0.10); color: var(--c-inverse-ink); }
+.tile--navy .tile__meta  { border-top-color: rgba(255,255,255,0.10); }
+.tile--navy .tile__arrow { background: rgba(255,255,255,0.12); color: var(--c-inverse-ink); }
+.tile--navy .tile__tag   { background: rgba(255,255,255,0.10); color: var(--c-inverse-ink); }
 .tile--mint  { background: var(--c-block-mint); }
 .tile--pink  { background: var(--c-block-pink); }
 .tile--lilac { background: var(--c-block-lilac); }
@@ -1435,7 +1472,11 @@ img { max-width: 100%; display: block; }
   .footer__about { grid-column: span 2; }
   .clients__grid { grid-template-columns: repeat(2, 1fr); }
   .color-block, .contact-block { padding: 48px 24px; border-radius: 0; }
-  .tile { min-height: 380px; }
+  .tile { min-height: 460px; }
+  .tile__visual { min-height: 300px; }
+  .tile__meta { padding: 22px 24px; }
+  .tile__title { font-size: 21px; }
+  .tile__arrow { width: 42px; height: 42px; font-size: 16px; }
   .case-asset { padding: 32px 24px; min-height: 320px; }
   .cs-hero { height: 62vh; min-height: 480px; }
   .cs-hero__info { padding-bottom: 40px; }

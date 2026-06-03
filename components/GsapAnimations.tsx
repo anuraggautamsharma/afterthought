@@ -224,21 +224,24 @@ export default function GsapAnimations() {
       })
 
       /* ────────────────────────────────────────────────────────────
-         10 · TILE — hover parallax on inner visual
+         10 · TILE — hover parallax + zoom on inner visual
       ──────────────────────────────────────────────────────────── */
       qa('.tile').forEach(tile => {
         const visual = tile.querySelector('.tile__visual') as HTMLElement | null
         if (!visual) return
 
+        tile.addEventListener('mouseenter', () => {
+          gsap.to(visual, { scale: 1.04, duration: 0.55, ease: 'power2.out', overwrite: 'auto' })
+        })
         tile.addEventListener('mousemove', (e: Event) => {
           const me = e as MouseEvent
-          const r = (tile as HTMLElement).getBoundingClientRect()
-          const x = ((me.clientX - r.left) / r.width  - 0.5) * 18
-          const y = ((me.clientY - r.top)  / r.height - 0.5) * 12
-          gsap.to(visual, { x, y, duration: 0.45, ease: 'power2.out', overwrite: 'auto' })
+          const r  = (tile as HTMLElement).getBoundingClientRect()
+          const x  = ((me.clientX - r.left) / r.width  - 0.5) * 22
+          const y  = ((me.clientY - r.top)  / r.height - 0.5) * 14
+          gsap.to(visual, { x, y, scale: 1.05, duration: 0.45, ease: 'power2.out', overwrite: 'auto' })
         })
         tile.addEventListener('mouseleave', () => {
-          gsap.to(visual, { x: 0, y: 0, duration: 0.85, ease: 'elastic.out(1, 0.5)', overwrite: 'auto' })
+          gsap.to(visual, { x: 0, y: 0, scale: 1, duration: 0.9, ease: 'elastic.out(1, 0.45)', overwrite: 'auto' })
         })
       })
 
