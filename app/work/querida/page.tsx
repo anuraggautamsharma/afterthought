@@ -8,46 +8,52 @@ export const metadata: Metadata = {
 export default function Querida() {
   return (
     <>
-      <section className="page-header container">
-        <div className="page-header__eyebrow eyebrow">
-          <span><a href="/work" style={{ color: 'inherit', textDecoration: 'none', borderBottom: '1px solid currentColor', paddingBottom: '1px' }}>← Work</a></span>
-          <span>·</span>
-          <span>Case 002</span>
+      {/* ── HERO ── */}
+      <div className="cs-hero">
+        <div className="cs-hero__image" style={{ background: 'var(--c-block-coral)' }}>
+          <div className="cs-hero-querida">
+            <div className="cs-hero-querida__name">Querida</div>
+            <div className="cs-hero-querida__sub">A small kitchen · Spanish, mostly · Est. 2018</div>
+          </div>
         </div>
-        <h1 className="display-xl page-header__title">Querida — a neighbourhood place that takes itself seriously, but <em>only just</em>.</h1>
-        <p className="page-header__sub body-lg">A small Spanish kitchen that had outgrown its first identity. We gave them a wordmark, a menu system, and a tone of voice that knows when to stop talking.</p>
-      </section>
+        <div className="cs-hero__gradient"></div>
+        <div className="cs-hero__info">
+          <div className="container">
+            <div className="cs-hero__eyebrow">
+              <a href="/work">← Work</a>
+              <span>·</span>
+              <span>Case 002</span>
+            </div>
+            <h1 className="display-xl cs-hero__title">Querida — a neighbourhood place that takes itself seriously, but <em>only just</em>.</h1>
+          </div>
+        </div>
+      </div>
 
-      <section className="container" style={{ paddingBottom: 'var(--s-section)' }}>
-        <div className="case-cover" style={{ background: 'var(--c-block-coral)' }}>
-          <div className="case-cover__head">
-            <div>
-              <span className="caption" style={{ display: 'block', marginBottom: '12px', opacity: 0.7 }}>Project · 2026</span>
-              <div style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', fontSize: 'clamp(72px, 11vw, 160px)', lineHeight: 0.9, letterSpacing: '-4px' }}>Querida</div>
-            </div>
-            <div style={{ textAlign: 'right' }}>
-              <span className="caption" style={{ display: 'block', marginBottom: '12px', opacity: 0.7 }}>Est. 2018 · Re-set 2026</span>
-              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', letterSpacing: '1px', textTransform: 'uppercase', opacity: 0.75 }}>A neighbourhood restaurant<br />Bandra West, Mumbai</div>
-            </div>
-          </div>
-          <div className="case-cover__visual">
-            <div style={{ width: '100%', maxWidth: '700px' }}>
-              <div style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', fontSize: 'clamp(96px, 14vw, 200px)', lineHeight: 0.92, letterSpacing: '-6px', textAlign: 'center' }}>Querida</div>
-              <div style={{ marginTop: '20px', display: 'flex', alignItems: 'center', gap: '12px' }}>
-                <div style={{ flex: 1, height: '1px', background: 'rgba(0,0,0,0.4)', position: 'relative' }}>
-                  <span style={{ position: 'absolute', left: '-3px', top: '-3px', width: '7px', height: '7px', borderRadius: '50%', background: 'var(--c-ink)' }}></span>
-                  <span style={{ position: 'absolute', right: '-3px', top: '-3px', width: '7px', height: '7px', borderRadius: '50%', background: 'var(--c-ink)' }}></span>
-                </div>
-              </div>
-              <div style={{ marginTop: '16px', textAlign: 'center', fontFamily: 'var(--font-mono)', fontSize: '12px', letterSpacing: '1.2px', textTransform: 'uppercase', opacity: 0.7 }}>A small kitchen — Spanish, mostly</div>
-            </div>
-          </div>
-          <div className="case-meta">
-            <div><span className="caption">Client</span><div className="meta-val">Querida Restaurants</div></div>
-            <div><span className="caption">Scope</span><div className="meta-val">Identity, Print, Menu</div></div>
-            <div><span className="caption">Year</span><div className="meta-val">2026</div></div>
-            <div><span className="caption">Lead</span><div className="meta-val">T. Gidwani &amp; A. Gautam</div></div>
-          </div>
+      {/* ── META STRIP ── */}
+      <div className="cs-meta container">
+        <div className="cs-meta__item">
+          <span className="cs-meta__label">Client</span>
+          <span className="cs-meta__val">Querida Restaurants</span>
+        </div>
+        <div className="cs-meta__item">
+          <span className="cs-meta__label">Scope</span>
+          <span className="cs-meta__val">Identity, Print, Menu</span>
+        </div>
+        <div className="cs-meta__item">
+          <span className="cs-meta__label">Year</span>
+          <span className="cs-meta__val">2026</span>
+        </div>
+        <div className="cs-meta__item">
+          <span className="cs-meta__label">Lead</span>
+          <span className="cs-meta__val">T. Gidwani &amp; A. Gautam</span>
+        </div>
+      </div>
+
+      {/* ── BODY ── */}
+      <div className="container" style={{ paddingBottom: 'var(--s-section)' }}>
+
+        <div className="cs-intro">
+          <p>A small Spanish kitchen that had outgrown its first identity. We gave them a wordmark, a menu system, and a tone of voice that knows when to stop talking.</p>
         </div>
 
         <div className="case-section">
@@ -58,7 +64,26 @@ export default function Querida() {
           </div>
         </div>
 
-        <div className="case-pullquote container" style={{ paddingLeft: 0, paddingRight: 0 }}>
+        {/* Menu mockup */}
+        <div className="cs-image" style={{ background: 'var(--c-block-cream)', justifyContent: 'flex-start', alignItems: 'flex-start', padding: '64px' }}>
+          <div style={{ width: '100%', maxWidth: '520px', background: 'var(--c-canvas)', padding: '44px', borderRadius: '8px', boxShadow: '0 20px 60px rgba(0,0,0,0.08)' }}>
+            <div style={{ textAlign: 'center', paddingBottom: '24px', borderBottom: '1px solid var(--c-hairline)' }}>
+              <div style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', fontSize: '52px', lineHeight: 1, letterSpacing: '-1.5px' }}>Querida</div>
+              <div style={{ marginTop: '8px', fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '1.4px', textTransform: 'uppercase', opacity: 0.5 }}>Menu · Wk 14 · Apr 2026</div>
+            </div>
+            <div style={{ paddingTop: '24px', display: 'flex', flexDirection: 'column', gap: '12px', fontFamily: 'var(--font-mono)', fontSize: '12px', letterSpacing: '0.6px', textTransform: 'uppercase' }}>
+              {[['Pan con tomate', '06'], ['Boquerones en vinagre', '09'], ['Tortilla, dressed leaves', '11'], ['Gambas al ajillo', '14'], ['Albóndigas, mother\'s recipe', '12'], ['Almond cake, citrus', '08']].map(([dish, price]) => (
+                <div key={dish} style={{ display: 'flex', alignItems: 'center' }}>
+                  <span>{dish}</span>
+                  <span style={{ flex: 1, borderBottom: '1px dotted rgba(0,0,0,0.3)', margin: '0 10px', transform: 'translateY(-3px)' }}></span>
+                  <span>{price}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div className="case-pullquote">
           <blockquote>&quot;It&apos;s a Spanish word that means <em>&quot;darling&quot;</em>. Don&apos;t make it precious about it.&quot;</blockquote>
           <div className="case-pullquote__attr caption">— The owner, kickoff call, February 2026</div>
         </div>
@@ -71,19 +96,18 @@ export default function Querida() {
           </div>
         </div>
 
-        <div className="case-asset" style={{ background: 'var(--c-block-cream)', padding: '48px', minHeight: '520px' }}>
-          <div style={{ width: '100%', maxWidth: '560px', background: 'var(--c-canvas)', padding: '40px', borderRadius: '8px', boxShadow: '0 16px 40px rgba(0,0,0,0.06)' }}>
-            <div style={{ textAlign: 'center', paddingBottom: '24px', borderBottom: '1px solid var(--c-hairline)' }}>
-              <div style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', fontSize: '52px', lineHeight: 1, letterSpacing: '-1.5px' }}>Querida</div>
-              <div style={{ marginTop: '8px', fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '1.4px', textTransform: 'uppercase', opacity: 0.55 }}>Menu · Wk 14 · Apr 2026</div>
+        {/* Monogram + poster grid */}
+        <div className="cs-image-grid">
+          <div className="cs-image" style={{ background: 'var(--c-ink)', color: 'var(--c-inverse-ink)' }}>
+            <div style={{ textAlign: 'center' }}>
+              <div style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', fontSize: 'clamp(80px, 12vw, 160px)', lineHeight: 1, letterSpacing: '-2px' }}>Q</div>
+              <div style={{ marginTop: '24px', fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '1.4px', textTransform: 'uppercase', opacity: 0.6 }}>Monogram · Napkins, awning, matchbook</div>
             </div>
-            <div style={{ paddingTop: '20px', display: 'flex', flexDirection: 'column', gap: '10px', fontFamily: 'var(--font-mono)', fontSize: '12px', letterSpacing: '0.6px', textTransform: 'uppercase' }}>
-              <div style={{ display: 'flex', alignItems: 'center' }}><span>Pan con tomate</span><span style={{ flex: 1, borderBottom: '1px dotted rgba(0,0,0,0.35)', margin: '0 8px', transform: 'translateY(-3px)' }}></span><span>06</span></div>
-              <div style={{ display: 'flex', alignItems: 'center' }}><span>Boquerones en vinagre</span><span style={{ flex: 1, borderBottom: '1px dotted rgba(0,0,0,0.35)', margin: '0 8px', transform: 'translateY(-3px)' }}></span><span>09</span></div>
-              <div style={{ display: 'flex', alignItems: 'center' }}><span>Tortilla, dressed leaves</span><span style={{ flex: 1, borderBottom: '1px dotted rgba(0,0,0,0.35)', margin: '0 8px', transform: 'translateY(-3px)' }}></span><span>11</span></div>
-              <div style={{ display: 'flex', alignItems: 'center' }}><span>Gambas al ajillo</span><span style={{ flex: 1, borderBottom: '1px dotted rgba(0,0,0,0.35)', margin: '0 8px', transform: 'translateY(-3px)' }}></span><span>14</span></div>
-              <div style={{ display: 'flex', alignItems: 'center' }}><span>Albóndigas, mother&apos;s recipe</span><span style={{ flex: 1, borderBottom: '1px dotted rgba(0,0,0,0.35)', margin: '0 8px', transform: 'translateY(-3px)' }}></span><span>12</span></div>
-              <div style={{ display: 'flex', alignItems: 'center' }}><span>Almond cake, citrus</span><span style={{ flex: 1, borderBottom: '1px dotted rgba(0,0,0,0.35)', margin: '0 8px', transform: 'translateY(-3px)' }}></span><span>08</span></div>
+          </div>
+          <div className="cs-image" style={{ background: 'var(--c-block-pink)' }}>
+            <div style={{ textAlign: 'center', padding: '0 32px' }}>
+              <div style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', fontSize: 'clamp(36px, 5vw, 60px)', lineHeight: 1.08, letterSpacing: '-1.5px' }}>Sunday lunch<br />at <em>Querida</em></div>
+              <div style={{ marginTop: '24px', fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '1.4px', textTransform: 'uppercase', opacity: 0.6 }}>Risograph poster · 2 colours</div>
             </div>
           </div>
         </div>
@@ -93,21 +117,6 @@ export default function Querida() {
           <div className="case-section__body">
             <p>One italic wordmark. One serif, one monospace, one paper colour. The dish names and the prices do everything else. The owner prints a fresh menu every Tuesday on a small Risograph in the back office — the same printer the team uses for the loyalty card, the Sunday lunch flyer, and the takeaway slip.</p>
             <p>We wrote a one-page guide. The owner has not called us about it since.</p>
-          </div>
-        </div>
-
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', margin: '32px 0' }}>
-          <div className="case-asset" style={{ background: 'var(--c-ink)', color: 'var(--c-inverse-ink)', minHeight: '320px', padding: '32px' }}>
-            <div style={{ textAlign: 'center' }}>
-              <div style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', fontSize: '80px', lineHeight: 1, letterSpacing: '-2px' }}>Q</div>
-              <div style={{ marginTop: '24px', fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '1.4px', textTransform: 'uppercase', opacity: 0.7 }}>Monogram · For napkins, the awning, the matchbook</div>
-            </div>
-          </div>
-          <div className="case-asset" style={{ background: 'var(--c-block-pink)', minHeight: '320px', padding: '32px' }}>
-            <div style={{ textAlign: 'center' }}>
-              <div style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', fontSize: '48px', lineHeight: 1, letterSpacing: '-1.5px' }}>Sunday lunch<br />at <em>Querida</em></div>
-              <div style={{ marginTop: '24px', fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '1.4px', textTransform: 'uppercase', opacity: 0.65 }}>Risograph poster · 2 colours, one rule</div>
-            </div>
           </div>
         </div>
 
@@ -126,14 +135,16 @@ export default function Querida() {
           </div>
         </div>
 
-        <div className="case-next">
+        {/* ── NEXT ── */}
+        <div className="cs-next">
           <div>
-            <span className="caption" style={{ opacity: 0.55, display: 'block', marginBottom: '8px' }}>Previous project</span>
-            <div style={{ fontSize: '28px', letterSpacing: '-0.4px', fontVariationSettings: "'wght' 480", fontWeight: 480 }}>Helio — a climate-tech holding company, renamed.</div>
+            <span className="cs-next__label">Previous project</span>
+            <div className="cs-next__title">Helio — from a brief about heat pumps to a brand about hope.</div>
           </div>
           <a className="btn btn-primary" href="/work/helio">Read Helio →</a>
         </div>
-      </section>
+
+      </div>
     </>
   )
 }

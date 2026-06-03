@@ -820,6 +820,202 @@ img { max-width: 100%; display: block; }
   gap: 24px; flex-wrap: wrap;
 }
 
+/* ============== CASE STUDY v2 — CS COMPONENTS ============== */
+.cs-hero {
+  position: relative;
+  width: 100%;
+  height: 78vh;
+  min-height: 580px;
+  overflow: hidden;
+}
+.cs-hero__image {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.cs-hero__gradient {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, transparent 32%, rgba(0,0,0,0.68) 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+.cs-hero__info {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  padding-bottom: 56px;
+}
+.cs-hero__eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.62);
+  margin-bottom: 20px;
+}
+.cs-hero__eyebrow a { color: inherit; text-decoration: none; transition: color 0.2s; }
+.cs-hero__eyebrow a:hover { color: #fff; }
+.cs-hero__title {
+  color: #fff;
+  max-width: 960px;
+  text-shadow: 0 4px 56px rgba(0,0,0,0.14);
+}
+.cs-hero__title em {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -2px;
+}
+
+/* Helio hero visual */
+.cs-hero-helio {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 56px;
+}
+.cs-hero-helio__wordmark {
+  font-size: clamp(88px, 13vw, 192px);
+  line-height: 0.9;
+  letter-spacing: -6px;
+  font-variation-settings: "wght" 540;
+  font-weight: 540;
+  color: var(--c-ink);
+}
+.cs-hero-helio__wordmark .o { display: inline-block; transform: translateY(3px); }
+.cs-hero-helio .vis-helio__sun {
+  width: clamp(150px, 20vw, 280px);
+  height: clamp(150px, 20vw, 280px);
+  flex-shrink: 0;
+}
+
+/* Querida hero visual */
+.cs-hero-querida {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding-left: clamp(28px, 7vw, 112px);
+  width: 100%;
+}
+.cs-hero-querida__name {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: clamp(80px, 17vw, 272px);
+  line-height: 0.88;
+  letter-spacing: -5px;
+  color: var(--c-ink);
+}
+.cs-hero-querida__sub {
+  margin-top: 28px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  opacity: 0.52;
+  color: var(--c-ink);
+}
+
+/* Meta strip */
+.cs-meta {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  padding: 36px 0;
+  border-bottom: 1px solid var(--c-hairline);
+  margin-bottom: 88px;
+}
+.cs-meta__item {
+  padding-left: 28px;
+  border-left: 1px solid var(--c-hairline);
+}
+.cs-meta__item:first-child { padding-left: 0; border-left: none; }
+.cs-meta__label {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  opacity: 0.44;
+  margin-bottom: 10px;
+}
+.cs-meta__val {
+  font-size: 15px;
+  font-variation-settings: "wght" 450;
+  font-weight: 450;
+  letter-spacing: -0.2px;
+  line-height: 1.4;
+}
+
+/* Intro paragraph */
+.cs-intro {
+  padding-bottom: 80px;
+  border-bottom: 1px solid var(--c-hairline);
+}
+.cs-intro p {
+  font-size: clamp(18px, 1.8vw, 22px);
+  line-height: 1.56;
+  letter-spacing: -0.3px;
+  font-variation-settings: "wght" 350;
+  font-weight: 350;
+  max-width: 820px;
+  margin-bottom: 0;
+}
+
+/* Image blocks */
+.cs-image {
+  width: 100%;
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  margin: 56px 0;
+  min-height: 480px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.cs-image-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin: 56px 0;
+}
+.cs-image-grid .cs-image { margin: 0; min-height: 380px; }
+
+/* Next project strip */
+.cs-next {
+  margin-top: 112px;
+  padding: 56px 0;
+  border-top: 1px solid var(--c-hairline);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 32px;
+  flex-wrap: wrap;
+}
+.cs-next__label {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  opacity: 0.44;
+  margin-bottom: 12px;
+}
+.cs-next__title {
+  font-size: 28px;
+  letter-spacing: -0.4px;
+  font-variation-settings: "wght" 480;
+  font-weight: 480;
+  line-height: 1.25;
+  max-width: 600px;
+}
+
 /* ============== CLIENTS / LIST ============== */
 .clients {
   border-top: 1px solid var(--c-hairline);
@@ -996,6 +1192,9 @@ img { max-width: 100%; display: block; }
   .case-cover { padding: 48px 32px 40px; }
   .case-section { grid-template-columns: 1fr; gap: 16px; }
   .case-meta { grid-template-columns: repeat(2, 1fr); }
+  .cs-meta { grid-template-columns: repeat(2, 1fr); gap: 24px 0; }
+  .cs-meta__item:nth-child(odd) { padding-left: 0; border-left: none; }
+  .cs-meta__item:nth-child(even) { padding-left: 24px; }
   .founders-grid { grid-template-columns: 1fr; }
   .studio-intro { grid-template-columns: 1fr; gap: 32px; }
   .journal-feature { grid-template-columns: 1fr; padding: 40px; }
@@ -1022,6 +1221,13 @@ img { max-width: 100%; display: block; }
   .color-block, .contact-block { padding: 48px 24px; border-radius: 0; }
   .tile { min-height: 380px; }
   .case-asset { padding: 32px 24px; min-height: 320px; }
+  .cs-hero { height: 62vh; min-height: 480px; }
+  .cs-hero__info { padding-bottom: 40px; }
+  .cs-hero-helio { gap: 32px; }
+  .cs-image { min-height: 380px; margin: 40px 0; }
+  .cs-image-grid { grid-template-columns: 1fr; }
+  .cs-image-grid .cs-image { min-height: 320px; }
+  .cs-next { flex-direction: column; align-items: flex-start; }
   .contact-form { padding: 32px 24px; }
   .contact-side__cities { grid-template-columns: 1fr; }
   .top-nav__inner .nav-cta .btn-secondary { display: none; }
@@ -1037,6 +1243,11 @@ img { max-width: 100%; display: block; }
   .footer__wordmark { letter-spacing: -3px; }
   .page-header__meta { grid-template-columns: 1fr; }
   .case-meta { grid-template-columns: 1fr; }
+  .cs-meta { grid-template-columns: 1fr; gap: 20px; }
+  .cs-meta__item { padding-left: 0 !important; border-left: none !important; }
+  .cs-hero { height: 56vh; min-height: 420px; }
+  .cs-hero-helio { flex-direction: column; gap: 20px; align-items: center; }
+  .cs-hero-querida { padding-left: 0; padding: 0 var(--gutter); }
   .founder__initials { font-size: 100px; }
 }
 

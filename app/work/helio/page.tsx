@@ -8,40 +8,52 @@ export const metadata: Metadata = {
 export default function Helio() {
   return (
     <>
-      <section className="page-header container">
-        <div className="page-header__eyebrow eyebrow">
-          <span><a href="/work" style={{ color: 'inherit', textDecoration: 'none', borderBottom: '1px solid currentColor', paddingBottom: '1px' }}>← Work</a></span>
-          <span>·</span>
-          <span>Case 001</span>
+      {/* ── HERO ── */}
+      <div className="cs-hero">
+        <div className="cs-hero__image" style={{ background: 'var(--c-block-lime)' }}>
+          <div className="cs-hero-helio">
+            <div className="vis-helio__sun cs-hero-helio__sun"></div>
+            <div className="cs-hero-helio__wordmark">Heli<span className="o">o</span></div>
+          </div>
         </div>
-        <h1 className="display-xl page-header__title">Helio — from a brief about heat pumps to a brand about <em>hope</em>.</h1>
-        <p className="page-header__sub body-lg">A climate-tech holding company asked for a new name and identity for the moment they stopped being a &quot;heat-pump installer&quot; and started being something larger.</p>
-      </section>
+        <div className="cs-hero__gradient"></div>
+        <div className="cs-hero__info">
+          <div className="container">
+            <div className="cs-hero__eyebrow">
+              <a href="/work">← Work</a>
+              <span>·</span>
+              <span>Case 001</span>
+            </div>
+            <h1 className="display-xl cs-hero__title">Helio — from a brief about heat pumps to a brand about <em>hope</em>.</h1>
+          </div>
+        </div>
+      </div>
 
-      <section className="container" style={{ paddingBottom: 'var(--s-section)' }}>
-        <div className="case-cover" style={{ background: 'var(--c-block-lime)' }}>
-          <div className="case-cover__head">
-            <div>
-              <span className="caption" style={{ display: 'block', marginBottom: '12px', opacity: 0.6 }}>Project · 2025</span>
-              <div style={{ fontSize: 'clamp(56px, 8vw, 120px)', lineHeight: 0.9, letterSpacing: '-4px', fontVariationSettings: "'wght' 540", fontWeight: 540 }}>Helio</div>
-            </div>
-            <div style={{ textAlign: 'right' }}>
-              <span className="caption" style={{ display: 'block', marginBottom: '12px', opacity: 0.6 }}>R0 — R3</span>
-              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', letterSpacing: '1px', textTransform: 'uppercase', opacity: 0.7 }}>A climate-tech holding company<br />Bangalore &amp; Berlin</div>
-            </div>
-          </div>
-          <div className="case-cover__visual">
-            <div style={{ display: 'flex', alignItems: 'center', gap: '48px', flexWrap: 'wrap', justifyContent: 'center' }}>
-              <div className="vis-helio__sun" style={{ width: '220px', height: '220px' }}></div>
-              <div style={{ fontSize: 'clamp(96px, 14vw, 200px)', lineHeight: 0.9, letterSpacing: '-8px', fontVariationSettings: "'wght' 540", fontWeight: 540 }}>Heli<span style={{ display: 'inline-block', transform: 'translateY(2px)' }}>o</span></div>
-            </div>
-          </div>
-          <div className="case-meta">
-            <div><span className="caption">Client</span><div className="meta-val">Helio Holdings</div></div>
-            <div><span className="caption">Scope</span><div className="meta-val">Naming, Identity, Web</div></div>
-            <div><span className="caption">Year</span><div className="meta-val">2025</div></div>
-            <div><span className="caption">Lead</span><div className="meta-val">A. Gautam &amp; T. Gidwani</div></div>
-          </div>
+      {/* ── META STRIP ── */}
+      <div className="cs-meta container">
+        <div className="cs-meta__item">
+          <span className="cs-meta__label">Client</span>
+          <span className="cs-meta__val">Helio Holdings</span>
+        </div>
+        <div className="cs-meta__item">
+          <span className="cs-meta__label">Scope</span>
+          <span className="cs-meta__val">Naming, Identity, Web</span>
+        </div>
+        <div className="cs-meta__item">
+          <span className="cs-meta__label">Year</span>
+          <span className="cs-meta__val">2025</span>
+        </div>
+        <div className="cs-meta__item">
+          <span className="cs-meta__label">Lead</span>
+          <span className="cs-meta__val">A. Gautam &amp; T. Gidwani</span>
+        </div>
+      </div>
+
+      {/* ── BODY ── */}
+      <div className="container" style={{ paddingBottom: 'var(--s-section)' }}>
+
+        <div className="cs-intro">
+          <p>A climate-tech holding company asked for a new name and identity for the moment they stopped being a &quot;heat-pump installer&quot; and started being something larger.</p>
         </div>
 
         <div className="case-section">
@@ -52,7 +64,17 @@ export default function Helio() {
           </div>
         </div>
 
-        <div className="case-pullquote container" style={{ paddingLeft: 0, paddingRight: 0 }}>
+        {/* Wordmark on dark */}
+        <div className="cs-image" style={{ background: 'var(--c-block-navy)', color: 'var(--c-inverse-ink)' }}>
+          <div style={{ textAlign: 'center' }}>
+            <div style={{ fontSize: 'clamp(80px, 13vw, 192px)', lineHeight: 1, letterSpacing: '-7px', fontVariationSettings: "'wght' 540", fontWeight: 540 }}>
+              Heli<span style={{ display: 'inline-block', transform: 'translateY(3px)', color: 'var(--c-block-coral)' }}>o</span>
+            </div>
+            <div style={{ marginTop: '20px', fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '2px', textTransform: 'uppercase', opacity: 0.45 }}>Wordmark · Primary · 2025</div>
+          </div>
+        </div>
+
+        <div className="case-pullquote">
           <blockquote>&quot;We don&apos;t sell heat pumps. We sell the part of the house that <em>finally feels like the future</em>.&quot;</blockquote>
           <div className="case-pullquote__attr caption">Helio — internal brand line, 2025</div>
         </div>
@@ -65,10 +87,23 @@ export default function Helio() {
           </div>
         </div>
 
-        <div className="case-asset" style={{ background: 'var(--c-block-navy)', color: 'var(--c-inverse-ink)' }}>
-          <div style={{ textAlign: 'center' }}>
-            <div style={{ fontSize: 'clamp(80px, 12vw, 160px)', lineHeight: 1, letterSpacing: '-6px', fontVariationSettings: "'wght' 540", fontWeight: 540 }}>Heli<span style={{ display: 'inline-block', transform: 'translateY(2px)', color: 'var(--c-block-coral)' }}>o</span></div>
-            <div style={{ marginTop: '24px', fontFamily: 'var(--font-mono)', fontSize: '12px', letterSpacing: '2px', textTransform: 'uppercase', opacity: 0.6 }}>Wordmark · Light &amp; dark · 2025</div>
+        {/* Sub-brand grid */}
+        <div className="cs-image-grid">
+          <div className="cs-image" style={{ background: 'var(--c-block-coral)' }}>
+            <div style={{ textAlign: 'center' }}>
+              <div style={{ fontSize: 'clamp(52px, 7vw, 96px)', lineHeight: 0.9, letterSpacing: '-3px', fontVariationSettings: "'wght' 540", fontWeight: 540 }}>
+                Helio<br /><span style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', fontWeight: 400, letterSpacing: '-2px' }}>Home</span>
+              </div>
+              <div style={{ marginTop: '20px', fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '1.2px', textTransform: 'uppercase', opacity: 0.6 }}>Sub-brand · Installation</div>
+            </div>
+          </div>
+          <div className="cs-image" style={{ background: 'var(--c-block-cream)' }}>
+            <div style={{ textAlign: 'center' }}>
+              <div style={{ fontSize: 'clamp(52px, 7vw, 96px)', lineHeight: 0.9, letterSpacing: '-3px', fontVariationSettings: "'wght' 540", fontWeight: 540 }}>
+                Helio<br /><span style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', fontWeight: 400, letterSpacing: '-2px' }}>Capital</span>
+              </div>
+              <div style={{ marginTop: '20px', fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '1.2px', textTransform: 'uppercase', opacity: 0.6 }}>Sub-brand · Lending</div>
+            </div>
           </div>
         </div>
 
@@ -80,17 +115,18 @@ export default function Helio() {
           </div>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', margin: '32px 0' }}>
-          <div className="case-asset" style={{ background: 'var(--c-block-coral)', minHeight: '360px', padding: '32px' }}>
-            <div style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: '72px', lineHeight: 0.9, letterSpacing: '-3px', fontVariationSettings: "'wght' 540", fontWeight: 540 }}>Helio<br /><span style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', fontWeight: 400, letterSpacing: '-2px' }}>Home</span></div>
-              <div style={{ marginTop: '20px', fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '1.2px', textTransform: 'uppercase', opacity: 0.7 }}>Sub-brand · Installation</div>
+        {/* Website mockup */}
+        <div className="cs-image" style={{ background: 'var(--c-block-navy)', padding: '56px', alignItems: 'flex-start', justifyContent: 'flex-start' }}>
+          <div style={{ width: '100%', maxWidth: '680px', background: 'rgba(255,255,255,0.05)', borderRadius: '8px', padding: '40px', color: 'var(--c-inverse-ink)', border: '1px solid rgba(255,255,255,0.08)' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '1px', textTransform: 'uppercase', opacity: 0.4, marginBottom: '48px' }}>
+              <span>helio.com</span><span>2025</span>
             </div>
-          </div>
-          <div className="case-asset" style={{ background: 'var(--c-block-cream)', minHeight: '360px', padding: '32px' }}>
-            <div style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: '72px', lineHeight: 0.9, letterSpacing: '-3px', fontVariationSettings: "'wght' 540", fontWeight: 540 }}>Helio<br /><span style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', fontWeight: 400, letterSpacing: '-2px' }}>Capital</span></div>
-              <div style={{ marginTop: '20px', fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '1.2px', textTransform: 'uppercase', opacity: 0.7 }}>Sub-brand · Lending</div>
+            <div style={{ fontSize: 'clamp(32px, 4vw, 52px)', lineHeight: 1.08, letterSpacing: '-1px', marginBottom: '28px' }}>
+              A warmer home<br />and a quieter <em style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic' }}>planet</em>.
+            </div>
+            <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+              <span style={{ background: 'var(--c-block-lime)', color: 'var(--c-ink)', padding: '10px 20px', borderRadius: '50px', fontSize: '13px', fontVariationSettings: "'wght' 480", fontWeight: 480 }}>Find an installer</span>
+              <span style={{ background: 'rgba(255,255,255,0.1)', color: 'var(--c-inverse-ink)', padding: '10px 20px', borderRadius: '50px', fontSize: '13px' }}>See pricing</span>
             </div>
           </div>
         </div>
@@ -103,19 +139,6 @@ export default function Helio() {
           </div>
         </div>
 
-        <div className="case-asset" style={{ background: 'var(--c-canvas)', border: '1px solid var(--c-hairline)', padding: '24px', minHeight: '460px' }}>
-          <div style={{ width: '100%', maxWidth: '720px', background: 'var(--c-block-navy)', borderRadius: '8px', padding: '32px', color: 'var(--c-inverse-ink)' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '1px', textTransform: 'uppercase', opacity: 0.6 }}>
-              <span>helio.com</span><span>2025</span>
-            </div>
-            <div style={{ margin: '48px 0 24px', fontSize: '48px', lineHeight: 1.05, letterSpacing: '-1px' }}>A warmer home<br />and a quieter <em style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic' }}>planet</em>.</div>
-            <div style={{ display: 'flex', gap: '8px' }}>
-              <span style={{ background: 'var(--c-block-coral)', color: 'var(--c-ink)', padding: '8px 16px', borderRadius: '50px', fontSize: '13px' }}>Find an installer</span>
-              <span style={{ background: 'rgba(255,255,255,0.12)', color: 'var(--c-inverse-ink)', padding: '8px 16px', borderRadius: '50px', fontSize: '13px' }}>See pricing</span>
-            </div>
-          </div>
-        </div>
-
         <div className="case-section">
           <div className="case-section__label"><span className="eyebrow">05 · The outcome</span></div>
           <div className="case-section__body">
@@ -124,14 +147,16 @@ export default function Helio() {
           </div>
         </div>
 
-        <div className="case-next">
+        {/* ── NEXT ── */}
+        <div className="cs-next">
           <div>
-            <span className="caption" style={{ opacity: 0.55, display: 'block', marginBottom: '8px' }}>Next project</span>
-            <div style={{ fontSize: '28px', letterSpacing: '-0.4px', fontVariationSettings: "'wght' 480", fontWeight: 480 }}>Querida — a neighbourhood place, re-set.</div>
+            <span className="cs-next__label">Next project</span>
+            <div className="cs-next__title">Querida — a neighbourhood place that takes itself seriously, but only just.</div>
           </div>
           <a className="btn btn-primary" href="/work/querida">Read Querida →</a>
         </div>
-      </section>
+
+      </div>
     </>
   )
 }
