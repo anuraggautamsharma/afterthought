@@ -17,18 +17,18 @@ const posts: Record<string, PostMeta> = {
   'a-modest-argument-against-the-rebrand': {
     title: 'A modest argument against the rebrand.',
     category: 'Essay',
-    date: '04 / 2026',
+    date: 'Apr 2026',
     issue: 'Issue 02',
     readTime: '11 min read',
     authors: 'Anurag Gautam & Tina Gidwani',
     excerpt: 'Most brands we meet need a quieter, slower thing than the one they came in asking for. Here is the conversation we now start with.',
     heroColor: 'var(--c-block-navy)',
-    heroTextColor: 'var(--c-inverse-ink)',
+    heroTextColor: 'rgba(255,255,255,0.92)',
   },
   'the-brief-is-always-wrong': {
     title: 'The brief is always wrong, and that\'s the part of the job we love most.',
     category: 'Essay',
-    date: '02 / 2026',
+    date: 'Feb 2026',
     issue: 'Issue 03',
     readTime: '9 min read',
     authors: 'Anurag Gautam',
@@ -38,7 +38,7 @@ const posts: Record<string, PostMeta> = {
   'on-making-a-wordmark': {
     title: 'On making a wordmark you\'ll still like in eleven years.',
     category: 'Process',
-    date: '12 / 2025',
+    date: 'Dec 2025',
     issue: 'Issue 01',
     readTime: '6 min read',
     authors: 'Tina Gidwani',
@@ -48,7 +48,7 @@ const posts: Record<string, PostMeta> = {
   'dont-design-the-menu': {
     title: 'Don\'t design the menu. Design the way the menu changes.',
     category: 'Opinion',
-    date: '10 / 2025',
+    date: 'Oct 2025',
     issue: 'Issue 01',
     readTime: '4 min read',
     authors: 'Tina Gidwani & Anurag Gautam',
@@ -58,7 +58,7 @@ const posts: Record<string, PostMeta> = {
   'two-founders-no-department': {
     title: 'Two founders, no department: a small studio\'s first six months.',
     category: 'Studio',
-    date: '11 / 2025',
+    date: 'Nov 2025',
     issue: 'Issue 01',
     readTime: '7 min read',
     authors: 'Anurag Gautam & Tina Gidwani',
@@ -68,13 +68,13 @@ const posts: Record<string, PostMeta> = {
   'an-afterthought-on-naming': {
     title: 'An afterthought on naming the studio "Afterthought."',
     category: 'Studio',
-    date: '07 / 2025',
+    date: 'Jul 2025',
     issue: 'Issue 01',
     readTime: '5 min read',
     authors: 'Anurag Gautam',
     excerpt: 'The name started as a joke. Then it became the most honest thing we\'d said about the studio in six months of trying to name it.',
     heroColor: 'var(--c-ink)',
-    heroTextColor: 'var(--c-inverse-ink)',
+    heroTextColor: 'rgba(255,255,255,0.9)',
   },
 }
 
@@ -102,28 +102,35 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 }
 
 /* ─── Hero visual per post ─────────────────────────────── */
-function HeroVisual({ slug, post }: { slug: string; post: PostMeta }) {
-  const ink = post.heroTextColor ?? 'var(--c-ink)'
+function HeroVisual({ slug, textColor }: { slug: string; textColor: string }) {
   switch (slug) {
     case 'a-modest-argument-against-the-rebrand':
       return (
-        <div style={{ textAlign: 'center', padding: '0 32px' }}>
-          <div style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', fontSize: 'clamp(40px, 6vw, 84px)', lineHeight: 1.08, letterSpacing: '-2px', color: ink }}>
+        <div style={{ textAlign: 'center', padding: '0 40px' }}>
+          <div style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', fontSize: 'clamp(40px, 6vw, 90px)', lineHeight: 1.06, letterSpacing: '-2px', color: textColor }}>
             Are you sure<br />you want a{' '}
             <span style={{ textDecoration: 'line-through', textDecorationColor: '#E8825A', textDecorationThickness: '4px' }}>rebrand</span>?
           </div>
-          <div style={{ marginTop: '32px', fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '1.5px', textTransform: 'uppercase', opacity: 0.45, color: ink }}>
+          <div style={{ marginTop: '36px', fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '1.5px', textTransform: 'uppercase', opacity: 0.38, color: textColor }}>
             Issue 02 cover · April 2026
+          </div>
+        </div>
+      )
+    case 'the-brief-is-always-wrong':
+      return (
+        <div style={{ textAlign: 'center', padding: '0 40px' }}>
+          <div style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', fontSize: 'clamp(64px, 10vw, 130px)', lineHeight: 0.9, letterSpacing: '-4px', color: textColor, opacity: 0.9 }}>
+            The<br />Brief.
           </div>
         </div>
       )
     case 'on-making-a-wordmark':
       return (
         <div style={{ textAlign: 'center' }}>
-          <div style={{ fontSize: 'clamp(80px, 14vw, 200px)', lineHeight: 0.9, letterSpacing: '-7px', fontVariationSettings: "'wght' 540", fontWeight: 540, color: ink }}>
+          <div style={{ fontSize: 'clamp(80px, 14vw, 200px)', lineHeight: 0.9, letterSpacing: '-7px', fontVariationSettings: "'wght' 540", fontWeight: 540, color: textColor }}>
             Heli<span style={{ display: 'inline-block', transform: 'translateY(3px)', color: 'var(--c-block-coral)' }}>o</span>
           </div>
-          <div style={{ marginTop: '24px', fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '1.5px', textTransform: 'uppercase', opacity: 0.5, color: ink }}>
+          <div style={{ marginTop: '24px', fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '1.5px', textTransform: 'uppercase', opacity: 0.5, color: textColor }}>
             Helio wordmark · 2025
           </div>
         </div>
@@ -131,14 +138,22 @@ function HeroVisual({ slug, post }: { slug: string; post: PostMeta }) {
     case 'dont-design-the-menu':
       return (
         <div style={{ textAlign: 'center' }}>
-          <div style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', fontSize: 'clamp(48px, 7vw, 96px)', lineHeight: 1.05, letterSpacing: '-2px', color: ink }}>Querida</div>
-          <div style={{ marginTop: '16px', fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '1.4px', textTransform: 'uppercase', opacity: 0.55, color: ink }}>A small kitchen · Spanish, mostly</div>
+          <div style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', fontSize: 'clamp(56px, 9vw, 120px)', lineHeight: 1.02, letterSpacing: '-3px', color: textColor }}>Querida</div>
+          <div style={{ marginTop: '16px', fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '1.4px', textTransform: 'uppercase', opacity: 0.55, color: textColor }}>A small kitchen · Spanish, mostly</div>
+        </div>
+      )
+    case 'two-founders-no-department':
+      return (
+        <div style={{ textAlign: 'center' }}>
+          <div style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '2px', textTransform: 'uppercase', opacity: 0.45, color: textColor, marginBottom: '20px' }}>Studio note</div>
+          <div style={{ fontSize: 'clamp(80px, 13vw, 176px)', lineHeight: 0.88, letterSpacing: '-5px', fontVariationSettings: "'wght' 540", fontWeight: 540, color: textColor }}>001</div>
+          <div style={{ marginTop: '20px', fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '2px', textTransform: 'uppercase', opacity: 0.45, color: textColor }}>Six months in</div>
         </div>
       )
     default:
       return (
-        <div style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', fontSize: 'clamp(48px, 7vw, 96px)', lineHeight: 1, letterSpacing: '-2px', color: ink, padding: '0 32px', textAlign: 'center' }}>
-          {post.category}
+        <div style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', fontSize: 'clamp(56px, 8vw, 112px)', lineHeight: 1, letterSpacing: '-3px', color: textColor, padding: '0 40px', textAlign: 'center', opacity: 0.88 }}>
+          After-<br />thought.
         </div>
       )
   }
@@ -182,22 +197,29 @@ function RebrandEssay() {
 
       <p><strong>Four:</strong> The client says &ldquo;I&apos;d know it when I see it&rdquo; when asked what they want. This is not a bad answer, exactly — it means the instinct is there, and instincts can be worked with. But it usually means the client has a feeling, not a brief, and the feeling is &ldquo;better.&rdquo;</p>
 
-      <figure className="post-image">
-        <div className="post-image__visual" style={{ background: 'var(--c-surface-soft)', minHeight: '280px' }}>
-          <div style={{ textAlign: 'center', padding: '0 32px' }}>
-            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '1.5px', textTransform: 'uppercase', opacity: 0.4, marginBottom: '24px' }}>The spectrum of the brief</div>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px', maxWidth: '560px', textAlign: 'left' }}>
-              {[['Recalibrate', 'The idea is right. The execution drifted.'], ['Extend', 'The idea is right. The system never grew.'], ['Rethink', 'The idea itself has run out.']].map(([label, desc]) => (
-                <div key={label} style={{ padding: '20px', background: 'var(--c-canvas)', borderRadius: '8px', border: '1px solid var(--c-hairline)' }}>
-                  <div style={{ fontSize: '14px', fontVariationSettings: "'wght' 560", fontWeight: 560, marginBottom: '8px' }}>{label}</div>
-                  <div style={{ fontSize: '12px', lineHeight: 1.5, opacity: 0.6 }}>{desc}</div>
-                </div>
-              ))}
+      {/* ── Two-column image grid ── */}
+      <div className="post-image-grid">
+        <figure className="post-image">
+          <div className="post-image__visual" style={{ background: 'var(--c-block-navy)', minHeight: '280px' }}>
+            <div style={{ textAlign: 'center', padding: '40px 32px' }}>
+              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '1.5px', textTransform: 'uppercase', opacity: 0.4, color: '#fff', marginBottom: '20px' }}>Before</div>
+              <div style={{ fontSize: '48px', letterSpacing: '-2px', fontVariationSettings: "'wght' 380", fontWeight: 380, color: 'rgba(255,255,255,0.5)', lineHeight: 1 }}>Logo</div>
+              <div style={{ fontSize: '10px', fontFamily: 'var(--font-mono)', color: 'rgba(255,255,255,0.3)', letterSpacing: '1px', marginTop: '12px' }}>2019 — inconsistent</div>
             </div>
           </div>
-        </div>
-        <figcaption>Our internal framing before any engagement. Most briefs that arrive as &ldquo;rebrand&rdquo; are actually &ldquo;recalibrate.&rdquo;</figcaption>
-      </figure>
+          <figcaption>The original mark — five versions in circulation, none of them authoritative.</figcaption>
+        </figure>
+        <figure className="post-image">
+          <div className="post-image__visual" style={{ background: 'var(--c-block-navy)', minHeight: '280px' }}>
+            <div style={{ textAlign: 'center', padding: '40px 32px' }}>
+              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '1.5px', textTransform: 'uppercase', opacity: 0.4, color: '#fff', marginBottom: '20px' }}>After</div>
+              <div style={{ fontSize: '48px', letterSpacing: '-2px', fontVariationSettings: "'wght' 580", fontWeight: 580, color: 'rgba(255,255,255,0.92)', lineHeight: 1 }}>Logo</div>
+              <div style={{ fontSize: '10px', fontFamily: 'var(--font-mono)', color: 'rgba(255,255,255,0.45)', letterSpacing: '1px', marginTop: '12px' }}>2024 — one version, clearly owned</div>
+            </div>
+          </div>
+          <figcaption>The recalibrated mark — same underlying geometry, clarified weight and spacing.</figcaption>
+        </figure>
+      </div>
 
       <h2>What we offer instead</h2>
 
@@ -205,7 +227,42 @@ function RebrandEssay() {
 
       <p>What we offer in those cases is not a rebrand. It&apos;s closer to a translation. We read the existing system — even the inconsistent, apologetic, out-of-context version of it — and we find the idea that was always in there, half-expressed. We write it down. We extend it, carefully. And when the work is done, it usually doesn&apos;t look like a revolution. It looks like the thing it always should have been.</p>
 
+      {/* ── Full-width image ── */}
+      <figure className="post-image">
+        <div className="post-image__visual" style={{ background: 'var(--c-surface-soft)', minHeight: '320px' }}>
+          <div style={{ textAlign: 'center', padding: '0 40px' }}>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '1.5px', textTransform: 'uppercase', opacity: 0.38, marginBottom: '32px' }}>Our diagnostic framework — used in every first review</div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px', maxWidth: '600px', textAlign: 'left' }}>
+              {[
+                ['Recalibrate', 'The idea is right. The execution drifted.', 'var(--c-block-lime)'],
+                ['Extend', 'The idea is right. The system never grew.', 'var(--c-block-coral)'],
+                ['Rethink', 'The idea itself has run out.', 'var(--c-block-navy)'],
+              ].map(([label, desc, bg]) => (
+                <div key={label} style={{ padding: '20px', background: bg, borderRadius: '10px' }}>
+                  <div style={{ fontSize: '13px', fontVariationSettings: "'wght' 580", fontWeight: 580, marginBottom: '8px', color: bg === 'var(--c-block-navy)' ? '#fff' : 'var(--c-ink)' }}>{label}</div>
+                  <div style={{ fontSize: '11px', lineHeight: 1.55, opacity: 0.65, color: bg === 'var(--c-block-navy)' ? '#fff' : 'var(--c-ink)' }}>{desc}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+        <figcaption>Most briefs that arrive as &ldquo;rebrand&rdquo; are actually &ldquo;recalibrate.&rdquo; We ask the question in the first call.</figcaption>
+      </figure>
+
       <p>The clients who insist on the revolution are not wrong to want it. Sometimes the existing brand is genuinely broken, or tied to something the company no longer is, or simply so anonymous that continuing to use it is a kind of institutional shrug. In those cases, we start from zero and we enjoy it. But we ask the questions first. The tour is always worth taking.</p>
+
+      {/* ── Video block ── */}
+      <figure className="post-video">
+        <div className="post-video__frame">
+          <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '16px' }}>
+            <div style={{ width: '56px', height: '56px', borderRadius: '50%', border: '1.5px solid rgba(255,255,255,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <svg width="18" height="22" viewBox="0 0 18 22" fill="none"><path d="M1 1.5L17 11L1 20.5V1.5Z" fill="rgba(255,255,255,0.7)"/></svg>
+            </div>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '1.2px', textTransform: 'uppercase', color: 'rgba(255,255,255,0.38)' }}>Studio walkthrough · 4 min</div>
+          </div>
+        </div>
+        <figcaption>A short recording from our review process — brand audit to first direction, condensed.</figcaption>
+      </figure>
 
       <hr className="post-rule" />
 
@@ -226,36 +283,35 @@ export default async function Post({ params }: { params: Promise<{ slug: string 
     )
   }
 
+  const textColor = post.heroTextColor ?? 'var(--c-ink)'
   const related = (relatedSlugs[slug] ?? []).map(s => ({ slug: s, ...posts[s] })).filter(Boolean)
 
   return (
     <article>
 
-      {/* ── HEADER ── */}
-      <div className="container">
-        <header className="post-header">
-          <div className="post-header__eyebrow">
-            <a href="/thinking">← Journal</a>
-            <span className="post-header__byline-sep">·</span>
-            <span>{post.category}</span>
-            <span className="post-header__byline-sep">·</span>
-            <span>{post.issue}</span>
-          </div>
-          <h1 className="display-xl post-header__title">{post.title}</h1>
-          <div className="post-header__byline">
-            <span>{post.authors}</span>
-            <span className="post-header__byline-sep">·</span>
-            <span>{post.date}</span>
-            <span className="post-header__byline-sep">·</span>
-            <span>{post.readTime}</span>
-          </div>
-        </header>
+      {/* ── FULL-BLEED HERO ── */}
+      <div className="post-hero-full" style={{ background: post.heroColor }}>
+        <HeroVisual slug={slug} textColor={textColor} />
       </div>
 
-      {/* ── HERO IMAGE ── */}
+      {/* ── TITLE STRIP (below hero, inside container) ── */}
       <div className="container">
-        <div className="post-hero-image" style={{ background: post.heroColor }}>
-          <HeroVisual slug={slug} post={post} />
+        <div className="post-title">
+          <div className="post-title__eyebrow">
+            <a href="/thinking">← Journal</a>
+            <span className="post-title__sep">·</span>
+            <span>{post.category}</span>
+            <span className="post-title__sep">·</span>
+            <span>{post.issue}</span>
+          </div>
+          <h1 className="display-xl post-title__h1">{post.title}</h1>
+          <div className="post-title__byline">
+            <span>{post.authors}</span>
+            <span className="post-title__sep">·</span>
+            <span>{post.date}</span>
+            <span className="post-title__sep">·</span>
+            <span>{post.readTime}</span>
+          </div>
         </div>
       </div>
 

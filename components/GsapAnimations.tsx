@@ -116,17 +116,17 @@ export default function GsapAnimations() {
       }())
 
       /* ────────────────────────────────────────────────────────────
-         5 · SUB-PAGE HEADER ENTRANCE
+         5 · POST TITLE ENTRANCE (below full-bleed hero)
       ──────────────────────────────────────────────────────────── */
-      ;(function initPostHeader() {
-        if (!q('.post-header')) return
-        const eyebrow = q('.post-header__eyebrow')
-        const title   = q('.post-header__title')
-        const byline  = q('.post-header__byline')
+      ;(function initPostTitle() {
+        if (!q('.post-title')) return
+        const eyebrow = q('.post-title__eyebrow')
+        const title   = q('.post-title__h1')
+        const byline  = q('.post-title__byline')
 
         gsap.set([eyebrow, title, byline].filter(Boolean), { opacity: 0, y: 28 })
 
-        const tl = gsap.timeline({ delay: 0.8 })
+        const tl = gsap.timeline({ delay: 0.35 })
         if (eyebrow) tl.to(eyebrow, { opacity: 1, y: 0, duration: 0.50, ease: 'power3.out' })
         if (title)   tl.to(title,   { opacity: 1, y: 0, duration: 0.90, ease: 'expo.out' }, '-=0.20')
         if (byline)  tl.to(byline,  { opacity: 1, y: 0, duration: 0.55, ease: 'power3.out' }, '-=0.40')
@@ -173,7 +173,7 @@ export default function GsapAnimations() {
       ──────────────────────────────────────────────────────────── */
       ;['.section-head', '.color-block', '.j-feat',
        '.case-pullquote', '.case-cover', '.clients', '.cs-image', '.cs-intro',
-       '.post-hero-image', '.post-pullquote', '.post-image'].forEach(sel => {
+       '.post-hero-image', '.post-pullquote', '.post-image', '.post-video'].forEach(sel => {
         qa(sel).forEach(el => {
           gsap.fromTo(el,
             { opacity: 0, y: 48 },
@@ -199,6 +199,7 @@ export default function GsapAnimations() {
         { sel: '.cs-meta__item',       y: 16, x: 0, dur: 0.55, gap: 0.07 },
         { sel: '.post-related__item',  y: 20, x: 0, dur: 0.60, gap: 0.08 },
         { sel: '.j-list__item',        y: 16, x: 0, dur: 0.50, gap: 0.06 },
+        { sel: '.j-card',              y: 32, x: 0, dur: 0.72, gap: 0.09 },
       ]
 
       staggerGroups.forEach(({ sel, y, x, dur, gap }) => {

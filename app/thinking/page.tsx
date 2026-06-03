@@ -3,7 +3,47 @@ import NewsletterForm from '@/components/NewsletterForm'
 
 export const metadata: Metadata = {
   title: 'Thinking — Afterthought',
-  description: 'The Afterthought journal — slow essays from the desk.',
+  description: 'The Afterthought journal — essays, process notes and opinions from the studio.',
+}
+
+/* ── Per-post thumbnail visuals (placeholders until CMS images) ── */
+function CardImage({ slug, bg, textColor = 'var(--c-ink)' }: { slug: string; bg: string; textColor?: string }) {
+  const style: React.CSSProperties = { background: bg, position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px' }
+  switch (slug) {
+    case 'a-modest-argument-against-the-rebrand':
+      return <div style={style}>
+        <div style={{ textAlign: 'center' }}>
+          <div style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', fontSize: 'clamp(22px, 3.5vw, 42px)', lineHeight: 1.1, letterSpacing: '-1px', color: 'rgba(255,255,255,0.9)' }}>
+            Are you sure you<br />want a <span style={{ textDecoration: 'line-through', textDecorationColor: '#E8825A', textDecorationThickness: '3px' }}>rebrand</span>?
+          </div>
+        </div>
+      </div>
+    case 'the-brief-is-always-wrong':
+      return <div style={style}>
+        <div style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', fontSize: 'clamp(56px, 9vw, 100px)', lineHeight: 0.9, letterSpacing: '-3px', color: textColor, opacity: 0.85 }}>The<br />Brief.</div>
+      </div>
+    case 'on-making-a-wordmark':
+      return <div style={style}>
+        <div style={{ fontSize: 'clamp(64px, 10vw, 120px)', lineHeight: 0.9, letterSpacing: '-5px', fontVariationSettings: "'wght' 540", fontWeight: 540, color: textColor }}>Heli<span style={{ display: 'inline-block', transform: 'translateY(2px)', color: 'var(--c-block-coral)' }}>o</span></div>
+      </div>
+    case 'dont-design-the-menu':
+      return <div style={style}>
+        <div style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', fontSize: 'clamp(40px, 6vw, 72px)', lineHeight: 0.92, letterSpacing: '-2px', color: textColor }}>Querida</div>
+      </div>
+    case 'two-founders-no-department':
+      return <div style={style}>
+        <div style={{ textAlign: 'center' }}>
+          <div style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '2px', textTransform: 'uppercase', opacity: 0.5, color: textColor, marginBottom: '12px' }}>Studio</div>
+          <div style={{ fontSize: 'clamp(56px, 9vw, 112px)', lineHeight: 0.9, letterSpacing: '-4px', fontVariationSettings: "'wght' 540", fontWeight: 540, color: textColor }}>002</div>
+        </div>
+      </div>
+    case 'an-afterthought-on-naming':
+      return <div style={style}>
+        <div style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', fontSize: 'clamp(48px, 7vw, 88px)', lineHeight: 0.92, letterSpacing: '-2px', color: 'rgba(255,255,255,0.88)', textAlign: 'center' }}>After-<br />thought.</div>
+      </div>
+    default:
+      return <div style={style} />
+  }
 }
 
 const posts = [
@@ -13,10 +53,11 @@ const posts = [
     titleJsx: <>A modest argument against <em>the rebrand</em>.</>,
     category: 'Essay',
     issue: 'Issue 02',
-    date: '04 / 2026',
+    date: 'Apr 2026',
     readTime: '11 min',
-    authors: 'Anurag Gautam & Tina Gidwani',
-    excerpt: 'Most brands we meet need a quieter, slower thing than the one they came in asking for. Here is the conversation we now start with — and the four signals we listen for before we agree to redraw a single line.',
+    bg: 'var(--c-block-navy)',
+    textColor: 'rgba(255,255,255,0.9)',
+    excerpt: 'Most brands we meet need a quieter, slower thing than the one they came in asking for. Here is the conversation we now start with.',
     featured: true,
   },
   {
@@ -24,45 +65,50 @@ const posts = [
     title: 'The brief is always wrong, and that\'s the part of the job we love most.',
     category: 'Essay',
     issue: 'Issue 03',
-    date: '02 / 2026',
+    date: 'Feb 2026',
     readTime: '9 min',
+    bg: 'var(--c-block-coral)',
   },
   {
     slug: 'on-making-a-wordmark',
     title: 'On making a wordmark you\'ll still like in eleven years.',
     category: 'Process',
     issue: 'Issue 01',
-    date: '12 / 2025',
+    date: 'Dec 2025',
     readTime: '6 min',
+    bg: 'var(--c-block-lime)',
   },
   {
     slug: 'dont-design-the-menu',
     title: 'Don\'t design the menu. Design the way the menu changes.',
     category: 'Opinion',
     issue: 'Issue 01',
-    date: '10 / 2025',
+    date: 'Oct 2025',
     readTime: '4 min',
+    bg: 'var(--c-block-cream)',
   },
   {
     slug: 'two-founders-no-department',
     title: 'Two founders, no department: a small studio\'s first six months.',
     category: 'Studio',
     issue: 'Issue 01',
-    date: '11 / 2025',
+    date: 'Nov 2025',
     readTime: '7 min',
+    bg: 'var(--c-block-lilac)',
   },
   {
     slug: 'an-afterthought-on-naming',
     title: 'An afterthought on naming the studio "Afterthought."',
     category: 'Studio',
     issue: 'Issue 01',
-    date: '07 / 2025',
+    date: 'Jul 2025',
     readTime: '5 min',
+    bg: 'var(--c-ink)',
   },
 ]
 
 const featured = posts[0]
-const rest = posts.slice(1)
+const grid = posts.slice(1)
 
 export default function Thinking() {
   return (
@@ -73,47 +119,57 @@ export default function Thinking() {
           <span className="pulse"></span>
           <span>The journal · Vol. 01 · Quarterly</span>
         </div>
-        <h1 className="display-xl page-header__title">Notes from the desk — slow essays, the occasional <em>opinion</em>.</h1>
-        <p className="page-header__sub body-lg">We write four times a year, roughly. Short essays, the odd process post, and the kind of view of the industry you&apos;d usually only hear at the end of a good kickoff.</p>
+        <h1 className="display-xl page-header__title">Essays, process notes and the occasional <em>strong opinion</em>.</h1>
+        <p className="page-header__sub body-lg">We write when something is worth saying. Four times a year, roughly — essays on practice, notes on process, and opinions we&apos;re willing to put our name on.</p>
       </section>
 
       <div className="container" style={{ paddingBottom: 'var(--s-section)' }}>
 
-        {/* ── FEATURED POST ── */}
+        {/* ── FEATURED ARTICLE ── */}
         <a className="j-feat" href={`/thinking/${featured.slug}`}>
-          <div className="j-feat__kicker">
-            <span className="j-feat__kicker-dot"></span>
-            <span>Latest · {featured.category} · {featured.issue}</span>
+          <div className="j-feat__img" style={{ background: featured.bg }}>
+            <CardImage slug={featured.slug} bg={featured.bg} textColor={featured.textColor} />
           </div>
-          <h2 className="j-feat__title display-xl">{featured.titleJsx ?? featured.title}</h2>
-          <div className="j-feat__foot">
-            <p className="j-feat__excerpt">{featured.excerpt}</p>
-            <span className="j-feat__read">Read the essay · {featured.readTime} →</span>
+          <div className="j-feat__gradient"></div>
+          <div className="j-feat__content">
+            <div className="j-feat__kicker">
+              <span className="j-feat__dot"></span>
+              <span>Latest · {featured.category} · {featured.issue}</span>
+            </div>
+            <h2 className="j-feat__title">{featured.titleJsx ?? featured.title}</h2>
+            <div className="j-feat__meta">
+              <span>{featured.date}</span>
+              <span className="j-feat__meta-sep">·</span>
+              <span>{featured.readTime} read</span>
+              <span className="j-feat__meta-sep">·</span>
+              <span>Read the essay →</span>
+            </div>
           </div>
         </a>
 
-        {/* ── POST LIST ── */}
-        <div className="j-list-head">
-          <span className="j-list-head__label">All issues</span>
-          <span className="j-list-head__label">{posts.length} published</span>
+        {/* ── ARTICLE GRID ── */}
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginTop: '64px', marginBottom: '20px' }}>
+          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '1.2px', textTransform: 'uppercase', opacity: 0.42 }}>From the archive</span>
+          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '1.2px', textTransform: 'uppercase', opacity: 0.42 }}>{posts.length} published</span>
         </div>
 
-        <ul className="j-list">
-          {rest.map((post) => (
-            <li key={post.slug} className="j-list__item">
-              <a className="j-list__link" href={`/thinking/${post.slug}`}>
-                <div>
-                  <span className="j-list__kicker">{post.category} · {post.date}</span>
-                  <div className="j-list__title">{post.title}</div>
+        <div className="j-grid">
+          {grid.map(post => (
+            <a key={post.slug} className="j-card" href={`/thinking/${post.slug}`}>
+              <div className="j-card__img" style={{ background: post.bg, position: 'relative' }}>
+                <CardImage slug={post.slug} bg={post.bg} />
+              </div>
+              <div className="j-card__body">
+                <span className="j-card__kicker">{post.category} · {post.date}</span>
+                <div className="j-card__title">{post.title}</div>
+                <div className="j-card__foot">
+                  <span className="j-card__time">{post.readTime} read</span>
+                  <span className="j-card__arrow">→</span>
                 </div>
-                <div className="j-list__right">
-                  <span className="j-list__time">{post.readTime}</span>
-                  <span className="j-list__arrow">→</span>
-                </div>
-              </a>
-            </li>
+              </div>
+            </a>
           ))}
-        </ul>
+        </div>
 
         {/* ── NEWSLETTER ── */}
         <div id="newsletter" style={{ marginTop: '96px' }}>
