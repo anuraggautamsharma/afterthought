@@ -18,7 +18,7 @@ export default function Thinking() {
       </section>
 
       <section className="container" style={{ paddingBottom: '32px' }}>
-        <a className="journal-feature" href="#" style={{ textDecoration: 'none', color: 'inherit' }}>
+        <a className="journal-feature" href="/thinking/a-modest-argument-against-the-rebrand" style={{ textDecoration: 'none', color: 'inherit' }}>
           <div>
             <span className="journal-feature__cat">Essay · Anurag &amp; Tina · 11 min read</span>
             <h2 className="journal-feature__title">A modest argument against <em>the rebrand</em>.</h2>
@@ -49,7 +49,7 @@ export default function Thinking() {
         </div>
 
         <div className="thinking-grid">
-          <a className="think-card think-card--cream" href="#">
+          <a className="think-card think-card--cream" href="/thinking/the-brief-is-always-wrong">
             <div>
               <div className="think-card__top">
                 <span className="think-card__cat">Essay · 9 min</span>
@@ -60,7 +60,7 @@ export default function Thinking() {
             </div>
             <span className="think-card__cta">Read the essay →</span>
           </a>
-          <a className="think-card think-card--cream" href="#">
+          <a className="think-card think-card--cream" href="/thinking/on-making-a-wordmark">
             <div>
               <div className="think-card__top">
                 <span className="think-card__cat">Process · 6 min</span>
@@ -71,7 +71,7 @@ export default function Thinking() {
             </div>
             <span className="think-card__cta">Read the post →</span>
           </a>
-          <a className="think-card think-card--cream" href="#">
+          <a className="think-card think-card--cream" href="/thinking/dont-design-the-menu">
             <div>
               <div className="think-card__top">
                 <span className="think-card__cat">Opinion · 4 min</span>
@@ -97,12 +97,12 @@ export default function Thinking() {
         </div>
 
         <ul className="journal-list">
-          <li><a href="#"><span className="journal-list__num">№ 006</span><span className="journal-list__title">Don&apos;t design the menu. Design the way the menu changes.</span><span className="journal-list__cat">Opinion</span><span className="journal-list__date">10 · 25</span></a></li>
-          <li><a href="#"><span className="journal-list__num">№ 005</span><span className="journal-list__title">A modest argument against the rebrand.</span><span className="journal-list__cat">Essay</span><span className="journal-list__date">04 · 26</span></a></li>
-          <li><a href="#"><span className="journal-list__num">№ 004</span><span className="journal-list__title">On making a wordmark you&apos;ll still like in eleven years.</span><span className="journal-list__cat">Process</span><span className="journal-list__date">12 · 25</span></a></li>
-          <li><a href="#"><span className="journal-list__num">№ 003</span><span className="journal-list__title">The brief is always wrong, and that&apos;s the part of the job we love most.</span><span className="journal-list__cat">Essay</span><span className="journal-list__date">02 · 26</span></a></li>
-          <li><a href="#"><span className="journal-list__num">№ 002</span><span className="journal-list__title">Two founders, no department: a small studio&apos;s first six months.</span><span className="journal-list__cat">Studio</span><span className="journal-list__date">11 · 25</span></a></li>
-          <li><a href="#"><span className="journal-list__num">№ 001</span><span className="journal-list__title">An afterthought on naming the studio &quot;Afterthought.&quot;</span><span className="journal-list__cat">Studio</span><span className="journal-list__date">07 · 25</span></a></li>
+          <li><a href="/thinking/dont-design-the-menu"><span className="journal-list__num">№ 006</span><span className="journal-list__title">Don&apos;t design the menu. Design the way the menu changes.</span><span className="journal-list__cat">Opinion</span><span className="journal-list__date">10 · 25</span></a></li>
+          <li><a href="/thinking/a-modest-argument-against-the-rebrand"><span className="journal-list__num">№ 005</span><span className="journal-list__title">A modest argument against the rebrand.</span><span className="journal-list__cat">Essay</span><span className="journal-list__date">04 · 26</span></a></li>
+          <li><a href="/thinking/on-making-a-wordmark"><span className="journal-list__num">№ 004</span><span className="journal-list__title">On making a wordmark you&apos;ll still like in eleven years.</span><span className="journal-list__cat">Process</span><span className="journal-list__date">12 · 25</span></a></li>
+          <li><a href="/thinking/the-brief-is-always-wrong"><span className="journal-list__num">№ 003</span><span className="journal-list__title">The brief is always wrong, and that&apos;s the part of the job we love most.</span><span className="journal-list__cat">Essay</span><span className="journal-list__date">02 · 26</span></a></li>
+          <li><a href="/thinking/two-founders-no-department"><span className="journal-list__num">№ 002</span><span className="journal-list__title">Two founders, no department: a small studio&apos;s first six months.</span><span className="journal-list__cat">Studio</span><span className="journal-list__date">11 · 25</span></a></li>
+          <li><a href="/thinking/an-afterthought-on-naming"><span className="journal-list__num">№ 001</span><span className="journal-list__title">An afterthought on naming the studio &quot;Afterthought.&quot;</span><span className="journal-list__cat">Studio</span><span className="journal-list__date">07 · 25</span></a></li>
         </ul>
       </section>
 

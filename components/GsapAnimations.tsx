@@ -118,6 +118,20 @@ export default function GsapAnimations() {
       /* ────────────────────────────────────────────────────────────
          5 · SUB-PAGE HEADER ENTRANCE
       ──────────────────────────────────────────────────────────── */
+      ;(function initPostHeader() {
+        if (!q('.post-header')) return
+        const eyebrow = q('.post-header__eyebrow')
+        const title   = q('.post-header__title')
+        const byline  = q('.post-header__byline')
+
+        gsap.set([eyebrow, title, byline].filter(Boolean), { opacity: 0, y: 28 })
+
+        const tl = gsap.timeline({ delay: 0.8 })
+        if (eyebrow) tl.to(eyebrow, { opacity: 1, y: 0, duration: 0.50, ease: 'power3.out' })
+        if (title)   tl.to(title,   { opacity: 1, y: 0, duration: 0.90, ease: 'expo.out' }, '-=0.20')
+        if (byline)  tl.to(byline,  { opacity: 1, y: 0, duration: 0.55, ease: 'power3.out' }, '-=0.40')
+      }())
+
       ;(function initCsHero() {
         if (!q('.cs-hero')) return
         const eyebrow = q('.cs-hero__eyebrow')
@@ -158,7 +172,8 @@ export default function GsapAnimations() {
          7 · SCROLL REVEALS — individual large sections
       ──────────────────────────────────────────────────────────── */
       ;['.section-head', '.color-block', '.journal-feature',
-       '.case-pullquote', '.case-cover', '.clients', '.cs-image', '.cs-intro'].forEach(sel => {
+       '.case-pullquote', '.case-cover', '.clients', '.cs-image', '.cs-intro',
+       '.post-hero-image', '.post-pullquote', '.post-image'].forEach(sel => {
         qa(sel).forEach(el => {
           gsap.fromTo(el,
             { opacity: 0, y: 48 },
@@ -181,7 +196,8 @@ export default function GsapAnimations() {
         { sel: '.case-section',   y: 36,  x: 0,   dur: 0.80, gap: 0.10 },
         { sel: '.city-card',      y: 24,  x: 0,   dur: 0.60, gap: 0.10 },
         { sel: '.case-asset',     y: 32,  x: 0,   dur: 0.80, gap: 0.12 },
-        { sel: '.cs-meta__item',  y: 16,  x: 0,   dur: 0.55, gap: 0.07 },
+        { sel: '.cs-meta__item',       y: 16, x: 0, dur: 0.55, gap: 0.07 },
+        { sel: '.post-related__item',  y: 20, x: 0, dur: 0.60, gap: 0.08 },
       ]
 
       staggerGroups.forEach(({ sel, y, x, dur, gap }) => {
