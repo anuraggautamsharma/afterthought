@@ -36,49 +36,45 @@ export default function Home() {
         </div>
       </header>
 
-      <section className="showreel">
-        <div className="container">
-          <div className="showreel__stage" id="showreel-stage">
-            <video
-              id="showreel-video"
-              className="showreel__video"
-              muted
-              loop
-              playsInline
-              preload="none"
-            ></video>
+      <section className="showreel" id="showreel-section">
+        <div className="showreel__stage" id="showreel-stage">
+          <video
+            id="showreel-video"
+            className="showreel__video"
+            muted
+            loop
+            playsInline
+            preload="none"
+          ></video>
 
-            <div className="showreel__poster" aria-hidden="true">
-              <div className="sr-vignette"></div>
-              <div className="sr-glow"></div>
-              <div className="sr-grain"></div>
-            </div>
+          <div className="showreel__poster" aria-hidden="true">
+            <div className="sr-grain"></div>
+          </div>
 
-            <div className="showreel__overlay" id="showreel-overlay">
-              <button className="showreel__play-btn" aria-label="Play showreel">
-                <svg width="18" height="22" viewBox="0 0 18 22" fill="none">
-                  <path d="M1 1L17 11L1 21V1Z" fill="currentColor"></path>
-                </svg>
-              </button>
-            </div>
+          <div className="showreel__overlay" id="showreel-overlay">
+            <button className="showreel__play-btn" aria-label="Play showreel">
+              <svg width="20" height="24" viewBox="0 0 20 24" fill="none">
+                <path d="M2 1.5L18 12L2 22.5V1.5Z" fill="currentColor"></path>
+              </svg>
+            </button>
+          </div>
 
-            <div className="showreel__hud">
-              <div className="showreel__progress-track">
-                <div className="showreel__progress-fill" id="showreel-progress"></div>
-              </div>
-              <button className="showreel__mute" id="showreel-mute" aria-label="Toggle sound">
-                <svg className="sr-icon sr-icon--off" width="16" height="16" viewBox="0 0 16 16" fill="none">
-                  <path d="M1 5H4.5L8 2.5V13.5L4.5 11H1V5Z" fill="currentColor"/>
-                  <line x1="11" y1="5.5" x2="15" y2="10.5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round"/>
-                  <line x1="15" y1="5.5" x2="11" y2="10.5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round"/>
-                </svg>
-                <svg className="sr-icon sr-icon--on" width="16" height="16" viewBox="0 0 16 16" fill="none">
-                  <path d="M1 5H4.5L8 2.5V13.5L4.5 11H1V5Z" fill="currentColor"/>
-                  <path d="M11 6C12.2 7.2 12.2 8.8 11 10" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round"/>
-                  <path d="M13 4C15.2 6.2 15.2 9.8 13 12" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round"/>
-                </svg>
-              </button>
+          <div className="showreel__hud">
+            <div className="showreel__progress-track">
+              <div className="showreel__progress-fill" id="showreel-progress"></div>
             </div>
+            <button className="showreel__mute" id="showreel-mute" aria-label="Toggle sound">
+              <svg className="sr-icon sr-icon--off" width="15" height="15" viewBox="0 0 15 15" fill="none">
+                <path d="M1 5H4.5L7.5 2.5V12.5L4.5 10H1V5Z" fill="currentColor"/>
+                <line x1="10.5" y1="5" x2="14" y2="10" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round"/>
+                <line x1="14" y1="5" x2="10.5" y2="10" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round"/>
+              </svg>
+              <svg className="sr-icon sr-icon--on" width="15" height="15" viewBox="0 0 15 15" fill="none">
+                <path d="M1 5H4.5L7.5 2.5V12.5L4.5 10H1V5Z" fill="currentColor"/>
+                <path d="M10.5 5.5C11.7 6.7 11.7 8.3 10.5 9.5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round"/>
+                <path d="M12.5 3.5C14.7 5.7 14.7 9.3 12.5 11.5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round"/>
+              </svg>
+            </button>
           </div>
         </div>
       </section>

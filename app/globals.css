@@ -1079,51 +1079,41 @@ img { max-width: 100%; display: block; }
 /* ============== SHOWREEL ============== */
 /* ============== SHOWREEL ============== */
 .showreel {
-  background: #080808;
-  padding: 72px 0;
+  background: var(--c-canvas);
+  padding: var(--s-section) 0;
+  overflow: hidden;
 }
 .showreel__stage {
   position: relative;
   width: 100%;
   aspect-ratio: 16 / 9;
-  border-radius: 20px;
   overflow: hidden;
-  background: #060606;
+  background: #080808;
   cursor: pointer;
+  transform-origin: center center;
+  will-change: transform, border-radius;
 }
-/* Poster — shown before video loads */
+/* Poster */
 .showreel__poster {
   position: absolute;
   inset: 0;
   z-index: 1;
   pointer-events: none;
-}
-.sr-vignette {
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(ellipse at 50% 50%, #111 0%, #000 100%);
-  transition: opacity 0.5s ease;
-}
-.showreel__stage:hover .sr-vignette { opacity: 0.75; }
-.sr-glow {
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(ellipse at 50% 55%, rgba(255,255,255,0.025) 0%, transparent 60%);
+  background: radial-gradient(ellipse at 50% 42%, #1c1c1c 0%, #060606 70%);
 }
 .sr-grain {
   position: absolute;
   inset: -50%;
   width: 200%; height: 200%;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.08'/%3E%3C/svg%3E");
-  opacity: 0.55;
-  animation: grain 1.2s steps(3) infinite;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='256' height='256'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='256' height='256' filter='url(%23n)' opacity='0.1'/%3E%3C/svg%3E");
+  opacity: 0.4;
+  animation: grain 1.4s steps(3) infinite;
 }
 @keyframes grain {
   0%,100% { transform: translate(0,0) }
-  20%     { transform: translate(-2%,-3%) }
-  40%     { transform: translate(3%, 2%) }
-  60%     { transform: translate(-1%, 4%) }
-  80%     { transform: translate(2%,-2%) }
+  25%     { transform: translate(-2%,-3%) }
+  50%     { transform: translate(3%, 2%) }
+  75%     { transform: translate(-1%, 4%) }
 }
 /* Video */
 .showreel__video {
@@ -1144,44 +1134,26 @@ img { max-width: 100%; display: block; }
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: opacity 0.35s ease;
+  transition: opacity 0.3s ease;
 }
 .showreel__overlay.sr-hidden { opacity: 0; pointer-events: none; }
 .showreel__play-btn {
-  width: 72px; height: 72px;
+  width: 96px; height: 96px;
   border-radius: 50%;
-  background: rgba(255,255,255,0.07);
-  border: 1px solid rgba(255,255,255,0.22);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
+  background: #fff;
+  border: none;
   display: flex; align-items: center; justify-content: center;
-  color: #fff;
+  color: var(--c-ink);
   cursor: pointer;
-  position: relative;
-  transition: background 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
+  transition: background 0.25s ease, transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
   will-change: transform;
 }
-.showreel__play-btn::before,
-.showreel__play-btn::after {
-  content: '';
-  position: absolute;
-  border-radius: 50%;
-  border: 1px solid rgba(255,255,255,0.10);
-  animation: sr-ring 2.8s ease-out infinite;
+.showreel__play-btn svg { margin-left: 4px; }
+.showreel__play-btn:hover {
+  background: var(--c-block-lime);
+  transform: scale(1.10);
 }
-.showreel__play-btn::before { inset: -14px; }
-.showreel__play-btn::after  { inset: -28px; animation-delay: 0.7s; border-color: rgba(255,255,255,0.05); }
-@keyframes sr-ring {
-  0%   { transform: scale(1);    opacity: 1; }
-  100% { transform: scale(1.65); opacity: 0; }
-}
-.showreel__stage:hover .showreel__play-btn {
-  background: rgba(255,255,255,0.14);
-  border-color: rgba(255,255,255,0.48);
-  transform: scale(1.06);
-}
-.showreel__play-btn svg { margin-left: 3px; }
-/* HUD — progress + mute */
+/* HUD */
 .showreel__hud {
   position: absolute;
   inset: 0;
@@ -1192,36 +1164,32 @@ img { max-width: 100%; display: block; }
   position: absolute;
   bottom: 0; left: 0; right: 0;
   height: 2px;
-  background: rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.10);
 }
 .showreel__progress-fill {
   height: 100%;
   width: 0%;
-  background: rgba(255,255,255,0.55);
+  background: rgba(255,255,255,0.60);
   transition: width 0.25s linear;
 }
 .showreel__mute {
   position: absolute;
-  bottom: 16px; right: 16px;
+  bottom: 18px; right: 18px;
   pointer-events: auto;
-  width: 36px; height: 36px;
+  width: 34px; height: 34px;
   border-radius: 50%;
-  background: rgba(0,0,0,0.40);
-  border: 1px solid rgba(255,255,255,0.14);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: rgba(255,255,255,0.10);
+  border: 1px solid rgba(255,255,255,0.20);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   display: flex; align-items: center; justify-content: center;
-  color: rgba(255,255,255,0.65);
+  color: rgba(255,255,255,0.70);
   cursor: pointer;
   opacity: 0;
-  transform: translateY(4px);
-  transition: opacity 0.25s ease, transform 0.25s ease, background 0.2s ease, color 0.2s ease;
+  transition: opacity 0.2s ease, background 0.2s ease, color 0.2s ease;
 }
-.showreel__stage:hover .showreel__mute {
-  opacity: 1;
-  transform: translateY(0);
-}
-.showreel__mute:hover { background: rgba(0,0,0,0.60); color: #fff; }
+.showreel__stage:hover .showreel__mute { opacity: 1; }
+.showreel__mute:hover { background: rgba(255,255,255,0.22); color: #fff; }
 .sr-icon--on  { display: none; }
 .sr-icon--off { display: block; }
 .showreel__mute.is-on .sr-icon--off { display: none; }
@@ -1229,7 +1197,6 @@ img { max-width: 100%; display: block; }
 
 @media (max-width: 768px) {
   .showreel { padding: 56px 0; }
-  .showreel__stage { border-radius: 14px; }
-  .showreel__play-btn { width: 60px; height: 60px; }
-  .showreel__mute { opacity: 1; transform: none; bottom: 12px; right: 12px; }
+  .showreel__play-btn { width: 72px; height: 72px; }
+  .showreel__mute { opacity: 1; bottom: 12px; right: 12px; }
 }

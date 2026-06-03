@@ -240,16 +240,41 @@ export default function GsapAnimations() {
       })
 
       /* ────────────────────────────────────────────────────────────
-         14 · SHOWREEL SECTION REVEAL
+         14 · SHOWREEL — scroll-driven expansion
       ──────────────────────────────────────────────────────────── */
       ;(function () {
-        const stage = q('.showreel__stage')
-        if (!stage) return
+        const section = q('#showreel-section') as HTMLElement | null
+        const stage   = q('.showreel__stage')  as HTMLElement | null
+        if (!section || !stage) return
+
+        // Stage expands from inset+rounded to full-width as section scrolls in
         gsap.fromTo(stage,
-          { opacity: 0, scale: 0.97 },
-          { opacity: 1, scale: 1, duration: 1.1, ease: 'expo.out',
-            scrollTrigger: { trigger: stage, start: 'top 88%', once: true } }
+          { scale: 0.84, borderRadius: '3vw' },
+          { scale: 1,    borderRadius: '0px', ease: 'none',
+            scrollTrigger: {
+              trigger: section,
+              start: 'top bottom',
+              end:   'top 10%',
+              scrub: 1.5,
+            }
+          }
         )
+
+        // Inner poster zooms out as stage expands — parallax depth
+        const poster = stage.querySelector('.showreel__poster') as HTMLElement | null
+        if (poster) {
+          gsap.fromTo(poster,
+            { scale: 1.10 },
+            { scale: 1, ease: 'none',
+              scrollTrigger: {
+                trigger: section,
+                start: 'top bottom',
+                end:   'top 10%',
+                scrub: 1.5,
+              }
+            }
+          )
+        }
       }())
 
       /* ────────────────────────────────────────────────────────────
