@@ -10,12 +10,19 @@ export default function Home() {
   return (
     <>
       <header className="hero">
+        <div className="hero__bg" aria-hidden="true">
+          <span className="hero__bg-word">Afterthought</span>
+        </div>
         <div className="container">
           <div className="hero__eyebrow eyebrow">
             <span className="pulse"></span>
             <span>Independent design &amp; creative studio · Est. 2025</span>
           </div>
-          <h1 className="display-xl hero__title">We make the second&nbsp;thoughts that brands wish they&apos;d had <em>first</em>.</h1>
+          <h1 className="display-xl hero__title">
+            <span className="hero__clip"><span>We make the second&nbsp;</span></span>
+            <span className="hero__clip"><span>thoughts that brands</span></span>
+            <span className="hero__clip"><span>wish they&apos;d had <em>first</em>.</span></span>
+          </h1>
           <div className="hero__meta">
             <div className="hero__meta-block">
               <span className="caption">What we do</span>

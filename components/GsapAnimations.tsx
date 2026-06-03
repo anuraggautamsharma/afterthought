@@ -54,15 +54,65 @@ export default function GsapAnimations() {
       ──────────────────────────────────────────────────────────── */
       ;(function initHero() {
         if (!q('.hero')) return
-        gsap.set('.hero__eyebrow, .hero__title, .hero__meta', { opacity: 0 })
 
-        gsap.timeline({ delay: 0.9 })
-          .fromTo('.hero__eyebrow',
-            { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.58, ease: 'power3.out' })
-          .fromTo('.hero__title',
-            { opacity: 0, y: 64 }, { opacity: 1, y: 0, duration: 1.10, ease: 'expo.out' }, '-=0.28')
-          .fromTo('.hero__meta',
-            { opacity: 0, y: 32 }, { opacity: 1, y: 0, duration: 0.70, ease: 'power3.out' }, '-=0.55')
+        const clips   = qa('.hero__clip > span')
+        const bgWord  = q('.hero__bg-word') as HTMLElement | null
+        const eyebrow = q('.hero__eyebrow') as HTMLElement | null
+        const meta    = q('.hero__meta')    as HTMLElement | null
+        const em      = q('.hero__title em') as HTMLElement | null
+
+        gsap.set(clips, { yPercent: 112 })
+        gsap.set(eyebrow, { opacity: 0, y: 10 })
+        gsap.set(meta, { opacity: 0, y: 20 })
+
+        const tl = gsap.timeline({ delay: 0.82 })
+
+        tl.to(eyebrow, { opacity: 1, y: 0, duration: 0.55, ease: 'power3.out' })
+          .to(clips,   { yPercent: 0, duration: 1.05, stagger: 0.10, ease: 'expo.out' }, '-=0.12')
+          .to(meta,    { opacity: 1, y: 0, duration: 0.65, ease: 'power3.out' }, '-=0.50')
+          .call(() => { if (em) em.classList.add('underlined') }, [], '+=0.05')
+
+        if (bgWord) {
+          tl.to(bgWord, { opacity: 0.028, duration: 1.6, ease: 'power2.out' }, '-=1.0')
+        }
+
+        // Mouse parallax + magnetic CTAs (desktop pointer only)
+        if (!window.matchMedia('(pointer: fine)').matches) return
+
+        const hero  = q('.hero') as HTMLElement | null
+        const title = q('.hero__title') as HTMLElement | null
+
+        if (hero && title) {
+          hero.addEventListener('mousemove', (e: Event) => {
+            const me = e as MouseEvent
+            const r  = hero.getBoundingClientRect()
+            const nx = (me.clientX - r.left) / r.width  - 0.5
+            const ny = (me.clientY - r.top)  / r.height - 0.5
+
+            gsap.to(title,   { x: nx * 10, y: ny *  6, duration: 0.9, ease: 'power2.out', overwrite: 'auto' })
+            gsap.to(eyebrow, { x: nx *  5, y: ny *  3, duration: 0.9, ease: 'power2.out', overwrite: 'auto' })
+            if (bgWord) gsap.to(bgWord, { x: nx * -22, y: ny * -14, duration: 1.1, ease: 'power2.out', overwrite: 'auto' })
+          })
+
+          hero.addEventListener('mouseleave', () => {
+            const targets = [title, eyebrow, bgWord].filter(Boolean)
+            gsap.to(targets, { x: 0, y: 0, duration: 1.4, ease: 'elastic.out(1, 0.35)', overwrite: 'auto' })
+          })
+        }
+
+        // Magnetic CTA buttons
+        qa('.hero__cta-row .btn').forEach(btn => {
+          btn.addEventListener('mousemove', (e: Event) => {
+            const me = e as MouseEvent
+            const r  = (btn as HTMLElement).getBoundingClientRect()
+            const x  = me.clientX - (r.left + r.width  / 2)
+            const y  = me.clientY - (r.top  + r.height / 2)
+            gsap.to(btn, { x: x * 0.28, y: y * 0.28, duration: 0.3, ease: 'power2.out' })
+          })
+          btn.addEventListener('mouseleave', () => {
+            gsap.to(btn, { x: 0, y: 0, duration: 0.7, ease: 'elastic.out(1, 0.5)' })
+          })
+        })
       }())
 
       /* ────────────────────────────────────────────────────────────
@@ -254,28 +304,6 @@ export default function GsapAnimations() {
         })
       }())
 
-      /* ────────────────────────────────────────────────────────────
-         TEXT SCRAMBLE — hero italic 'first'
-      ──────────────────────────────────────────────────────────── */
-      ;(function () {
-        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz—·'
-        function scramble(el: Element, finalText: string, duration: number) {
-          const start = performance.now()
-          ;(function step(now: number) {
-            const p = Math.min((now - start) / duration, 1)
-            const resolved = Math.floor(p * finalText.length)
-            el.textContent = finalText.split('').map(function(c, i) {
-              return i < resolved ? c : chars[Math.floor(Math.random() * chars.length)]
-            }).join('')
-            if (p < 1) requestAnimationFrame(step)
-            else el.textContent = finalText
-          }(performance.now()))
-        }
-        setTimeout(function () {
-          const em = document.querySelector('.hero__title em')
-          if (em) scramble(em, 'first', 680)
-        }, 2600)
-      }())
     }
 
     init()
