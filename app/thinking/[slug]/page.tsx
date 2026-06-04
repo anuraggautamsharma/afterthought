@@ -2,7 +2,6 @@ import type { Metadata } from 'next'
 
 interface PostMeta {
   title: string
-  titleJsx?: React.ReactNode
   category: string
   date: string
   issue: string
@@ -14,77 +13,17 @@ interface PostMeta {
 }
 
 const posts: Record<string, PostMeta> = {
-  'a-modest-argument-against-the-rebrand': {
-    title: 'A modest argument against the rebrand.',
+  'the-future-of-design-belongs-to-the-messy-middle': {
+    title: 'The Future of Design Belongs to the Messy Middle.',
     category: 'Essay',
-    date: 'Apr 2026',
-    issue: 'Issue 02',
-    readTime: '11 min read',
+    date: 'Jun 2026',
+    issue: 'Issue 01',
+    readTime: '8 min read',
     authors: 'Anurag Gautam & Tina Gidwani',
-    excerpt: 'Most brands we meet need a quieter, slower thing than the one they came in asking for. Here is the conversation we now start with.',
+    excerpt: 'Design today lives in the space between speed and taste, automation and intuition, business pressure and creative freedom. That is where the real work begins.',
     heroColor: 'var(--c-block-navy)',
     heroTextColor: 'rgba(255,255,255,0.92)',
   },
-  'the-brief-is-always-wrong': {
-    title: 'The brief is always wrong, and that\'s the part of the job we love most.',
-    category: 'Essay',
-    date: 'Feb 2026',
-    issue: 'Issue 03',
-    readTime: '9 min read',
-    authors: 'Anurag Gautam',
-    excerpt: 'A short defence of the first month — the one nobody schedules for, and what we tend to do with it.',
-    heroColor: 'var(--c-block-coral)',
-  },
-  'on-making-a-wordmark': {
-    title: 'On making a wordmark you\'ll still like in eleven years.',
-    category: 'Process',
-    date: 'Dec 2025',
-    issue: 'Issue 01',
-    readTime: '6 min read',
-    authors: 'Tina Gidwani',
-    excerpt: 'Drawn from the Helio re-launch — how we settle on a single letterform when there are four good ones.',
-    heroColor: 'var(--c-block-lime)',
-  },
-  'dont-design-the-menu': {
-    title: 'Don\'t design the menu. Design the way the menu changes.',
-    category: 'Opinion',
-    date: 'Oct 2025',
-    issue: 'Issue 01',
-    readTime: '4 min read',
-    authors: 'Tina Gidwani & Anurag Gautam',
-    excerpt: 'A short rule we now apply to every restaurant brief — and the project that taught it to us.',
-    heroColor: 'var(--c-block-cream)',
-  },
-  'two-founders-no-department': {
-    title: 'Two founders, no department: a small studio\'s first six months.',
-    category: 'Studio',
-    date: 'Nov 2025',
-    issue: 'Issue 01',
-    readTime: '7 min read',
-    authors: 'Anurag Gautam & Tina Gidwani',
-    excerpt: 'What it actually looked like in the first half-year — the good decisions, the ones we\'d do differently, and the one we keep making.',
-    heroColor: 'var(--c-block-lilac)',
-  },
-  'an-afterthought-on-naming': {
-    title: 'An afterthought on naming the studio "Afterthought."',
-    category: 'Studio',
-    date: 'Jul 2025',
-    issue: 'Issue 01',
-    readTime: '5 min read',
-    authors: 'Anurag Gautam',
-    excerpt: 'The name started as a joke. Then it became the most honest thing we\'d said about the studio in six months of trying to name it.',
-    heroColor: 'var(--c-ink)',
-    heroTextColor: 'rgba(255,255,255,0.9)',
-  },
-}
-
-const relatedSlugs: Record<string, string[]> = {
-  'a-modest-argument-against-the-rebrand': ['the-brief-is-always-wrong', 'on-making-a-wordmark', 'dont-design-the-menu'],
-  'the-brief-is-always-wrong': ['a-modest-argument-against-the-rebrand', 'on-making-a-wordmark', 'two-founders-no-department'],
-  'on-making-a-wordmark': ['a-modest-argument-against-the-rebrand', 'dont-design-the-menu', 'two-founders-no-department'],
-  'dont-design-the-menu': ['a-modest-argument-against-the-rebrand', 'on-making-a-wordmark', 'an-afterthought-on-naming'],
-  'two-founders-no-department': ['an-afterthought-on-naming', 'a-modest-argument-against-the-rebrand', 'the-brief-is-always-wrong'],
-  'an-afterthought-on-naming': ['two-founders-no-department', 'a-modest-argument-against-the-rebrand', 'the-brief-is-always-wrong'],
 }
 
 export function generateStaticParams() {
@@ -101,172 +40,118 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   }
 }
 
-/* ─── Hero visual per post ─────────────────────────────── */
-function HeroVisual({ slug, textColor }: { slug: string; textColor: string }) {
-  switch (slug) {
-    case 'a-modest-argument-against-the-rebrand':
-      return (
-        <div style={{ textAlign: 'center', padding: '0 40px' }}>
-          <div style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', fontSize: 'clamp(40px, 6vw, 90px)', lineHeight: 1.06, letterSpacing: '-2px', color: textColor }}>
-            Are you sure<br />you want a{' '}
-            <span style={{ textDecoration: 'line-through', textDecorationColor: '#E8825A', textDecorationThickness: '4px' }}>rebrand</span>?
-          </div>
-          <div style={{ marginTop: '36px', fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '1.5px', textTransform: 'uppercase', opacity: 0.38, color: textColor }}>
-            Issue 02 cover · April 2026
-          </div>
-        </div>
-      )
-    case 'the-brief-is-always-wrong':
-      return (
-        <div style={{ textAlign: 'center', padding: '0 40px' }}>
-          <div style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', fontSize: 'clamp(64px, 10vw, 130px)', lineHeight: 0.9, letterSpacing: '-4px', color: textColor, opacity: 0.9 }}>
-            The<br />Brief.
-          </div>
-        </div>
-      )
-    case 'on-making-a-wordmark':
-      return (
-        <div style={{ textAlign: 'center' }}>
-          <div style={{ fontSize: 'clamp(80px, 14vw, 200px)', lineHeight: 0.9, letterSpacing: '-7px', fontVariationSettings: "'wght' 540", fontWeight: 540, color: textColor }}>
-            Heli<span style={{ display: 'inline-block', transform: 'translateY(3px)', color: 'var(--c-block-coral)' }}>o</span>
-          </div>
-          <div style={{ marginTop: '24px', fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '1.5px', textTransform: 'uppercase', opacity: 0.5, color: textColor }}>
-            Helio wordmark · 2025
-          </div>
-        </div>
-      )
-    case 'dont-design-the-menu':
-      return (
-        <div style={{ textAlign: 'center' }}>
-          <div style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', fontSize: 'clamp(56px, 9vw, 120px)', lineHeight: 1.02, letterSpacing: '-3px', color: textColor }}>Querida</div>
-          <div style={{ marginTop: '16px', fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '1.4px', textTransform: 'uppercase', opacity: 0.55, color: textColor }}>A small kitchen · Spanish, mostly</div>
-        </div>
-      )
-    case 'two-founders-no-department':
-      return (
-        <div style={{ textAlign: 'center' }}>
-          <div style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '2px', textTransform: 'uppercase', opacity: 0.45, color: textColor, marginBottom: '20px' }}>Studio note</div>
-          <div style={{ fontSize: 'clamp(80px, 13vw, 176px)', lineHeight: 0.88, letterSpacing: '-5px', fontVariationSettings: "'wght' 540", fontWeight: 540, color: textColor }}>001</div>
-          <div style={{ marginTop: '20px', fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '2px', textTransform: 'uppercase', opacity: 0.45, color: textColor }}>Six months in</div>
-        </div>
-      )
-    default:
-      return (
-        <div style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', fontSize: 'clamp(56px, 8vw, 112px)', lineHeight: 1, letterSpacing: '-3px', color: textColor, padding: '0 40px', textAlign: 'center', opacity: 0.88 }}>
-          After-<br />thought.
-        </div>
-      )
-  }
+function HeroVisual({ textColor }: { textColor: string }) {
+  return (
+    <div style={{ textAlign: 'center', padding: '0 40px' }}>
+      <div style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', fontSize: 'clamp(48px, 7vw, 100px)', lineHeight: 0.96, letterSpacing: '-3px', color: textColor }}>
+        The Messy<br />Middle.
+      </div>
+      <div style={{ marginTop: '32px', fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '1.5px', textTransform: 'uppercase', color: textColor, opacity: 0.35 }}>
+        Issue 01 · June 2026
+      </div>
+    </div>
+  )
 }
 
-/* ─── Body content per post ────────────────────────────── */
-function PostBody({ slug }: { slug: string }) {
-  switch (slug) {
-    case 'a-modest-argument-against-the-rebrand':
-      return <RebrandEssay />
-    default:
-      return (
-        <div className="post-body container">
-          <p className="post-lead" style={{ opacity: 0.45, fontStyle: 'italic' }}>This essay is coming soon.</p>
-          <p>We publish four times a year, roughly. <a href="/thinking" style={{ color: 'inherit', borderBottom: '1px solid currentColor' }}>See what&apos;s already up</a>, or subscribe below and we&apos;ll send it when it&apos;s ready.</p>
-        </div>
-      )
-  }
-}
-
-function RebrandEssay() {
+function MessyMiddleEssay() {
   return (
     <div className="post-body container">
-      <p className="post-lead">The rebrand arrives with a particular kind of urgency. The pitch deck is ready, the new CEO is impatient, and somewhere in the brief is a sentence that reads: &quot;We want to feel more premium.&quot; What nobody says in the first meeting — and what we have learned, slowly, to ask in the second — is what happened to make the current brand feel wrong.</p>
 
-      <p>Most of the time, the answer is not &ldquo;the logo is bad.&rdquo; It&apos;s something more specific: the company got bigger, or pivoted, or hired someone who keeps saying the word &ldquo;contemporary,&rdquo; or lost the original designer who knew why every decision was made. The brand didn&apos;t fail. It just stopped being explained.</p>
+      <p className="post-lead">Design is no longer a straight line. It is not just brief, moodboard, wireframe, design, delivery. It is not just about making something look beautiful. And it is definitely not just about using the newest AI tool before everyone else does.</p>
 
-      <p>We have a rule we apply before we agree to any rebrand: we ask the client to give us a tour of the current identity. Not a critique — a tour. What does this colour mean? Why this typeface and not another? What did you want people to feel when they first saw this? Usually within twenty minutes, a rebranding project becomes a recalibration project. The work is still there. The logic is still there. What was missing was someone to translate it.</p>
+      <p>Design today lives in the messy middle.</p>
 
-      <blockquote className="post-pullquote">&ldquo;A new mark on a confused company is still a confused company. The brief comes to us because the team can&apos;t agree on what they look like.&rdquo;</blockquote>
+      <p>The space between speed and taste.<br />
+      Between automation and intuition.<br />
+      Between business pressure and creative freedom.<br />
+      Between what AI can generate and what only a designer can feel.</p>
 
-      <p>This is the uncomfortable thing about rebrands: they are, more often than not, a symptom of something organisational. The brief comes to us because the team can&apos;t agree on what they look like, and they&apos;ve decided — reasonably, if optimistically — that a new visual identity will settle the argument. It won&apos;t. Or not for long.</p>
+      <p>At Afterthought, we believe this is where the real work begins.</p>
 
-      <h2>The four signals we listen for</h2>
+      <h2>AI can make design faster. But it cannot make it meaningful.</h2>
 
-      <p><strong>One:</strong> Nobody can explain why the current brand looks the way it does. Not the founder, not the head of marketing, not the designer who updated it last February. It exists, and everyone uses it, and no one knows what it means.</p>
+      <p>AI has changed the way designers work. It can generate options, speed up research, support ideation, create prototypes, and reduce the time spent on repetitive tasks. According to Figma&apos;s State of the Designer 2026 report, 89% of designers say AI helps them work faster, 80% say it improves collaboration, and 91% say AI tools improve their designs.</p>
 
-      <p><strong>Two:</strong> The brand has multiple unofficial versions in the wild and nobody has noticed. The investor deck uses a darker version of the navy. The website uses the old wordmark. The swag vendor was given a JPEG in 2021 and ran with it. The system has fractured, slowly, and the fractures have become normal.</p>
+      <p>But faster does not always mean better.</p>
 
-      <p><strong>Three:</strong> The most recent update was made by an intern during a quiet summer, and it somehow stuck. Nobody approved it. Nobody rejected it. It became the version.</p>
+      <p>A design can be produced quickly and still feel empty. A brand identity can look polished and still say nothing. A website can be technically impressive and still fail to create trust.</p>
 
-      <p><strong>Four:</strong> The client says &ldquo;I&apos;d know it when I see it&rdquo; when asked what they want. This is not a bad answer, exactly — it means the instinct is there, and instincts can be worked with. But it usually means the client has a feeling, not a brief, and the feeling is &ldquo;better.&rdquo;</p>
+      <p>That is why the designer&apos;s role is becoming more important, not less.</p>
 
-      {/* ── Two-column image grid ── */}
-      <div className="post-image-grid">
-        <figure className="post-image">
-          <div className="post-image__visual" style={{ background: 'var(--c-block-navy)', minHeight: '280px' }}>
-            <div style={{ textAlign: 'center', padding: '40px 32px' }}>
-              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '1.5px', textTransform: 'uppercase', opacity: 0.4, color: '#fff', marginBottom: '20px' }}>Before</div>
-              <div style={{ fontSize: '48px', letterSpacing: '-2px', fontVariationSettings: "'wght' 380", fontWeight: 380, color: 'rgba(255,255,255,0.5)', lineHeight: 1 }}>Logo</div>
-              <div style={{ fontSize: '10px', fontFamily: 'var(--font-mono)', color: 'rgba(255,255,255,0.3)', letterSpacing: '1px', marginTop: '12px' }}>2019 — inconsistent</div>
-            </div>
-          </div>
-          <figcaption>The original mark — five versions in circulation, none of them authoritative.</figcaption>
-        </figure>
-        <figure className="post-image">
-          <div className="post-image__visual" style={{ background: 'var(--c-block-navy)', minHeight: '280px' }}>
-            <div style={{ textAlign: 'center', padding: '40px 32px' }}>
-              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '1.5px', textTransform: 'uppercase', opacity: 0.4, color: '#fff', marginBottom: '20px' }}>After</div>
-              <div style={{ fontSize: '48px', letterSpacing: '-2px', fontVariationSettings: "'wght' 580", fontWeight: 580, color: 'rgba(255,255,255,0.92)', lineHeight: 1 }}>Logo</div>
-              <div style={{ fontSize: '10px', fontFamily: 'var(--font-mono)', color: 'rgba(255,255,255,0.45)', letterSpacing: '1px', marginTop: '12px' }}>2024 — one version, clearly owned</div>
-            </div>
-          </div>
-          <figcaption>The recalibrated mark — same underlying geometry, clarified weight and spacing.</figcaption>
-        </figure>
-      </div>
+      <blockquote className="post-pullquote">
+        &ldquo;AI can give you outputs. But designers give those outputs direction. AI can create variation. But designers create meaning.&rdquo;
+      </blockquote>
 
-      <h2>What we offer instead</h2>
+      <h2>Craft is the new difference between average and unforgettable.</h2>
 
-      <p>These are not signs that the brand has failed. They&apos;re signs that the organisation lost track of what it was building, and the brand just got there first.</p>
+      <p>When everyone has access to the same tools, taste becomes the real advantage.</p>
 
-      <p>What we offer in those cases is not a rebrand. It&apos;s closer to a translation. We read the existing system — even the inconsistent, apologetic, out-of-context version of it — and we find the idea that was always in there, half-expressed. We write it down. We extend it, carefully. And when the work is done, it usually doesn&apos;t look like a revolution. It looks like the thing it always should have been.</p>
+      <p>The future will not belong to the people who simply know how to prompt better. It will belong to the people who know what to keep, what to remove, what to refine, and what to protect.</p>
 
-      {/* ── Full-width image ── */}
-      <figure className="post-image">
-        <div className="post-image__visual" style={{ background: 'var(--c-surface-soft)', minHeight: '320px' }}>
-          <div style={{ textAlign: 'center', padding: '0 40px' }}>
-            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '1.5px', textTransform: 'uppercase', opacity: 0.38, marginBottom: '32px' }}>Our diagnostic framework — used in every first review</div>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px', maxWidth: '600px', textAlign: 'left' }}>
-              {[
-                ['Recalibrate', 'The idea is right. The execution drifted.', 'var(--c-block-lime)'],
-                ['Extend', 'The idea is right. The system never grew.', 'var(--c-block-coral)'],
-                ['Rethink', 'The idea itself has run out.', 'var(--c-block-navy)'],
-              ].map(([label, desc, bg]) => (
-                <div key={label} style={{ padding: '20px', background: bg, borderRadius: '10px' }}>
-                  <div style={{ fontSize: '13px', fontVariationSettings: "'wght' 580", fontWeight: 580, marginBottom: '8px', color: bg === 'var(--c-block-navy)' ? '#fff' : 'var(--c-ink)' }}>{label}</div>
-                  <div style={{ fontSize: '11px', lineHeight: 1.55, opacity: 0.65, color: bg === 'var(--c-block-navy)' ? '#fff' : 'var(--c-ink)' }}>{desc}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-        <figcaption>Most briefs that arrive as &ldquo;rebrand&rdquo; are actually &ldquo;recalibrate.&rdquo; We ask the question in the first call.</figcaption>
-      </figure>
+      <p>Craft is not just decoration.</p>
 
-      <p>The clients who insist on the revolution are not wrong to want it. Sometimes the existing brand is genuinely broken, or tied to something the company no longer is, or simply so anonymous that continuing to use it is a kind of institutional shrug. In those cases, we start from zero and we enjoy it. But we ask the questions first. The tour is always worth taking.</p>
+      <p>Craft is the small decision that makes a brand feel premium. The pause in an animation that makes the story land. The spacing that makes a layout breathe. The typography that makes a message feel confident. The visual system that makes a company look like it knows where it is going.</p>
 
-      {/* ── Video block ── */}
-      <figure className="post-video">
-        <div className="post-video__frame">
-          <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '16px' }}>
-            <div style={{ width: '56px', height: '56px', borderRadius: '50%', border: '1.5px solid rgba(255,255,255,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <svg width="18" height="22" viewBox="0 0 18 22" fill="none"><path d="M1 1.5L17 11L1 20.5V1.5Z" fill="rgba(255,255,255,0.7)"/></svg>
-            </div>
-            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '1.2px', textTransform: 'uppercase', color: 'rgba(255,255,255,0.38)' }}>Studio walkthrough · 4 min</div>
-          </div>
-        </div>
-        <figcaption>A short recording from our review process — brand audit to first direction, condensed.</figcaption>
-      </figure>
+      <p>In Figma&apos;s research, designers connected craft with visual polish, thoughtful problem-solving, intuitive UX, emotion, delight, and consistency. For us, craft is simpler than that:</p>
+
+      <blockquote className="post-pullquote">
+        &ldquo;Craft is care made visible. It is what separates a design that was made from a design that was considered.&rdquo;
+      </blockquote>
+
+      <h2>Creative freedom is not a luxury. It is how better work happens.</h2>
+
+      <p>Great design needs freedom. Not chaos. Not random exploration. Not endless experimentation without direction. But the kind of freedom where designers are trusted to think, question, challenge, and shape the final outcome.</p>
+
+      <p>Figma&apos;s report notes that creative autonomy is a major contributor to designer satisfaction, with 87% of designers saying decision-making power helps them do their best work. At the same time, 91% say clear goals and expectations help them perform better.</p>
+
+      <p>That balance matters. Creative teams do not need micromanagement. They need clarity. They need to know the business goal, the audience, the problem, the positioning, and the emotional response the work should create. Once that is clear, the best ideas usually come when designers are given room to think beyond the obvious.</p>
+
+      <p>At Afterthought, we do not see design as execution alone. We see it as strategy made visible.</p>
+
+      <h2>The best designers are becoming translators.</h2>
+
+      <p>The designer of 2026 is not just someone who makes screens, logos, posts, or motion graphics. The designer is becoming a translator.</p>
+
+      <p>A translator of business goals into visual systems.<br />
+      A translator of audience behaviour into experience.<br />
+      A translator of brand personality into design language.<br />
+      A translator of abstract ideas into things people can see, feel, and remember.</p>
+
+      <p>This is why the messy middle matters. Because most brands do not fail because they lack visuals. They fail because their visuals do not have a point of view.</p>
+
+      <p>They look correct, but not distinct. They look modern, but not memorable. They look expensive, but not meaningful.</p>
+
+      <p>In a world where AI can generate endless creative options, the strongest brands will not be the ones with the most content. They will be the ones with the clearest taste.</p>
+
+      <h2>What this means for brands.</h2>
+
+      <p>For founders, marketers, and growing companies, the message is clear: do not use design only when something needs to &ldquo;look good.&rdquo;</p>
+
+      <p>Bring design into the room earlier.</p>
+
+      <p>Use it when you are defining your positioning. Use it when you are shaping your product experience. Use it when you are building trust. Use it when you are trying to explain why your brand should matter.</p>
+
+      <p>Because design is no longer the final layer. It is part of the thinking. The brands that understand this will move faster, communicate better, and build stronger emotional memory in the minds of their audience.</p>
+
+      <h2>The Afterthought perspective.</h2>
+
+      <p>At Afterthought, we are interested in the work that happens after the obvious idea.</p>
+
+      <p>After the first reference.<br />
+      After the first draft.<br />
+      After the easy visual.<br />
+      After the trend everyone is already copying.</p>
+
+      <p>That is where better design usually begins.</p>
+
+      <p>We use tools, systems, AI, research, motion, strategy, and storytelling. But the goal is never just output. The goal is to create work with intention. Work that feels sharp. Work that feels considered. Work that gives a brand a stronger voice. Work that helps businesses look as serious as the value they provide.</p>
+
+      <p>Because the future of design is not just faster. It is more thoughtful. And in a world full of instant visuals, thoughtfulness may become the rarest form of craft.</p>
 
       <hr className="post-rule" />
 
-      <p style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', letterSpacing: '0.5px', opacity: 0.5 }}>Published in Issue 02 of the Afterthought Journal, April 2026. If you found this useful, the next issue comes out in July — <a href="/thinking#newsletter" style={{ color: 'inherit', borderBottom: '1px solid currentColor' }}>subscribe here</a>.</p>
+      <p style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', letterSpacing: '0.5px', opacity: 0.5 }}>Published in Issue 01 of the Afterthought Journal, June 2026. If you found this useful, subscribe below — the next issue comes out in September.</p>
+
     </div>
   )
 }
@@ -284,17 +169,16 @@ export default async function Post({ params }: { params: Promise<{ slug: string 
   }
 
   const textColor = post.heroTextColor ?? 'var(--c-ink)'
-  const related = (relatedSlugs[slug] ?? []).map(s => ({ slug: s, ...posts[s] })).filter(Boolean)
 
   return (
     <article>
 
       {/* ── FULL-BLEED HERO ── */}
       <div className="post-hero-full" style={{ background: post.heroColor }}>
-        <HeroVisual slug={slug} textColor={textColor} />
+        <HeroVisual textColor={textColor} />
       </div>
 
-      {/* ── TITLE STRIP (below hero, inside container) ── */}
+      {/* ── TITLE STRIP ── */}
       <div className="container">
         <div className="post-title">
           <div className="post-title__eyebrow">
@@ -316,7 +200,7 @@ export default async function Post({ params }: { params: Promise<{ slug: string 
       </div>
 
       {/* ── BODY ── */}
-      <PostBody slug={slug} />
+      <MessyMiddleEssay />
 
       {/* ── SUBSCRIBE ── */}
       <section className="container">
@@ -329,22 +213,6 @@ export default async function Post({ params }: { params: Promise<{ slug: string 
           </div>
         </div>
       </section>
-
-      {/* ── RELATED ── */}
-      {related.length > 0 && (
-        <div className="container post-related">
-          <span className="post-related__label">More from the journal</span>
-          <div className="post-related__grid">
-            {related.map(r => (
-              <a key={r.slug} className="post-related__item" href={`/thinking/${r.slug}`}>
-                <span className="post-related__item-cat">{r.category}</span>
-                <span className="post-related__item-title">{r.title}</span>
-                <span className="post-related__item-date">{r.date}</span>
-              </a>
-            ))}
-          </div>
-        </div>
-      )}
 
     </article>
   )
