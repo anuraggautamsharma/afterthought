@@ -1830,7 +1830,7 @@ img { max-width: 100%; display: block; }
 /* ============== SHOWREEL ============== */
 .showreel {
   background: var(--c-canvas);
-  padding: var(--s-section) 0;
+  padding: 0 0 var(--s-section);
   overflow: hidden;
 }
 .showreel__stage {
@@ -1946,7 +1946,7 @@ img { max-width: 100%; display: block; }
 .showreel__mute.is-on .sr-icon--on  { display: block; }
 
 @media (max-width: 768px) {
-  .showreel { padding: 56px 0; }
+  .showreel { padding: 0 0 56px; }
   .showreel__play-btn { width: 72px; height: 72px; }
   .showreel__mute { opacity: 1; bottom: 12px; right: 12px; }
 }
