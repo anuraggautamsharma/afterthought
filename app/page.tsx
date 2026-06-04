@@ -14,22 +14,38 @@ export default function Home() {
           <span className="hero__bg-word">Afterthought</span>
         </div>
         <div className="container">
-          <div className="hero__eyebrow eyebrow">
-            <span className="pulse"></span>
-            <span>Independent design &amp; creative studio · Est. 2025</span>
+          <div className="hero__head">
+            <div className="hero__eyebrow eyebrow">
+              <span className="pulse"></span>
+              <span>Independent studio · Bangalore · Est. 2025</span>
+            </div>
+            <div className="hero__badge">
+              <span className="hero__badge-dot"></span>
+              Open for briefs
+            </div>
           </div>
           <h1 className="display-xl hero__title">
             <span className="hero__clip"><span>We make the second&nbsp;</span></span>
             <span className="hero__clip"><span>thoughts that brands</span></span>
             <span className="hero__clip"><span>wish they&apos;d had <em>first</em>.</span></span>
           </h1>
-          <div className="hero__meta">
-            <div className="hero__meta-block">
-              <p className="body-lg hero__desc">Brand identity, naming, and motion — made for founders who want to look as serious as they are.</p>
-            </div>
-            <div className="hero__cta-row">
-              <a className="btn btn-primary" href="/contact">Start a project</a>
-              <a className="btn btn-secondary" href="/work">See our work</a>
+        </div>
+        <div className="hero__bar">
+          <div className="container">
+            <div className="hero__bar-inner">
+              <div className="hero__services">
+                <span>Brand Identity</span>
+                <span className="hero__sep">·</span>
+                <span>Naming</span>
+                <span className="hero__sep">·</span>
+                <span>Motion</span>
+                <span className="hero__sep">·</span>
+                <span>Bangalore · Worldwide</span>
+              </div>
+              <div className="hero__cta-row">
+                <a className="btn btn-primary" href="/contact">Start a project</a>
+                <a className="btn btn-secondary" href="/work">See our work</a>
+              </div>
             </div>
           </div>
         </div>
