@@ -31,7 +31,7 @@ export default function GsapAnimations() {
         const clips   = qa('.hero__clip > span')
         const bgWord  = q('.hero__bg-word') as HTMLElement | null
         const eyebrow = q('.hero__eyebrow') as HTMLElement | null
-        const meta    = q('.hero__meta')    as HTMLElement | null
+        const meta    = q('.hero__bar')    as HTMLElement | null
         const em      = q('.hero__title em') as HTMLElement | null
 
         gsap.set(clips, { yPercent: 112 })
