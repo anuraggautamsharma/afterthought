@@ -111,16 +111,13 @@ export default function PipelineLab() {
 
         {/* ── VIDEO EMBED ── */}
         <figure className="post-video" style={{ margin: '64px 0' }}>
-          <div className="post-video__frame" style={{ background: '#0A0614' }}>
-            <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '20px' }}>
-              <PipelineFlow accent="#A855F7" />
-              <div style={{ width: '64px', height: '64px', borderRadius: '50%', border: '1.5px solid rgba(168,85,247,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <svg width="20" height="24" viewBox="0 0 20 24" fill="none">
-                  <path d="M2 1.5L18 12L2 22.5V1.5Z" fill="rgba(168,85,247,0.85)" />
-                </svg>
-              </div>
-              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '1.2px', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)' }}>30 sec · Motion Graphics · 2025</div>
-            </div>
+          <div className="post-video__frame">
+            <iframe
+              src="https://www.youtube.com/embed/XL-wrU8nrZk?rel=0&modestbranding=1"
+              title="The Pipeline Lab — Brand Intro"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            />
           </div>
           <figcaption>The Pipeline Lab brand intro — script and motion design by Afterthought.</figcaption>
         </figure>
@@ -132,30 +129,6 @@ export default function PipelineLab() {
             <h2>The aesthetic of a well-run sales operation.</h2>
             <p>The visual language had to feel like the inside of the agency itself — structured, sharp, and systematically executed. We avoided illustration and anything that read as &ldquo;creative agency.&rdquo; This was a performance business explaining a performance service to a performance audience.</p>
             <p>The style was built on clean layouts, bold kinetic typography, pipeline-inspired motion, and a dark-to-light palette with purple as the brand accent. Each transition was functional — it moved the argument forward rather than providing visual decoration. Abstract pipeline flows made the service feel tangible without making it literal.</p>
-          </div>
-        </div>
-
-        {/* ── STYLE FRAMES GRID ── */}
-        <div className="cs-image-grid">
-          <div className="cs-image" style={{ background: '#0A0614', minHeight: '280px', margin: 0 }}>
-            <div style={{ padding: '40px 36px', width: '100%' }}>
-              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '1.5px', textTransform: 'uppercase', color: 'rgba(168,85,247,0.6)', marginBottom: '24px' }}>Frame 01 — Problem</div>
-              <div style={{ fontSize: 'clamp(22px, 3vw, 36px)', lineHeight: 1.12, letterSpacing: '-1px', fontVariationSettings: "'wght' 560", fontWeight: 560, color: '#fff' }}>
-                Most outbound<br />
-                <span style={{ color: '#A855F7' }}>doesn&apos;t work.</span>
-              </div>
-              <div style={{ marginTop: '24px', height: '1px', background: 'rgba(168,85,247,0.25)', width: '60%' }}></div>
-            </div>
-          </div>
-          <div className="cs-image" style={{ background: '#F2ECFF', minHeight: '280px', margin: 0 }}>
-            <div style={{ padding: '40px 36px', width: '100%' }}>
-              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '1.5px', textTransform: 'uppercase', color: 'rgba(91,33,182,0.5)', marginBottom: '24px' }}>Frame 02 — Solution</div>
-              <div style={{ fontSize: 'clamp(22px, 3vw, 36px)', lineHeight: 1.12, letterSpacing: '-1px', fontVariationSettings: "'wght' 560", fontWeight: 560, color: '#0A0614' }}>
-                Build a system<br />
-                <span style={{ color: '#7C3AED' }}>that creates pipeline.</span>
-              </div>
-              <div style={{ marginTop: '24px', height: '1px', background: 'rgba(124,58,237,0.25)', width: '60%' }}></div>
-            </div>
           </div>
         </div>
 
