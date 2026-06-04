@@ -25,8 +25,7 @@ export default function Home() {
           </h1>
           <div className="hero__meta">
             <div className="hero__meta-block">
-              <span className="caption">What we do</span>
-              <p className="body-lg">Brand identity, naming, packaging and digital — made for founders, institutions and the occasional well-meaning monopoly. We start where the obvious answer runs out.</p>
+              <p className="body-lg hero__desc">Brand identity, naming, and motion — made for founders who want to look as serious as they are.</p>
             </div>
             <div className="hero__cta-row">
               <a className="btn btn-primary" href="/contact">Start a project</a>
