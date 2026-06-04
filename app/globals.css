@@ -584,6 +584,30 @@ img { max-width: 100%; display: block; }
 .tile--purple .tile__eyebrow { color: #F1E9DA; }
 .tile--purple .tile__title { color: #F1E9DA; }
 
+/* ============== TILE VISUAL: PIPELINE LAB ============== */
+.tile--dark { background: #0A0614; color: #fff; }
+.tile--dark .tile__meta  { border-top-color: rgba(255,255,255,0.10); color: #fff; }
+.tile--dark .tile__arrow { background: rgba(168,85,247,0.22); color: #fff; }
+.tile--dark .tile__eyebrow { color: rgba(255,255,255,0.5); }
+.tile--dark .tile__title { color: #fff; }
+
+.vis-pipelinelab {
+  width: 100%; height: 100%;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 32px; padding: 48px 40px;
+  position: relative; overflow: hidden;
+}
+.vis-pipelinelab__wordmark {
+  font-size: clamp(32px, 4vw, 56px);
+  line-height: 1; letter-spacing: -2px;
+  font-variation-settings: "wght" 560; font-weight: 560;
+  color: #fff; text-align: center;
+}
+.vis-pipelinelab__wordmark span { color: #A855F7; }
+.tile--purple .tile__eyebrow { color: #F1E9DA; }
+.tile--purple .tile__title { color: #F1E9DA; }
+
 .vis-justach {
   width: 100%; height: 100%;
   display: flex; flex-direction: column;

@@ -83,10 +83,10 @@ export default function Home() {
         <div className="section-head">
           <div className="section-head__left">
             <span className="caption">Selected work — 2025</span>
-            <h2 className="display-lg section-head__title">One project, so far. Built to last.</h2>
+            <h2 className="display-lg section-head__title">Two projects. Identity, script, and motion.</h2>
           </div>
           <div className="section-head__right">
-            <p className="body-sm">We started Afterthought in 2025. Below is the first engagement — a naming and complete brand identity for a modern men&apos;s salon. More work is on the way.</p>
+            <p className="body-sm">We started Afterthought in 2025. Below are the first two engagements — a brand identity for a men&apos;s salon and a motion piece for a B2B GTM agency.</p>
           </div>
         </div>
 
@@ -105,6 +105,37 @@ export default function Home() {
               <div className="tile__meta-left">
                 <span className="tile__eyebrow">Case 001 · Justach · Naming · Logo · Identity · 2025</span>
                 <div className="tile__title">A men&apos;s salon built around one unforgettable symbol.</div>
+              </div>
+              <div className="tile__arrow">→</div>
+            </div>
+          </a>
+
+          <a className="tile tile--dark tile-wide" href="/work/pipelinelab">
+            <div className="tile__visual">
+              <div className="vis-pipelinelab">
+                <svg viewBox="0 0 304 64" fill="none" style={{ width: '100%', maxWidth: '300px' }} aria-hidden="true">
+                  {[0,1,2].map(i => {
+                    const xs = [32, 112, 192, 272]
+                    return <line key={i} x1={xs[i]+14} y1={32} x2={xs[i+1]-14} y2={32} stroke="#A855F7" strokeWidth="1" strokeOpacity="0.35" strokeDasharray="4 4"/>
+                  })}
+                  {['ICP','Outreach','Meeting','Pipeline'].map((label, i) => {
+                    const xs = [32, 112, 192, 272]
+                    return (
+                      <g key={label}>
+                        <circle cx={xs[i]} cy={32} r={14} fill="#A855F7" fillOpacity="0.12"/>
+                        <circle cx={xs[i]} cy={32} r={5} fill="#A855F7" fillOpacity="0.7"/>
+                        <text x={xs[i]} y={58} textAnchor="middle" fill="white" fillOpacity="0.35" fontSize="8" fontFamily="monospace" letterSpacing="0.8">{label}</text>
+                      </g>
+                    )
+                  })}
+                </svg>
+                <div className="vis-pipelinelab__wordmark">The Pipeline<span>.</span>Lab</div>
+              </div>
+            </div>
+            <div className="tile__meta">
+              <div className="tile__meta-left">
+                <span className="tile__eyebrow">Case 002 · The Pipeline Lab · Script · Motion Design · 2025</span>
+                <div className="tile__title">Thirty seconds to explain a revenue engine.</div>
               </div>
               <div className="tile__arrow">→</div>
             </div>
