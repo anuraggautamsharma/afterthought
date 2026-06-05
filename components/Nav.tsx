@@ -7,6 +7,7 @@ const links = [
   { href: '/work',     label: 'Work',     desc: 'Brand Identity · Naming · Motion' },
   { href: '/studio',   label: 'Studio',   desc: 'About the studio'                 },
   { href: '/thinking', label: 'Thinking', desc: 'Journal & essays'                 },
+  { href: '/careers',  label: 'Careers',  desc: 'Work with us'                     },
   { href: '/contact',  label: 'Contact',  desc: 'Start a brief'                    },
 ]
 
