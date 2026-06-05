@@ -111,8 +111,8 @@ export default function Studio() {
       <section className="container" style={{ paddingBottom: 'var(--s-section)' }}>
         <div className="color-block color-block--lime">
           <span className="eyebrow cb-eyebrow">What we make</span>
-          <h2 className="cb-title display-lg">Six disciplines. <em>One clear point of view.</em></h2>
-          <p className="body-lg cb-body">Brand identity, naming, motion, packaging, digital, and campaigns — all of it done with two founders, not handed off after the pitch.</p>
+          <h2 className="cb-title display-lg">Seven disciplines. <em>One clear point of view.</em></h2>
+          <p className="body-lg cb-body">Brand identity, naming, motion, packaging, digital, campaigns, and social — all of it done with two founders, not handed off after the pitch.</p>
           <div style={{ marginTop: '40px' }}>
             <a className="btn btn-primary" href="/services">See all services →</a>
           </div>

@@ -54,6 +54,14 @@ const services = [
     deliverables: ['Campaign concept & art direction', 'OOH and print design', 'Social campaign suite', 'Brand film concept and direction', 'Photography direction'],
     for: 'Brands making a deliberate public moment. Founders who need the launch to count.',
   },
+  {
+    num: '07',
+    title: 'Social Media & Distribution',
+    tags: ['Content', 'Social', 'Distribution'],
+    description: 'We help brands build a real presence — not just post more. That means a content system rooted in the brand, a point of view worth following, and a distribution strategy that compounds over time rather than chasing the algorithm.',
+    deliverables: ['Content strategy & editorial calendar', 'Social identity system (templates, formats, type)', 'Platform-native content production', 'Caption and copy voice', 'Distribution playbook & channel strategy'],
+    for: 'Brands with something to say but no system to say it consistently. Founders building an audience alongside a product.',
+  },
 ]
 
 export default function Services() {
@@ -65,7 +73,7 @@ export default function Services() {
           <span>Services · What we make</span>
         </div>
         <h1 className="display-xl page-header__title">
-          Six disciplines. <em>One clear point of view.</em>
+          Seven disciplines. <em>One clear point of view.</em>
         </h1>
         <p className="page-header__sub body-lg">
           We take on roughly four engagements a year. Every project gets two founders, not a team assigned after the pitch. Below is what we do, what we deliver, and who it&apos;s for.
