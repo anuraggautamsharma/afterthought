@@ -1972,31 +1972,27 @@ img { max-width: 100%; display: block; }
 .svc-list {
   display: flex;
   flex-direction: column;
-  gap: 10px;
   padding-bottom: var(--s-section);
 }
 
-/* ── Service card ── */
+/* ── Service card — sticky deck ── */
 .svc-card {
-  position: relative;
+  position: sticky;
   overflow: hidden;
   border-radius: var(--r-lg);
   padding: 48px 56px 52px;
+  will-change: transform;
+  transform-origin: 50% 0;
 }
-.svc-card::after {
-  content: attr(data-num);
-  position: absolute;
-  top: -16px;
-  right: 40px;
-  font-size: 220px;
-  line-height: 1;
-  font-variation-settings: 'wght' 800;
-  font-weight: 800;
-  opacity: 0.06;
-  pointer-events: none;
-  user-select: none;
-  letter-spacing: -8px;
-}
+
+/* Peek offsets: each card sticks 12px below previous, revealing a coloured top edge */
+.svc-card:nth-child(1) { top: 68px;  z-index: 1; }
+.svc-card:nth-child(2) { top: 80px;  z-index: 2; }
+.svc-card:nth-child(3) { top: 92px;  z-index: 3; }
+.svc-card:nth-child(4) { top: 104px; z-index: 4; }
+.svc-card:nth-child(5) { top: 116px; z-index: 5; }
+.svc-card:nth-child(6) { top: 128px; z-index: 6; }
+.svc-card:nth-child(7) { top: 140px; z-index: 7; }
 
 /* Color variants — all light pastels */
 .svc-card--lime   { background: #EEF9BE; }
@@ -2138,7 +2134,14 @@ img { max-width: 100%; display: block; }
   .svc-limit:nth-child(3), .svc-limit:nth-child(4) { border-top: none; }
 }
 @media (max-width: 768px) {
-  .svc-list { gap: 8px; }
+  /* Tighter peek on mobile — 8px per card */
+  .svc-card:nth-child(1) { top: 64px;  }
+  .svc-card:nth-child(2) { top: 72px;  }
+  .svc-card:nth-child(3) { top: 80px;  }
+  .svc-card:nth-child(4) { top: 88px;  }
+  .svc-card:nth-child(5) { top: 96px;  }
+  .svc-card:nth-child(6) { top: 104px; }
+  .svc-card:nth-child(7) { top: 112px; }
   .svc-card { padding: 32px 32px 36px; }
   .svc-card::after { font-size: 120px; top: -8px; right: 20px; }
   .svc-card__title { font-size: 28px; }

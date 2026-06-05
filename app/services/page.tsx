@@ -1,11 +1,13 @@
 import type { Metadata } from 'next'
+import { ServiceCards } from '@/components/ServiceCards'
+import type { Service } from '@/components/ServiceCards'
 
 export const metadata: Metadata = {
   title: 'Services — Afterthought',
   description: 'Brand identity, naming, motion, packaging, and digital — what Afterthought does, how it works, and what we don\'t take on.',
 }
 
-const services = [
+const services: Service[] = [
   {
     num: '01',
     color: 'lime',
@@ -87,36 +89,9 @@ export default function Services() {
         </p>
       </section>
 
-      {/* ── SERVICE CARDS ── */}
-      <div className="container svc-list">
-        {services.map((svc) => (
-          <div key={svc.num} className={`svc-card svc-card--${svc.color}`} data-num={svc.num}>
-            <div className="svc-card__top">
-              <span className="svc-card__num">{svc.num}</span>
-              <div className="svc-card__tags">
-                {svc.tags.map(t => <span key={t} className="svc-tag">{t}</span>)}
-              </div>
-            </div>
-
-            <h2 className="svc-card__title">{svc.title}</h2>
-            <p className="svc-card__desc">{svc.description}</p>
-
-            <div className="svc-card__rule" />
-
-            <div className="svc-card__bottom">
-              <div>
-                <span className="svc-card__label">What we deliver</span>
-                <ul className="svc-deliverables">
-                  {svc.deliverables.map(d => <li key={d}>{d}</li>)}
-                </ul>
-              </div>
-              <div>
-                <span className="svc-card__label">Who it&apos;s for</span>
-                <p className="svc-card__for">{svc.for}</p>
-              </div>
-            </div>
-          </div>
-        ))}
+      {/* ── SERVICE DECK ── */}
+      <div className="container">
+        <ServiceCards services={services} />
       </div>
 
       {/* ── PROCESS ── */}
