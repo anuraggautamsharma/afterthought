@@ -582,6 +582,7 @@ img { max-width: 100%; display: block; }
 }
 .hero__ticker-track {
   display: flex;
+  width: max-content;
   white-space: nowrap;
   animation: ticker-scroll 24s linear infinite;
   will-change: transform;
