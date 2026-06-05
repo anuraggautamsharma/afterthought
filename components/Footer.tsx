@@ -23,6 +23,7 @@ export default function Footer() {
               <li><a href="/studio">About</a></li>
               <li><a href="/studio#founders">Founders</a></li>
               <li><a href="/studio#capabilities">Capabilities</a></li>
+              <li><a href="/careers">Careers</a></li>
             </ul>
           </div>
           <div className="footer__col">
