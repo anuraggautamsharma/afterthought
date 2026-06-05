@@ -569,6 +569,9 @@ img { max-width: 100%; display: block; }
   background: var(--c-semantic-success);
   animation: pulse 2.2s ease-in-out infinite;
 }
+.hero__sub {
+  display: none;
+}
 .hero__ticker {
   background: var(--c-block-lilac);
   overflow: hidden;
@@ -579,13 +582,14 @@ img { max-width: 100%; display: block; }
 .hero__ticker-track {
   display: flex;
   white-space: nowrap;
-  animation: ticker-scroll 28s linear infinite;
+  animation: ticker-scroll 24s linear infinite;
+  will-change: transform;
 }
 .hero__ticker-set {
   display: inline-flex;
   align-items: center;
-  gap: 28px;
-  padding-right: 28px;
+  gap: 32px;
+  padding-right: 32px;
   flex-shrink: 0;
   font-family: var(--font-mono);
   font-size: 11px;
@@ -598,8 +602,8 @@ img { max-width: 100%; display: block; }
   opacity: 0.35;
 }
 @keyframes ticker-scroll {
-  0%   { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
+  0%   { transform: translate3d(0, 0, 0); }
+  100% { transform: translate3d(-50%, 0, 0); }
 }
 
 /* ============== SECTION HEADERS ============== */
@@ -2144,12 +2148,16 @@ img { max-width: 100%; display: block; }
   .hero__head { margin-bottom: 24px; }
   .hero__bg-word { font-size: 100px; letter-spacing: -4px; right: -4%; bottom: -2%; }
   .hero__badge { display: none; }
-  .hero__ticker { margin-top: 32px; padding: 13px 0; }
-  .hero__ticker-track { animation-duration: 18s; }
+  .hero__sub { display: block; font-size: 15px; line-height: 1.6; opacity: 0.55; margin-top: 20px; max-width: 480px; }
+  .hero__ticker { margin-top: 28px; padding: 14px 0; }
+  .hero__ticker-track { animation-duration: 15s; }
+  .hero__ticker-set { font-size: 13px; letter-spacing: 1.2px; gap: 24px; padding-right: 24px; }
   .display-xl { font-size: 52px; letter-spacing: -1px; }
   .display-lg { font-size: 40px; letter-spacing: -0.6px; }
   .display-md { font-size: 32px; letter-spacing: -0.4px; }
-  .section { padding-top: 64px; padding-bottom: 64px; }
+  .section { padding-top: 56px; padding-bottom: 56px; }
+  .section-head { margin-bottom: 32px; }
+  .showreel { padding: 0 0 20px; }
   .work-grid { grid-template-columns: 1fr; }
   .work-grid .tile-wide { grid-column: span 1; }
   .vis-helio { grid-template-columns: 1fr; }
@@ -2202,14 +2210,16 @@ img { max-width: 100%; display: block; }
   .nav-overlay__socials { display: none; }
   /* Hero — tight on small phones */
   .hero { padding-top: 32px; padding-bottom: 0; }
-  .hero__head { margin-bottom: 18px; }
+  .hero__head { margin-bottom: 16px; }
   .hero__bg-word { display: none; }
   .hero__eyebrow { font-size: 10px; }
-  .hero__ticker { margin-top: 24px; padding: 12px 0; }
-  .hero__ticker-track { animation-duration: 13s; }
-  .hero__ticker-set { font-size: 10px; letter-spacing: 1.2px; gap: 20px; padding-right: 20px; }
-  .display-xl { font-size: 38px; letter-spacing: -0.7px; line-height: 1.08; }
+  .hero__ticker { margin-top: 20px; padding: 13px 0; }
+  .hero__ticker-track { animation-duration: 10s; }
+  .hero__ticker-set { font-size: 13px; letter-spacing: 1px; gap: 22px; padding-right: 22px; }
+  .display-xl { font-size: 36px; letter-spacing: -0.6px; line-height: 1.1; }
   .display-lg { font-size: 30px; letter-spacing: -0.4px; }
+  .section { padding-top: 44px; padding-bottom: 44px; }
+  .showreel { padding: 0 0 8px; }
   .manifesto-grid { grid-template-columns: 1fr; }
   .footer__cols { grid-template-columns: 1fr 1fr; }
   .footer__wordmark { letter-spacing: -3px; }

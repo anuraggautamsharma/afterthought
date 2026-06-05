@@ -29,6 +29,7 @@ export default function Home() {
             <span className="hero__clip"><span>thoughts that brands</span></span>
             <span className="hero__clip"><span>wish they&apos;d had <em>first</em>.</span></span>
           </h1>
+          <p className="hero__sub">Brand identity, naming & motion — for founders who know what they stand for but haven&apos;t yet found how it looks.</p>
         </div>
         <div className="hero__ticker" aria-hidden="true">
           <div className="hero__ticker-track">
