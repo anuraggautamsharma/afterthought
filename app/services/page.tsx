@@ -8,6 +8,7 @@ export const metadata: Metadata = {
 const services = [
   {
     num: '01',
+    color: 'lime',
     title: 'Brand Identity & Strategy',
     tags: ['Visual', 'Verbal', 'Systems'],
     description: 'The full thing — from a single positioning sentence to a working visual system. We research the category, write the brief in our own words, then build an identity that holds up across every surface it needs to touch.',
@@ -16,6 +17,7 @@ const services = [
   },
   {
     num: '02',
+    color: 'cream',
     title: 'Naming & Verbal Identity',
     tags: ['Naming', 'Tone of voice', 'Copy'],
     description: 'We find the name that says the thing you didn\'t know you meant. Then we build the language system around it — tone, voice, the sentence that goes on the homepage, the words that hold up in a pitch.',
@@ -24,6 +26,7 @@ const services = [
   },
   {
     num: '03',
+    color: 'navy',
     title: 'Motion & Animation',
     tags: ['Brand motion', 'Film', 'UI animation'],
     description: 'Brand identity systems that move. We design motion for logos, campaigns, social content, and product UI — always from brand first, never decoration for its own sake.',
@@ -32,6 +35,7 @@ const services = [
   },
   {
     num: '04',
+    color: 'coral',
     title: 'Packaging & Retail Systems',
     tags: ['CPG', 'Hospitality', 'Print'],
     description: 'Physical identity — the thing that sits on a shelf, arrives in a bag, or greets someone at a door. We design for production reality, not just for the render.',
@@ -40,6 +44,7 @@ const services = [
   },
   {
     num: '05',
+    color: 'mint',
     title: 'Digital & Web',
     tags: ['Web', 'Product', 'Design systems'],
     description: 'Design for screens that need to do something. We work at the intersection of brand and product — from marketing sites to internal tools — and hand off work that developers can actually build.',
@@ -48,6 +53,7 @@ const services = [
   },
   {
     num: '06',
+    color: 'lilac',
     title: 'Campaigns & Creative Direction',
     tags: ['Launch', 'OOH', 'Brand films'],
     description: 'The moment a brand goes public — we help plan it and make it. From launch campaigns to annual brand films, we concept, direct, and produce. For production at scale, we bring in our trusted collaborators.',
@@ -56,6 +62,7 @@ const services = [
   },
   {
     num: '07',
+    color: 'pink',
     title: 'Social Media & Distribution',
     tags: ['Content', 'Social', 'Distribution'],
     description: 'We help brands build a real presence — not just post more. That means a content system rooted in the brand, a point of view worth following, and a distribution strategy that compounds over time rather than chasing the algorithm.',
@@ -80,32 +87,32 @@ export default function Services() {
         </p>
       </section>
 
-      {/* ── SERVICE LIST ── */}
+      {/* ── SERVICE CARDS ── */}
       <div className="container svc-list">
-        {services.map((svc, i) => (
-          <div key={svc.num} className="svc-row">
-            <div className="svc-row__head">
-              <span className="svc-row__num">{svc.num}</span>
-              <div>
-                <h2 className="svc-row__title">{svc.title}</h2>
-                <div className="svc-row__tags">
-                  {svc.tags.map(t => <span key={t} className="svc-tag">{t}</span>)}
-                </div>
+        {services.map((svc) => (
+          <div key={svc.num} className={`svc-card svc-card--${svc.color}`} data-num={svc.num}>
+            <div className="svc-card__top">
+              <span className="svc-card__num">{svc.num}</span>
+              <div className="svc-card__tags">
+                {svc.tags.map(t => <span key={t} className="svc-tag">{t}</span>)}
               </div>
             </div>
-            <div className="svc-row__body">
-              <p className="svc-row__desc">{svc.description}</p>
-              <div className="svc-row__cols">
-                <div>
-                  <span className="svc-row__label">What we deliver</span>
-                  <ul className="svc-deliverables">
-                    {svc.deliverables.map(d => <li key={d}>{d}</li>)}
-                  </ul>
-                </div>
-                <div>
-                  <span className="svc-row__label">Who it&apos;s for</span>
-                  <p className="svc-row__for">{svc.for}</p>
-                </div>
+
+            <h2 className="svc-card__title">{svc.title}</h2>
+            <p className="svc-card__desc">{svc.description}</p>
+
+            <div className="svc-card__rule" />
+
+            <div className="svc-card__bottom">
+              <div>
+                <span className="svc-card__label">What we deliver</span>
+                <ul className="svc-deliverables">
+                  {svc.deliverables.map(d => <li key={d}>{d}</li>)}
+                </ul>
+              </div>
+              <div>
+                <span className="svc-card__label">Who it&apos;s for</span>
+                <p className="svc-card__for">{svc.for}</p>
               </div>
             </div>
           </div>
