@@ -569,32 +569,38 @@ img { max-width: 100%; display: block; }
   background: var(--c-semantic-success);
   animation: pulse 2.2s ease-in-out infinite;
 }
-.hero__bar {
+.hero__ticker {
   background: var(--c-block-lime);
+  overflow: hidden;
+  padding: 18px 0;
   margin-top: 56px;
   will-change: transform, opacity;
 }
-.hero__bar-inner {
+.hero__ticker-track {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 24px;
-  padding: 22px 0;
-  flex-wrap: wrap;
+  white-space: nowrap;
+  animation: ticker-scroll 28s linear infinite;
 }
-.hero__services {
-  display: flex;
+.hero__ticker-set {
+  display: inline-flex;
   align-items: center;
-  gap: 16px;
+  gap: 28px;
+  padding-right: 28px;
+  flex-shrink: 0;
   font-family: var(--font-mono);
   font-size: 11px;
-  letter-spacing: 1px;
+  letter-spacing: 1.8px;
   text-transform: uppercase;
-  opacity: 0.65;
+  color: rgba(0,0,0,0.65);
 }
-.hero__sep { opacity: 0.4; }
-.hero__cta-row { display: flex; gap: 12px; }
-.hero__cta-row .btn { will-change: transform; }
+.hero__ticker-sep {
+  font-size: 7px;
+  opacity: 0.35;
+}
+@keyframes ticker-scroll {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
 
 /* ============== SECTION HEADERS ============== */
 .section-head {
@@ -2126,10 +2132,7 @@ img { max-width: 100%; display: block; }
   .hero { padding-top: 96px; padding-bottom: 0; }
   .hero__bg-word { font-size: 100px; letter-spacing: -4px; right: -4%; bottom: -2%; }
   .hero__badge { display: none; }
-  .hero__services { display: none; }
-  .hero__bar-inner { justify-content: flex-start; }
-  .hero__cta-row { width: 100%; }
-  .hero__cta-row .btn { flex: 1; text-align: center; }
+  .hero__ticker { margin-top: 40px; padding: 14px 0; }
   .display-xl { font-size: 56px; letter-spacing: -1.12px; }
   .display-lg { font-size: 44px; letter-spacing: -0.66px; }
   .display-md { font-size: 36px; letter-spacing: -0.5px; }
@@ -2170,9 +2173,7 @@ img { max-width: 100%; display: block; }
   .hero { padding-top: 72px; padding-bottom: 0; }
   .hero__bg-word { display: none; }
   .hero__eyebrow { font-size: 10px; }
-  .hero__bar { margin-top: 40px; }
-  .hero__cta-row { width: 100%; gap: 10px; }
-  .hero__cta-row .btn { flex: 1; text-align: center; }
+  .hero__ticker { margin-top: 32px; }
   .display-xl { font-size: 40px; letter-spacing: -0.8px; }
   .display-lg { font-size: 34px; letter-spacing: -0.5px; }
   .manifesto-grid { grid-template-columns: 1fr; }

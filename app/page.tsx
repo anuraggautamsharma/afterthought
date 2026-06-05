@@ -30,23 +30,20 @@ export default function Home() {
             <span className="hero__clip"><span>wish they&apos;d had <em>first</em>.</span></span>
           </h1>
         </div>
-        <div className="hero__bar">
-          <div className="container">
-            <div className="hero__bar-inner">
-              <div className="hero__services">
-                <span>Brand Identity</span>
-                <span className="hero__sep">·</span>
-                <span>Naming</span>
-                <span className="hero__sep">·</span>
-                <span>Motion</span>
-                <span className="hero__sep">·</span>
-                <span>Bangalore · Worldwide</span>
-              </div>
-              <div className="hero__cta-row">
-                <a className="btn btn-primary" href="/contact">Start a project</a>
-                <a className="btn btn-secondary" href="/work">See our work</a>
-              </div>
-            </div>
+        <div className="hero__ticker" aria-hidden="true">
+          <div className="hero__ticker-track">
+            {[0, 1].map(i => (
+              <span key={i} className="hero__ticker-set">
+                <span>Brand Identity</span><span className="hero__ticker-sep">✦</span>
+                <span>Naming</span><span className="hero__ticker-sep">✦</span>
+                <span>Motion</span><span className="hero__ticker-sep">✦</span>
+                <span>Visual Design</span><span className="hero__ticker-sep">✦</span>
+                <span>Bangalore</span><span className="hero__ticker-sep">✦</span>
+                <span>Working Worldwide</span><span className="hero__ticker-sep">✦</span>
+                <span>Independent Studio</span><span className="hero__ticker-sep">✦</span>
+                <span>Est. 2025</span><span className="hero__ticker-sep">✦</span>
+              </span>
+            ))}
           </div>
         </div>
       </header>
