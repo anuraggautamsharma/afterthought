@@ -6,15 +6,15 @@ export default function Footer() {
         <div className="footer__cols">
           <div className="footer__col footer__about">
             <h5>The studio</h5>
-            <p>Afterthought is an independent design and creative studio based in Bangalore, working internationally on brand identity, naming, packaging and digital.</p>
+            <p>Afterthought is an independent design and creative studio based in Bangalore, working internationally on brand identity, naming, and motion.</p>
             <p>Est. 2025 · Currently reading briefs for Summer 2026.</p>
           </div>
           <div className="footer__col">
             <h5>Work</h5>
             <ul>
               <li><a href="/work">All projects</a></li>
-              <li><a href="/work/helio">Helio</a></li>
-              <li><a href="/work/querida">Querida</a></li>
+              <li><a href="/work/justach">Justach</a></li>
+              <li><a href="/work/pipelinelab">The Pipeline Lab</a></li>
             </ul>
           </div>
           <div className="footer__col">
@@ -35,10 +35,10 @@ export default function Footer() {
           <div className="footer__col">
             <h5>Connect</h5>
             <ul>
-              <li><a href="mailto:hello@afterthought.studio">Email</a></li>
               <li><a href="#">Instagram</a></li>
-              <li><a href="#">Are.na</a></li>
               <li><a href="#">LinkedIn</a></li>
+              <li><a href="#">Behance</a></li>
+              <li><a href="#">Medium</a></li>
             </ul>
           </div>
         </div>
