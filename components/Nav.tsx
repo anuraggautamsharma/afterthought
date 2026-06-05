@@ -39,7 +39,6 @@ export default function Nav() {
             aria-expanded={open}
             onClick={() => setOpen(v => !v)}
           >
-            <span className="nav-menu-btn__label">{open ? 'Close' : 'Menu'}</span>
             <span className="nav-menu-btn__icon" aria-hidden="true">
               <span className="nav-menu-btn__bar nav-menu-btn__bar--top"></span>
               <span className="nav-menu-btn__bar nav-menu-btn__bar--bot"></span>

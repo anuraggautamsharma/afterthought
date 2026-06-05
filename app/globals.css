@@ -170,53 +170,51 @@ img { max-width: 100%; display: block; }
   .wordmark { height: 24px; }
 }
 
-/* Menu toggle button */
+/* Menu toggle button — icon only */
 .nav-menu-btn {
   background: none;
   border: none;
   cursor: pointer;
-  font-family: var(--font-mono);
-  font-size: 12px;
-  letter-spacing: 1.8px;
-  text-transform: uppercase;
   color: var(--c-ink);
-  padding: 8px 0;
+  padding: 10px;
   display: inline-flex;
   align-items: center;
-  gap: 10px;
+  justify-content: center;
   transition: color 0.35s ease, opacity 0.15s ease;
   position: relative; z-index: 1;
   user-select: none;
+  margin-right: -10px;
 }
-.top-nav.menu-open .nav-menu-btn { color: rgba(255,255,255,0.65); }
-.nav-menu-btn:hover { opacity: 0.55; }
+.top-nav.menu-open .nav-menu-btn { color: rgba(255,255,255,0.75); }
+.nav-menu-btn:hover { opacity: 0.5; }
 
 /* Hamburger → X icon */
 .nav-menu-btn__icon {
-  display: inline-flex;
+  display: flex;
   flex-direction: column;
-  gap: 6px;
-  width: 22px;
+  gap: 7px;
+  width: 26px;
   flex-shrink: 0;
 }
 .nav-menu-btn__bar {
   display: block;
-  width: 22px;
+  width: 26px;
   height: 1.5px;
   background: currentColor;
   border-radius: 2px;
   transform-origin: center;
-  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
-.menu-open .nav-menu-btn__bar--top { transform: translateY(3.75px) rotate(45deg); }
-.menu-open .nav-menu-btn__bar--bot { transform: translateY(-3.75px) rotate(-45deg); }
+/* gap=7px, bar=1.5px → center-to-center=8.5px → translate=4.25px */
+.menu-open .nav-menu-btn__bar--top { transform: translateY(4.25px) rotate(45deg); }
+.menu-open .nav-menu-btn__bar--bot { transform: translateY(-4.25px) rotate(-45deg); }
 
 /* ============== FULLSCREEN NAV OVERLAY ============== */
 .nav-overlay {
   position: fixed;
   inset: 0;
   z-index: 199;
-  background: #0A0A0A;
+  background: var(--c-block-navy);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -259,7 +257,7 @@ img { max-width: 100%; display: block; }
   font-family: var(--font-mono);
   font-size: 11px;
   letter-spacing: 1px;
-  color: rgba(255,255,255,0.22);
+  color: rgba(255,255,255,0.30);
   width: 24px;
   flex-shrink: 0;
   padding-bottom: 12px;
@@ -272,7 +270,7 @@ img { max-width: 100%; display: block; }
   font-size: clamp(48px, 7vw, 108px);
   line-height: 1.04;
   letter-spacing: -3px;
-  color: rgba(255,255,255,0.82);
+  color: rgba(255,255,255,0.90);
   transition: color 0.18s ease;
 }
 .nav-overlay__label em {
@@ -287,7 +285,7 @@ img { max-width: 100%; display: block; }
   font-size: 11px;
   letter-spacing: 0.8px;
   text-transform: uppercase;
-  color: rgba(255,255,255,0.22);
+  color: rgba(255,255,255,0.30);
   flex-shrink: 0;
   padding-bottom: 12px;
   align-self: flex-end;
@@ -297,7 +295,8 @@ img { max-width: 100%; display: block; }
 /* Hover & active state — only label turns lime */
 .nav-overlay__link:hover .nav-overlay__label,
 .nav-overlay__link.is-active .nav-overlay__label { color: var(--c-block-lime); }
-.nav-overlay__link:hover .nav-overlay__desc { color: rgba(255,255,255,0.38); }
+.nav-overlay__link:hover .nav-overlay__desc,
+.nav-overlay__link.is-active .nav-overlay__desc { color: rgba(255,255,255,0.48); }
 
 /* Staggered reveal on open */
 .nav-overlay.is-open .nav-overlay__link {
@@ -311,7 +310,7 @@ img { max-width: 100%; display: block; }
 .nav-overlay.is-open .nav-overlay__item:nth-child(4) .nav-overlay__link { transition-delay: 0.27s; }
 
 /* Divider lines between items */
-.nav-overlay__item + .nav-overlay__item { border-top: 1px solid rgba(255,255,255,0.07); }
+.nav-overlay__item + .nav-overlay__item { border-top: 1px solid rgba(255,255,255,0.10); }
 
 /* Bottom metadata row */
 .nav-overlay__foot {
@@ -333,17 +332,17 @@ img { max-width: 100%; display: block; }
 .nav-overlay__meta {
   font-family: var(--font-mono);
   font-size: 11px; letter-spacing: 1px; text-transform: uppercase;
-  color: rgba(255,255,255,0.22);
+  color: rgba(255,255,255,0.35);
 }
 .nav-overlay__socials { display: flex; gap: 20px; }
 .nav-overlay__social {
   font-family: var(--font-mono);
   font-size: 11px; letter-spacing: 1px; text-transform: uppercase;
-  color: rgba(255,255,255,0.22);
+  color: rgba(255,255,255,0.35);
   text-decoration: none;
   transition: color 0.18s ease;
 }
-.nav-overlay__social:hover { color: rgba(255,255,255,0.65); }
+.nav-overlay__social:hover { color: rgba(255,255,255,0.75); }
 
 /* ============== MARQUEE STRIP ============== */
 .marquee {
