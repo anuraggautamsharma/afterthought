@@ -52,7 +52,7 @@ export default function Careers() {
         </div>
 
         {/* ── CULTURE NOTE ── */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px', marginTop: '80px' }}>
+        <div className="principles-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px', marginTop: '80px' }}>
           {[
             { num: '01', title: 'Craft first.', body: 'We care about the work above everything else. Every detail is worth getting right.' },
             { num: '02', title: 'No bullshit.', body: 'Straight feedback, honest timelines, and real conversations. We don\'t do agency theatre.' },
