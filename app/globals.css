@@ -181,12 +181,35 @@ img { max-width: 100%; display: block; }
   text-transform: uppercase;
   color: var(--c-ink);
   padding: 8px 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
   transition: color 0.35s ease, opacity 0.15s ease;
   position: relative; z-index: 1;
   user-select: none;
 }
 .top-nav.menu-open .nav-menu-btn { color: rgba(255,255,255,0.65); }
 .nav-menu-btn:hover { opacity: 0.55; }
+
+/* Hamburger → X icon */
+.nav-menu-btn__icon {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 22px;
+  flex-shrink: 0;
+}
+.nav-menu-btn__bar {
+  display: block;
+  width: 22px;
+  height: 1.5px;
+  background: currentColor;
+  border-radius: 2px;
+  transform-origin: center;
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.menu-open .nav-menu-btn__bar--top { transform: translateY(3.75px) rotate(45deg); }
+.menu-open .nav-menu-btn__bar--bot { transform: translateY(-3.75px) rotate(-45deg); }
 
 /* ============== FULLSCREEN NAV OVERLAY ============== */
 .nav-overlay {
@@ -197,7 +220,6 @@ img { max-width: 100%; display: block; }
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 0 var(--gutter);
   padding-top: 64px;
   opacity: 0;
   pointer-events: none;
@@ -210,67 +232,118 @@ img { max-width: 100%; display: block; }
   visibility: visible;
   transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), visibility 0s 0s;
 }
+
+/* Constrained inner wrapper — matches page container grid */
+.nav-overlay__inner {
+  max-width: var(--max-w);
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+
 .nav-overlay__list { list-style: none; }
-.nav-overlay__item { overflow: hidden; line-height: 1; }
+.nav-overlay__item { overflow: hidden; }
+
 .nav-overlay__link {
-  display: block;
-  font-size: clamp(56px, 9vw, 130px);
+  display: flex;
+  align-items: baseline;
+  gap: 20px;
+  text-decoration: none;
+  padding: 2px 0;
+  transform: translateY(112%);
+  transition: transform 0.32s ease;
+}
+
+/* Counter */
+.nav-overlay__num {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 1px;
+  color: rgba(255,255,255,0.22);
+  width: 24px;
+  flex-shrink: 0;
+  padding-bottom: 12px;
+  align-self: flex-end;
+}
+
+/* Large label */
+.nav-overlay__label {
+  flex: 1;
+  font-size: clamp(48px, 7vw, 108px);
   line-height: 1.04;
   letter-spacing: -3px;
   color: rgba(255,255,255,0.82);
-  text-decoration: none;
-  padding: 6px 0;
-  transform: translateY(112%);
-  transition: transform 0.32s ease, color 0.18s ease;
+  transition: color 0.18s ease;
 }
-.nav-overlay__link em {
+.nav-overlay__label em {
   font-family: var(--font-serif);
   font-style: italic;
   font-weight: 400;
 }
-.nav-overlay__link.is-active { color: var(--c-block-lime); }
-.nav-overlay__link:hover { color: var(--c-block-lime); }
+
+/* Descriptor — right-aligned, baseline of label */
+.nav-overlay__desc {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.22);
+  flex-shrink: 0;
+  padding-bottom: 12px;
+  align-self: flex-end;
+  transition: color 0.18s ease;
+}
+
+/* Hover & active state — only label turns lime */
+.nav-overlay__link:hover .nav-overlay__label,
+.nav-overlay__link.is-active .nav-overlay__label { color: var(--c-block-lime); }
+.nav-overlay__link:hover .nav-overlay__desc { color: rgba(255,255,255,0.38); }
 
 /* Staggered reveal on open */
 .nav-overlay.is-open .nav-overlay__link {
   transform: translateY(0);
-  transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1), ease;
-  transition-duration: 0.75s, 0.18s;
+  transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  transition-duration: 0.75s;
 }
-.nav-overlay.is-open .nav-overlay__item:nth-child(1) .nav-overlay__link { transition-delay: 0.06s, 0s; }
-.nav-overlay.is-open .nav-overlay__item:nth-child(2) .nav-overlay__link { transition-delay: 0.13s, 0s; }
-.nav-overlay.is-open .nav-overlay__item:nth-child(3) .nav-overlay__link { transition-delay: 0.20s, 0s; }
-.nav-overlay.is-open .nav-overlay__item:nth-child(4) .nav-overlay__link { transition-delay: 0.27s, 0s; }
+.nav-overlay.is-open .nav-overlay__item:nth-child(1) .nav-overlay__link { transition-delay: 0.06s; }
+.nav-overlay.is-open .nav-overlay__item:nth-child(2) .nav-overlay__link { transition-delay: 0.13s; }
+.nav-overlay.is-open .nav-overlay__item:nth-child(3) .nav-overlay__link { transition-delay: 0.20s; }
+.nav-overlay.is-open .nav-overlay__item:nth-child(4) .nav-overlay__link { transition-delay: 0.27s; }
+
+/* Divider lines between items */
+.nav-overlay__item + .nav-overlay__item { border-top: 1px solid rgba(255,255,255,0.07); }
 
 /* Bottom metadata row */
 .nav-overlay__foot {
   position: absolute;
-  bottom: 40px;
-  left: var(--gutter); right: var(--gutter);
-  display: flex; align-items: flex-end; justify-content: space-between;
-  flex-wrap: wrap; gap: 12px;
+  bottom: 0; left: 0; right: 0;
+  padding-bottom: 36px;
   opacity: 0;
   transform: translateY(10px);
   transition: opacity 0.5s ease 0.32s, transform 0.5s ease 0.32s;
 }
-.nav-overlay.is-open .nav-overlay__foot {
-  opacity: 1;
-  transform: translateY(0);
+.nav-overlay.is-open .nav-overlay__foot { opacity: 1; transform: translateY(0); }
+.nav-overlay__foot-inner {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 12px;
 }
 .nav-overlay__meta {
   font-family: var(--font-mono);
   font-size: 11px; letter-spacing: 1px; text-transform: uppercase;
-  color: rgba(255,255,255,0.28);
+  color: rgba(255,255,255,0.22);
 }
 .nav-overlay__socials { display: flex; gap: 20px; }
 .nav-overlay__social {
   font-family: var(--font-mono);
   font-size: 11px; letter-spacing: 1px; text-transform: uppercase;
-  color: rgba(255,255,255,0.28);
+  color: rgba(255,255,255,0.22);
   text-decoration: none;
   transition: color 0.18s ease;
 }
-.nav-overlay__social:hover { color: rgba(255,255,255,0.7); }
+.nav-overlay__social:hover { color: rgba(255,255,255,0.65); }
 
 /* ============== MARQUEE STRIP ============== */
 .marquee {
@@ -1851,7 +1924,8 @@ img { max-width: 100%; display: block; }
   .nav-overlay__foot { bottom: 28px; }
 }
 @media (max-width: 560px) {
-  .nav-overlay__link { letter-spacing: -2px; }
+  .nav-overlay__label { letter-spacing: -2px; }
+  .nav-overlay__desc { display: none; }
   .nav-overlay__socials { display: none; }
 
   .hero { padding-top: 72px; padding-bottom: 0; }
