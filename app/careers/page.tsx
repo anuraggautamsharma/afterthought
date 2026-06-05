@@ -1,5 +1,4 @@
 import type { Metadata } from 'next'
-import FreelanceForm from '@/components/FreelanceForm'
 import JobCard from '@/components/JobCard'
 import { roles } from '@/lib/roles'
 
@@ -44,10 +43,11 @@ export default function Careers() {
           <span className="eyebrow cb-eyebrow">Freelance & collaborations</span>
           <h2 className="cb-title display-lg">You do great work. <em>So do we.</em></h2>
           <p className="body-lg cb-body">
-            We work with independent designers, writers, strategists, and makers on a project basis. No retainers, no long commitments — just good briefs done well. If that sounds like your kind of engagement, tell us about your work.
+            We work with independent designers, writers, strategists, and makers on a project basis. No retainers, no long commitments — just good briefs done well.
           </p>
-          <div style={{ marginTop: '32px', paddingTop: '32px', borderTop: '1px solid rgba(0,0,0,0.12)' }}>
-            <FreelanceForm />
+          <div style={{ marginTop: '32px', display: 'flex', gap: '16px', alignItems: 'center', flexWrap: 'wrap' }}>
+            <a className="btn btn-primary" href="/careers/freelance">See how to work with us →</a>
+            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '0.5px', opacity: 0.55 }}>Brand design · Motion · Strategy · Copy · Dev · Photography</span>
           </div>
         </div>
 
