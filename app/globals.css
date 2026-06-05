@@ -2157,7 +2157,7 @@ img { max-width: 100%; display: block; }
   .display-md { font-size: 32px; letter-spacing: -0.4px; }
   .section { padding-top: 56px; padding-bottom: 56px; }
   .section-head { margin-bottom: 32px; }
-  .showreel { padding: 0 0 20px; }
+  .showreel { padding: 32px 0 20px; }
   .work-grid { grid-template-columns: 1fr; }
   .work-grid .tile-wide { grid-column: span 1; }
   .vis-helio { grid-template-columns: 1fr; }
@@ -2219,7 +2219,7 @@ img { max-width: 100%; display: block; }
   .display-xl { font-size: 36px; letter-spacing: -0.6px; line-height: 1.1; }
   .display-lg { font-size: 30px; letter-spacing: -0.4px; }
   .section { padding-top: 44px; padding-bottom: 44px; }
-  .showreel { padding: 0 0 8px; }
+  .showreel { padding: 28px 0 8px; }
   .manifesto-grid { grid-template-columns: 1fr; }
   .footer__cols { grid-template-columns: 1fr 1fr; }
   .footer__wordmark { letter-spacing: -3px; }
