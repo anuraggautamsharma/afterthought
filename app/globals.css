@@ -1956,6 +1956,96 @@ img { max-width: 100%; display: block; }
   margin-bottom: 0;
 }
 
+/* ── ROLE DETAIL PAGE ── */
+.role-page {
+  padding-bottom: var(--s-section);
+}
+.role-page__top {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 64px;
+  padding-bottom: 64px;
+  border-bottom: 1px solid var(--c-hairline);
+  margin-bottom: 64px;
+  align-items: start;
+}
+.role-page__overview { }
+.role-section-label {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  opacity: 0.45;
+  margin-bottom: 20px;
+}
+.role-info-card {
+  border: 1px solid var(--c-hairline);
+  border-radius: var(--r-lg);
+  padding: 24px;
+  position: sticky;
+  top: 88px;
+}
+.role-info-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--c-hairline);
+}
+.role-info-key {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  opacity: 0.4;
+}
+.role-info-val {
+  font-size: 15px;
+  font-variation-settings: 'wght' 460;
+  font-weight: 460;
+}
+.role-page__section {
+  margin-bottom: 64px;
+}
+.role-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.role-list li {
+  font-size: 16px;
+  line-height: 1.55;
+  padding-left: 20px;
+  position: relative;
+  opacity: 0.8;
+}
+.role-list li::before {
+  content: '→';
+  position: absolute;
+  left: 0;
+  font-size: 12px;
+  opacity: 0.4;
+  top: 2px;
+}
+.role-page__cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  margin-bottom: 80px;
+  padding-bottom: 64px;
+  border-bottom: 1px solid var(--c-hairline);
+}
+.role-page__apply {
+  padding-top: 16px;
+}
+.role-apply-head {
+  margin-bottom: 48px;
+}
+
 .contact-side h3 { font-size: 28px; letter-spacing: -0.4px; font-variation-settings: "wght" 480; font-weight: 480; margin-bottom: 24px; }
 .contact-side .contact-meta { border-top: 1px solid var(--c-hairline); }
 .contact-side__cities {
