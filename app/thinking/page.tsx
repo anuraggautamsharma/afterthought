@@ -76,7 +76,7 @@ export default function Thinking() {
           <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '1.2px', textTransform: 'uppercase', opacity: 0.42 }}>{posts.length} published</span>
         </div>
 
-        <div style={{ padding: '48px', background: 'var(--c-surface-soft)', borderRadius: 'var(--r-lg)', textAlign: 'center' }}>
+        <div className="j-more-box" style={{ padding: '48px', background: 'var(--c-surface-soft)', borderRadius: 'var(--r-lg)', textAlign: 'center' }}>
           <div style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', fontSize: 'clamp(22px, 3vw, 32px)', letterSpacing: '-0.5px', marginBottom: '16px' }}>More on the way.</div>
           <p className="body-sm" style={{ opacity: 0.6, maxWidth: '440px', margin: '0 auto' }}>We publish four times a year — essays on practice, process, and the occasional opinion we&apos;re willing to defend. Subscribe below and we&apos;ll send the next one when it&apos;s ready.</p>
         </div>

@@ -146,7 +146,17 @@ export default function GsapAnimations() {
       ──────────────────────────────────────────────────────────── */
       ;['.section-head', '.color-block', '.j-feat',
        '.case-pullquote', '.case-cover', '.clients', '.cs-image', '.cs-intro',
-       '.post-hero-image', '.post-pullquote', '.post-image', '.post-video'].forEach(sel => {
+       '.post-hero-image', '.post-pullquote', '.post-image', '.post-video',
+       '.studio-intro',
+       '.svc-limits__head',
+       '.contact-form',
+       '.contact-side',
+       '.role-page__top',
+       '.role-page__section',
+       '.role-page__cols',
+       '.role-page__apply',
+       '.j-more-box',
+      ].forEach(sel => {
         qa(sel).forEach(el => {
           gsap.fromTo(el,
             { opacity: 0, y: 48 },
@@ -173,6 +183,9 @@ export default function GsapAnimations() {
         { sel: '.post-related__item',  y: 20, x: 0, dur: 0.60, gap: 0.08 },
         { sel: '.j-list__item',        y: 16, x: 0, dur: 0.50, gap: 0.06 },
         { sel: '.j-card',              y: 32, x: 0, dur: 0.72, gap: 0.09 },
+        { sel: '.job-card',            y: 36, x: 0, dur: 0.75, gap: 0.09 },
+        { sel: '.svc-limit',           y: 24, x: 0, dur: 0.65, gap: 0.08 },
+        { sel: '.freelance-niche',     y: 28, x: 0, dur: 0.65, gap: 0.07 },
       ]
 
       staggerGroups.forEach(({ sel, y, x, dur, gap }) => {
