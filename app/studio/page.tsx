@@ -108,51 +108,13 @@ export default function Studio() {
         </div>
       </section>
 
-      <section id="capabilities" className="container" style={{ paddingBottom: 'var(--s-section)' }}>
+      <section className="container" style={{ paddingBottom: 'var(--s-section)' }}>
         <div className="color-block color-block--lime">
           <span className="eyebrow cb-eyebrow">What we make</span>
-          <div className="capabilities">
-            <div className="capabilities__intro">
-              <h2 className="cb-title">Six disciplines, two people, and a small circle of trusted collaborators.</h2>
-              <p className="body-lg" style={{ maxWidth: '460px' }}>We take on roughly four engagements a year. For projects that need motion, illustration, photography or production at scale, we bring in a small group of people we&apos;ve worked with before. We tell you who they are at the kickoff.</p>
-            </div>
-            <ul className="cap-list">
-              <li className="cap-list__item"><span className="cap-list__num">01</span><span className="cap-list__name">Brand identity &amp; strategy</span><span className="cap-list__details">Lead · Verbal · Visual</span></li>
-              <li className="cap-list__item"><span className="cap-list__num">02</span><span className="cap-list__name">Naming &amp; verbal identity</span><span className="cap-list__details">Names · Voice · Stories</span></li>
-              <li className="cap-list__item"><span className="cap-list__num">03</span><span className="cap-list__name">Packaging &amp; retail systems</span><span className="cap-list__details">CPG · Hospitality</span></li>
-              <li className="cap-list__item"><span className="cap-list__num">04</span><span className="cap-list__name">Digital product &amp; web</span><span className="cap-list__details">Web · iOS · Tools</span></li>
-              <li className="cap-list__item"><span className="cap-list__num">05</span><span className="cap-list__name">Editorial &amp; publication</span><span className="cap-list__details">Book · Annual · Catalog</span></li>
-              <li className="cap-list__item"><span className="cap-list__num">06</span><span className="cap-list__name">Campaigns &amp; creative direction</span><span className="cap-list__details">Launch · Brand films · OOH</span></li>
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      <section className="container" style={{ paddingBottom: 'var(--s-section)' }}>
-        <div className="color-block color-block--cream">
-          <span className="eyebrow cb-eyebrow">How an engagement runs</span>
-          <h2 className="cb-title display-lg">Four phases, twelve to twenty weeks, one person on each side.</h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '24px', marginTop: '48px' }} className="phases-grid">
-            <div style={{ paddingTop: '20px', borderTop: '1px solid rgba(0,0,0,0.18)' }}>
-              <span className="caption" style={{ opacity: 0.55, display: 'block', marginBottom: '16px' }}>Phase 01 · Weeks 1–3</span>
-              <h3 style={{ fontSize: '22px', lineHeight: 1.20, letterSpacing: '-0.35px', fontVariationSettings: "'wght' 480", fontWeight: 480, marginBottom: '12px' }}>Listen, write, set aside.</h3>
-              <p style={{ fontSize: '15px', lineHeight: 1.55, opacity: 0.80 }}>We re-write the brief in our own words and run it past you. The first useful artefact of the project.</p>
-            </div>
-            <div style={{ paddingTop: '20px', borderTop: '1px solid rgba(0,0,0,0.18)' }}>
-              <span className="caption" style={{ opacity: 0.55, display: 'block', marginBottom: '16px' }}>Phase 02 · Weeks 3–8</span>
-              <h3 style={{ fontSize: '22px', lineHeight: 1.20, letterSpacing: '-0.35px', fontVariationSettings: "'wght' 480", fontWeight: 480, marginBottom: '12px' }}>First round, second thought.</h3>
-              <p style={{ fontSize: '15px', lineHeight: 1.55, opacity: 0.80 }}>Two directions, made far enough to argue with. One of them, usually the calmer one, becomes the project.</p>
-            </div>
-            <div style={{ paddingTop: '20px', borderTop: '1px solid rgba(0,0,0,0.18)' }}>
-              <span className="caption" style={{ opacity: 0.55, display: 'block', marginBottom: '16px' }}>Phase 03 · Weeks 8–16</span>
-              <h3 style={{ fontSize: '22px', lineHeight: 1.20, letterSpacing: '-0.35px', fontVariationSettings: "'wght' 480", fontWeight: 480, marginBottom: '12px' }}>Build the actual thing.</h3>
-              <p style={{ fontSize: '15px', lineHeight: 1.55, opacity: 0.80 }}>System, type, applications, the website if there is one. Weekly working sessions, fortnightly reviews.</p>
-            </div>
-            <div style={{ paddingTop: '20px', borderTop: '1px solid rgba(0,0,0,0.18)' }}>
-              <span className="caption" style={{ opacity: 0.55, display: 'block', marginBottom: '16px' }}>Phase 04 · Weeks 16–20</span>
-              <h3 style={{ fontSize: '22px', lineHeight: 1.20, letterSpacing: '-0.35px', fontVariationSettings: "'wght' 480", fontWeight: 480, marginBottom: '12px' }}>Hand over, stay near.</h3>
-              <p style={{ fontSize: '15px', lineHeight: 1.55, opacity: 0.80 }}>A one-page guide, a working file, and a small retainer to keep the system honest in the first six months.</p>
-            </div>
+          <h2 className="cb-title display-lg">Six disciplines. <em>One clear point of view.</em></h2>
+          <p className="body-lg cb-body">Brand identity, naming, motion, packaging, digital, and campaigns — all of it done with two founders, not handed off after the pitch.</p>
+          <div style={{ marginTop: '40px' }}>
+            <a className="btn btn-primary" href="/services">See all services →</a>
           </div>
         </div>
       </section>
@@ -178,10 +140,6 @@ export default function Studio() {
         </div>
       </section>
 
-      <style>{`
-        @media (max-width: 960px) { .phases-grid { grid-template-columns: 1fr 1fr !important; } }
-        @media (max-width: 560px) { .phases-grid { grid-template-columns: 1fr !important; } }
-      `}</style>
     </>
   )
 }

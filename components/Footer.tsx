@@ -22,7 +22,7 @@ export default function Footer() {
             <ul>
               <li><a href="/studio">About</a></li>
               <li><a href="/studio#founders">Founders</a></li>
-              <li><a href="/studio#capabilities">Capabilities</a></li>
+              <li><a href="/services">Services</a></li>
               <li><a href="/careers">Careers</a></li>
             </ul>
           </div>
