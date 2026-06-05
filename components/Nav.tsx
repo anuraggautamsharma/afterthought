@@ -75,7 +75,7 @@ export default function Nav() {
 
         <div className="nav-overlay__foot">
           <div className="nav-overlay__foot-inner">
-            <span className="nav-overlay__meta">Bangalore · Est. 2025 · Open for briefs</span>
+            <span className="nav-overlay__meta">Bangalore · Open for briefs</span>
             <div className="nav-overlay__socials">
               <a href="#" className="nav-overlay__social">Instagram</a>
               <a href="#" className="nav-overlay__social">LinkedIn</a>

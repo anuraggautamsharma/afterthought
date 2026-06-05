@@ -7,7 +7,7 @@ export default function Footer() {
           <div className="footer__col footer__about">
             <h5>The studio</h5>
             <p>Afterthought is an independent design and creative studio based in Bangalore, working internationally on brand identity, naming, and motion.</p>
-            <p>Est. 2025 · Currently reading briefs for Summer 2026.</p>
+            <p>Currently reading briefs for Summer 2026.</p>
           </div>
           <div className="footer__col">
             <h5>Work</h5>

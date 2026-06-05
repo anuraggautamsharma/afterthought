@@ -11,7 +11,7 @@ export default function Studio() {
     <>
       <section className="page-header container">
         <div className="page-header__eyebrow eyebrow">
-          <span>The studio · Est. 2025 · Bangalore — Working internationally</span>
+          <span>The studio · Bangalore — Working internationally</span>
         </div>
         <h1 className="display-xl page-header__title">A small studio, two stubborn opinions, and a long list of things we won&apos;t <em>quite</em> do.</h1>
         <p className="page-header__sub body-lg">Afterthought is a design and creative studio founded in 2025 by Anurag Gautam and Tina Gidwani. We work on brand identity, naming, packaging and digital — with founders, institutions and the occasional well-meaning monopoly.</p>

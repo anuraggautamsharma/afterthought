@@ -17,7 +17,7 @@ export default function Home() {
           <div className="hero__head">
             <div className="hero__eyebrow eyebrow">
               <span className="pulse"></span>
-              <span>Independent studio · Bangalore · Est. 2025</span>
+              <span>Independent studio · Bangalore</span>
             </div>
             <div className="hero__badge">
               <span className="hero__badge-dot"></span>
@@ -41,7 +41,6 @@ export default function Home() {
                 <span>Bangalore</span><span className="hero__ticker-sep">✦</span>
                 <span>Working Worldwide</span><span className="hero__ticker-sep">✦</span>
                 <span>Independent Studio</span><span className="hero__ticker-sep">✦</span>
-                <span>Est. 2025</span><span className="hero__ticker-sep">✦</span>
               </span>
             ))}
           </div>
@@ -161,7 +160,7 @@ export default function Home() {
           <h2 className="cb-title display-lg">The brands that don&apos;t know what they look like <em>yet</em>.</h2>
           <p className="body-lg cb-body" style={{ opacity: 0.85 }}>We&apos;re most interested in the moment before a category has a visual language — young companies, new products, and founders who know what they stand for but haven&apos;t yet found how it looks. The brief that arrives without all the answers is the one we want. We&apos;re less useful when the solution is already obvious.</p>
           <div style={{ marginTop: '56px', paddingTop: '24px', borderTop: '1px solid rgba(255,255,255,0.20)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '24px' }}>
-            <span className="caption" style={{ opacity: 0.7 }}>Bangalore · Working internationally · Est. 2025</span>
+            <span className="caption" style={{ opacity: 0.7 }}>Bangalore · Working internationally</span>
             <a className="btn btn-secondary-dark" href="/work">See the work →</a>
           </div>
         </div>

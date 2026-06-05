@@ -148,7 +148,7 @@ export default function PipelineLab() {
           <h2 className="cb-title display-lg">We write, design, and move.</h2>
           <p className="body-lg cb-body" style={{ opacity: 0.7 }}>Whether you need a brand identity, a motion piece, or both — we work across the brief from script to finished asset. If you have a story to tell, we&apos;d like to hear it first.</p>
           <div style={{ marginTop: '40px', paddingTop: '24px', borderTop: '1px solid rgba(255,255,255,0.12)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '24px' }}>
-            <span className="caption" style={{ opacity: 0.4, color: '#fff' }}>Bangalore · Working internationally · Est. 2025</span>
+            <span className="caption" style={{ opacity: 0.4, color: '#fff' }}>Bangalore · Working internationally</span>
             <a className="btn" style={{ background: '#A855F7', color: '#fff' }} href="/contact">Send a brief →</a>
           </div>
         </div>

@@ -570,7 +570,7 @@ img { max-width: 100%; display: block; }
   animation: pulse 2.2s ease-in-out infinite;
 }
 .hero__ticker {
-  background: var(--c-block-lime);
+  background: var(--c-block-lilac);
   overflow: hidden;
   padding: 18px 0;
   margin-top: 56px;

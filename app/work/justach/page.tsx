@@ -156,7 +156,7 @@ export default function Justach() {
           <h2 className="cb-title display-lg">The shelf has room for one more.</h2>
           <p className="body-lg cb-body" style={{ opacity: 0.8 }}>We take on a small number of projects at a time. If you have a naming challenge, an identity that needs rethinking, or a brand you want to build from scratch — we&apos;d like to hear from you.</p>
           <div style={{ marginTop: '40px', paddingTop: '24px', borderTop: '1px solid rgba(241,233,218,0.18)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '24px' }}>
-            <span className="caption" style={{ opacity: 0.5, color: '#F1E9DA' }}>Bangalore · Working internationally · Est. 2025</span>
+            <span className="caption" style={{ opacity: 0.5, color: '#F1E9DA' }}>Bangalore · Working internationally</span>
             <a className="btn" style={{ background: '#F1E9DA', color: '#541388' }} href="/contact">Send a brief →</a>
           </div>
         </div>
