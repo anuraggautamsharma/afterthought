@@ -26,7 +26,7 @@ const services = [
   },
   {
     num: '03',
-    color: 'navy',
+    color: 'sky',
     title: 'Motion & Animation',
     tags: ['Brand motion', 'Film', 'UI animation'],
     description: 'Brand identity systems that move. We design motion for logos, campaigns, social content, and product UI — always from brand first, never decoration for its own sake.',
