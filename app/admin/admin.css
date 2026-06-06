@@ -234,6 +234,10 @@
   max-width: 440px;
 }
 
+.admin-login__logo {
+  margin-bottom: 32px;
+}
+
 .admin-login__eyebrow {
   font-family: var(--font-mono);
   font-size: 10px;
