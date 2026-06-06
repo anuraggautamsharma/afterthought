@@ -10,10 +10,22 @@ function formatDate(str: string | null) {
 }
 
 export default async function PostsPage() {
-  const posts = await getAllPosts()
+  let posts: Awaited<ReturnType<typeof getAllPosts>> = []
+  let dbError: string | null = null
+
+  try {
+    posts = await getAllPosts()
+  } catch (e) {
+    dbError = e instanceof Error ? e.message : String(e)
+  }
 
   return (
     <>
+      {dbError && (
+        <div style={{ background: '#fee2e2', border: '1px solid #ef4444', borderRadius: '8px', padding: '16px', marginBottom: '24px', fontFamily: 'monospace', fontSize: '13px', color: '#991b1b' }}>
+          <strong>Database error:</strong> {dbError}
+        </div>
+      )}
       <div className="admin-page-head">
         <h1 className="admin-page-title">Posts</h1>
         <Link href="/admin/posts/new" className="btn btn-primary" style={{ fontSize: '14px', padding: '10px 20px' }}>
