@@ -6,6 +6,7 @@ import Nav from '@/components/Nav'
 import Footer from '@/components/Footer'
 import GsapAnimations from '@/components/GsapAnimations'
 import { getSettings } from '@/lib/settings'
+import { SITE_URL, SITE_NAME, SITE_DESCRIPTION } from '@/lib/site'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -30,11 +31,28 @@ const instrumentSerif = Instrument_Serif({
 })
 
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: 'Afterthought — A design & creative studio',
-  description:
-    'Afterthought is an independent design & creative studio based in Bangalore, working internationally. Brand identity, naming, packaging and digital, by Anurag Gautam and Tina Gidwani.',
+  description: SITE_DESCRIPTION,
+  applicationName: SITE_NAME,
   icons: {
     icon: '/assets/favicon.png',
+  },
+  alternates: {
+    canonical: '/',
+  },
+  openGraph: {
+    type: 'website',
+    siteName: SITE_NAME,
+    title: 'Afterthought — A design & creative studio',
+    description: SITE_DESCRIPTION,
+    url: SITE_URL,
+    locale: 'en_US',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Afterthought — A design & creative studio',
+    description: SITE_DESCRIPTION,
   },
 }
 
