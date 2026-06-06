@@ -36,7 +36,11 @@ export async function savePostAction(id: string | null, data: PostInput): Promis
 }
 
 export async function deletePostAction(id: string) {
-  await deletePost(id)
-  revalidatePath('/thinking')
+  try {
+    await deletePost(id)
+    revalidatePath('/thinking')
+  } catch {
+    // silently continue so we still redirect
+  }
   redirect('/admin/posts')
 }
