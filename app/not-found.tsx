@@ -32,7 +32,6 @@ export default function NotFound() {
           <Link href="/" className="nf__btn">Take me home</Link>
           <Link href="/work" className="nf__ghost">See our work ↗</Link>
         </div>
-
       </div>
 
       <style>{`
@@ -44,54 +43,64 @@ export default function NotFound() {
           padding: 60px 32px;
           text-align: center;
           background:
-            radial-gradient(ellipse 60% 50% at 20% 60%, rgba(215,242,108,0.18) 0%, transparent 70%),
-            radial-gradient(ellipse 50% 50% at 80% 40%, rgba(205,186,242,0.18) 0%, transparent 70%),
-            #FFFFFF;
+            radial-gradient(ellipse 55% 60% at 10% 20%,  rgba(215,242,108,0.35) 0%, transparent 65%),
+            radial-gradient(ellipse 45% 55% at 90% 80%,  rgba(205,186,242,0.4)  0%, transparent 65%),
+            radial-gradient(ellipse 40% 40% at 85% 15%,  rgba(244,168,135,0.28) 0%, transparent 60%),
+            radial-gradient(ellipse 35% 40% at 15% 85%,  rgba(199,233,213,0.3)  0%, transparent 60%),
+            #FAFAF8;
         }
 
         .nf__inner {
-          max-width: 540px;
+          max-width: 560px;
           width: 100%;
+          position: relative;
         }
 
-        /* ── Coloured digit blocks ── */
+        /* ── Digit blocks ── */
         .nf__digits {
           display: flex;
           align-items: center;
           justify-content: center;
-          gap: 14px;
-          margin-bottom: 52px;
+          gap: 16px;
+          margin-bottom: 48px;
         }
 
         .nf__digit {
-          width: 116px;
-          height: 152px;
-          border-radius: 22px;
+          width: 128px;
+          height: 168px;
+          border-radius: 24px;
           display: flex;
           align-items: center;
           justify-content: center;
-          font-size: 76px;
-          font-variation-settings: 'wght' 720;
-          font-weight: 720;
-          letter-spacing: -4px;
+          font-size: 84px;
+          font-variation-settings: 'wght' 740;
+          font-weight: 740;
+          letter-spacing: -5px;
           line-height: 1;
-          color: rgba(0,0,0,0.75);
-          transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1);
+          color: rgba(0,0,0,0.72);
+          transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.3s ease;
+          cursor: default;
         }
 
-        .nf__digit:hover { transform: rotate(0deg) scale(1.08) !important; }
+        .nf__digit:hover {
+          transform: rotate(0deg) translateY(-8px) scale(1.06) !important;
+          box-shadow: 0 20px 40px rgba(0,0,0,0.12);
+        }
 
         .nf__digit--a {
           background: #D7F26C;
-          transform: rotate(-4deg) translateY(4px);
+          transform: rotate(-5deg) translateY(6px);
+          box-shadow: 0 8px 24px rgba(167,202,48,0.35);
         }
         .nf__digit--b {
           background: #CDBAF2;
-          transform: rotate(2.5deg) translateY(-6px);
+          transform: rotate(3deg) translateY(-8px);
+          box-shadow: 0 8px 24px rgba(140,100,240,0.25);
         }
         .nf__digit--c {
           background: #F4A887;
-          transform: rotate(-2deg) translateY(2px);
+          transform: rotate(-2.5deg) translateY(4px);
+          box-shadow: 0 8px 24px rgba(220,110,60,0.28);
         }
 
         /* ── Text ── */
@@ -100,8 +109,8 @@ export default function NotFound() {
           font-size: 10px;
           letter-spacing: 2px;
           text-transform: uppercase;
-          opacity: 0.3;
-          margin-bottom: 20px;
+          opacity: 0.28;
+          margin-bottom: 18px;
         }
 
         .nf__title {
@@ -140,7 +149,7 @@ export default function NotFound() {
           display: inline-flex;
           align-items: center;
           background: var(--c-ink);
-          color: var(--c-canvas);
+          color: #FFFFFF;
           font-size: 14px;
           font-variation-settings: 'wght' 500;
           font-weight: 500;
@@ -166,12 +175,12 @@ export default function NotFound() {
         @media (max-width: 600px) {
           .nf__br { display: none; }
           .nf__digit {
-            width: 88px;
-            height: 116px;
-            font-size: 58px;
-            border-radius: 16px;
+            width: 92px;
+            height: 122px;
+            font-size: 60px;
+            border-radius: 18px;
           }
-          .nf__digits { gap: 10px; margin-bottom: 40px; }
+          .nf__digits { gap: 10px; margin-bottom: 36px; }
         }
       `}</style>
     </main>
