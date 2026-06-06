@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { getSettings } from '@/lib/settings'
 
 export const metadata: Metadata = {
   title: 'Afterthought — A design & creative studio',
@@ -6,7 +7,8 @@ export const metadata: Metadata = {
     'Afterthought is an independent design & creative studio based in Bangalore, working internationally. Brand identity, naming, packaging and digital, by Anurag Gautam and Tina Gidwani.',
 }
 
-export default function Home() {
+export default async function Home() {
+  const settings = await getSettings()
   return (
     <>
       <header className="hero">
@@ -17,11 +19,11 @@ export default function Home() {
           <div className="hero__head">
             <div className="hero__eyebrow eyebrow">
               <span className="pulse"></span>
-              <span>Independent studio · Bangalore</span>
+              <span>Independent studio · {settings.location}</span>
             </div>
             <div className="hero__badge">
               <span className="hero__badge-dot"></span>
-              Open for briefs
+              {settings.status_short}
             </div>
           </div>
           <h1 className="display-xl hero__title">

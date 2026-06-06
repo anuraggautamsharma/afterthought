@@ -5,6 +5,7 @@ import { SiteNav, SiteFooter } from '@/components/SiteShell'
 import Nav from '@/components/Nav'
 import Footer from '@/components/Footer'
 import GsapAnimations from '@/components/GsapAnimations'
+import { getSettings } from '@/lib/settings'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -37,17 +38,19 @@ export const metadata: Metadata = {
   },
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
+  const settings = await getSettings()
+
   return (
     <html lang="en" className={`${inter.variable} ${jetbrainsMono.variable} ${instrumentSerif.variable}`}>
       <body>
-        <SiteNav><Nav /></SiteNav>
+        <SiteNav><Nav settings={settings} /></SiteNav>
         {children}
-        <SiteFooter><Footer /></SiteFooter>
+        <SiteFooter><Footer settings={settings} /></SiteFooter>
         <SiteNav><GsapAnimations /></SiteNav>
       </body>
     </html>

@@ -215,6 +215,61 @@
 }
 
 /* ─────────────────────────────────────────────
+   SETTINGS PAGE
+───────────────────────────────────────────── */
+.admin-settings { max-width: 880px; }
+
+.admin-settings__save {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.admin-settings-card {
+  background: #FFFFFF;
+  border: 1px solid #E5E3DC;
+  border-radius: 14px;
+  padding: 24px 26px 28px;
+  margin-bottom: 16px;
+}
+
+.admin-settings-card__title {
+  font-size: 16px;
+  font-variation-settings: 'wght' 540;
+  font-weight: 540;
+  letter-spacing: -0.2px;
+  margin-bottom: 4px;
+}
+
+.admin-settings-card__hint {
+  font-size: 13px;
+  opacity: 0.45;
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+
+.admin-settings-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px 20px;
+}
+
+.admin-field--wide { grid-column: 1 / -1; }
+
+.admin-settings-where {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  opacity: 0.32;
+  margin-top: -2px;
+}
+
+@media (max-width: 600px) {
+  .admin-settings-grid { grid-template-columns: 1fr; }
+}
+
+/* ─────────────────────────────────────────────
    LOGIN PAGE
 ───────────────────────────────────────────── */
 .admin-login {

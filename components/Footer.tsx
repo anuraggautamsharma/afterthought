@@ -1,4 +1,13 @@
-export default function Footer() {
+import type { SiteSettings } from '@/lib/settings'
+
+export default function Footer({ settings }: { settings: SiteSettings }) {
+  const socials = [
+    { label: 'Instagram', href: settings.social_instagram },
+    { label: 'LinkedIn',  href: settings.social_linkedin  },
+    { label: 'Behance',   href: settings.social_behance   },
+    { label: 'Medium',    href: settings.social_medium    },
+  ].filter(s => s.href)
+
   return (
     <footer className="footer">
       <div className="footer__inner">
@@ -6,8 +15,8 @@ export default function Footer() {
         <div className="footer__cols">
           <div className="footer__col footer__about">
             <h5>The studio</h5>
-            <p>Afterthought is an independent design and creative studio based in Bangalore, working internationally on brand identity, naming, and motion.</p>
-            <p>Currently reading briefs for Summer 2026.</p>
+            <p>Afterthought is an independent design and creative studio based in {settings.location}, working internationally on brand identity, naming, and motion.</p>
+            <p>{settings.status_long}.</p>
           </div>
           <div className="footer__col">
             <h5>Work</h5>
@@ -36,10 +45,15 @@ export default function Footer() {
           <div className="footer__col">
             <h5>Connect</h5>
             <ul>
-              <li><a href="#">Instagram</a></li>
-              <li><a href="#">LinkedIn</a></li>
-              <li><a href="#">Behance</a></li>
-              <li><a href="#">Medium</a></li>
+              {socials.length > 0 ? (
+                socials.map(s => (
+                  <li key={s.label}>
+                    <a href={s.href} target="_blank" rel="noopener noreferrer">{s.label}</a>
+                  </li>
+                ))
+              ) : (
+                <li><a href={`mailto:${settings.email_general}`}>{settings.email_general}</a></li>
+              )}
             </ul>
           </div>
         </div>

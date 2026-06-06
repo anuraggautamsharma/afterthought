@@ -1,18 +1,20 @@
 import type { Metadata } from 'next'
 import ContactForm from '@/components/ContactForm'
+import { getSettings } from '@/lib/settings'
 
 export const metadata: Metadata = {
   title: 'Contact — Afterthought',
   description: 'Start a project with Afterthought. We read every note ourselves.',
 }
 
-export default function Contact() {
+export default async function Contact() {
+  const settings = await getSettings()
   return (
     <>
       <section className="page-header container">
         <div className="page-header__eyebrow eyebrow">
           <span className="pulse" style={{ background: 'var(--c-semantic-success)', width: '8px', height: '8px', borderRadius: '50%', display: 'inline-block' }}></span>
-          <span>Currently reading briefs for Summer 2026</span>
+          <span>{settings.status_long}</span>
         </div>
         <h1 className="display-xl page-header__title">Tell us the thing you keep <em>almost</em> saying out loud.</h1>
         <p className="page-header__sub body-lg">We read every note ourselves and reply within a week — sometimes with a meeting, sometimes with a short, honest &quot;not us, but try them.&quot; Either way, you&apos;ll hear from one of us, not a form-letter.</p>
@@ -25,10 +27,10 @@ export default function Contact() {
           <aside className="contact-side">
             <h3>Or, more directly.</h3>
             <div className="contact-meta">
-              <div className="contact-meta__row"><span className="caption">New work</span><a href="mailto:hello@afterthought.studio">hello@afterthought.studio</a></div>
-              <div className="contact-meta__row"><span className="caption">Press</span><a href="mailto:press@afterthought.studio">press@afterthought.studio</a></div>
-              <div className="contact-meta__row"><span className="caption">Anurag</span><a href="mailto:anurag@afterthought.studio">anurag@afterthought.studio</a></div>
-              <div className="contact-meta__row"><span className="caption">Tina</span><a href="mailto:tina@afterthought.studio">tina@afterthought.studio</a></div>
+              <div className="contact-meta__row"><span className="caption">New work</span><a href={`mailto:${settings.email_general}`}>{settings.email_general}</a></div>
+              <div className="contact-meta__row"><span className="caption">Press</span><a href={`mailto:${settings.email_press}`}>{settings.email_press}</a></div>
+              <div className="contact-meta__row"><span className="caption">Anurag</span><a href={`mailto:${settings.email_anurag}`}>{settings.email_anurag}</a></div>
+              <div className="contact-meta__row"><span className="caption">Tina</span><a href={`mailto:${settings.email_tina}`}>{settings.email_tina}</a></div>
             </div>
 
             <div className="contact-side__cities">

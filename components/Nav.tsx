@@ -2,6 +2,7 @@
 
 import { usePathname } from 'next/navigation'
 import { useState, useEffect } from 'react'
+import type { SiteSettings } from '@/lib/settings'
 
 const links = [
   { href: '/work',     label: 'Work',     desc: 'Brand Identity · Naming · Motion' },
@@ -12,9 +13,15 @@ const links = [
   { href: '/contact',  label: 'Contact',  desc: 'Start a brief'                    },
 ]
 
-export default function Nav() {
+export default function Nav({ settings }: { settings: SiteSettings }) {
   const pathname = usePathname()
   const [open, setOpen] = useState(false)
+
+  const socials = [
+    { label: 'Instagram', href: settings.social_instagram },
+    { label: 'LinkedIn',  href: settings.social_linkedin  },
+    { label: 'Behance',   href: settings.social_behance   },
+  ].filter(s => s.href)
 
   useEffect(() => {
     document.body.style.overflow = open ? 'hidden' : ''
@@ -76,12 +83,16 @@ export default function Nav() {
 
         <div className="nav-overlay__foot">
           <div className="nav-overlay__foot-inner">
-            <span className="nav-overlay__meta">Bangalore · Open for briefs</span>
-            <div className="nav-overlay__socials">
-              <a href="#" className="nav-overlay__social">Instagram</a>
-              <a href="#" className="nav-overlay__social">LinkedIn</a>
-              <a href="#" className="nav-overlay__social">Behance</a>
-            </div>
+            <span className="nav-overlay__meta">{settings.location} · {settings.status_short}</span>
+            {socials.length > 0 && (
+              <div className="nav-overlay__socials">
+                {socials.map(s => (
+                  <a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer" className="nav-overlay__social">
+                    {s.label}
+                  </a>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </div>
