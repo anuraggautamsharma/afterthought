@@ -3,6 +3,7 @@
 import { useState, useCallback, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import dynamic from 'next/dynamic'
+import Link from 'next/link'
 import type { Post } from '@/lib/posts'
 import { savePostAction } from '@/app/admin/posts/actions'
 import { slugify } from '@/lib/slugify'
@@ -21,6 +22,7 @@ export default function PostForm({ post }: Props) {
   const [excerpt,     setExcerpt]     = useState(post?.excerpt ?? '')
   const [content,     setContent]     = useState<object>(post?.content ?? {})
   const [category,    setCategory]    = useState(post?.category ?? 'Essay')
+  const [status,      setStatus]      = useState<'draft' | 'published'>(post?.status ?? 'draft')
   const [coverImage,  setCoverImage]  = useState(post?.cover_image ?? '')
   const [metaTitle,   setMetaTitle]   = useState(post?.meta_title ?? '')
   const [metaDesc,    setMetaDesc]    = useState(post?.meta_description ?? '')
@@ -33,7 +35,7 @@ export default function PostForm({ post }: Props) {
     if (!slugTouched) setSlug(slugify(val))
   }
 
-  const save = useCallback((status: 'draft' | 'published') => {
+  const save = useCallback((targetStatus: 'draft' | 'published') => {
     startTransition(async () => {
       setSaveStatus('Saving…')
       const result = await savePostAction(post?.id ?? null, {
@@ -43,8 +45,8 @@ export default function PostForm({ post }: Props) {
         meta_description: metaDesc || null,
         og_image: ogImage || null,
         focus_keyword: keyword || null,
-        status,
-        published_at: status === 'published' ? (post?.published_at ?? new Date().toISOString()) : null,
+        status: targetStatus,
+        published_at: targetStatus === 'published' ? (post?.published_at ?? new Date().toISOString()) : null,
       })
 
       if (result.error) {
@@ -59,17 +61,27 @@ export default function PostForm({ post }: Props) {
     })
   }, [title, slug, excerpt, content, category, coverImage, metaTitle, metaDesc, ogImage, keyword, post, router])
 
+  const saveLabel = pending
+    ? 'Saving…'
+    : status === 'draft'
+      ? 'Save draft'
+      : post?.status === 'published'
+        ? 'Update'
+        : 'Publish →'
+
   return (
     <div>
-      {/* Back link */}
-      <div style={{ marginBottom: '24px' }}>
-        <a href="/admin/posts" className="admin-btn-ghost" style={{ display: 'inline-flex', gap: '6px', alignItems: 'center' }}>
-          ← All posts
-        </a>
+      <div className="admin-editor-topbar">
+        <Link href="/admin/posts" className="admin-editor-back">← Posts</Link>
+        {saveStatus && (
+          <span className={`admin-save-pill ${saveStatus.startsWith('Error') ? 'is-error' : ''}`}>
+            {saveStatus}
+          </span>
+        )}
       </div>
 
       <div className="admin-editor-shell">
-        {/* Main content */}
+        {/* Main editor */}
         <div className="admin-editor-main">
           <div className="admin-editor-title-wrap">
             <textarea
@@ -89,31 +101,43 @@ export default function PostForm({ post }: Props) {
           <PostEditor content={content} onChange={setContent} />
         </div>
 
-        {/* Settings sidebar */}
+        {/* Sidebar */}
         <div className="admin-editor-sidebar">
-          {/* Publish */}
+
+          {/* Publish card */}
           <div className="admin-sidebar-card">
-            <span className="admin-sidebar-card__title">Publish</span>
-            <div className="admin-publish-actions">
-              <button type="button" className="admin-btn-primary" disabled={pending}
-                onClick={() => save('published')}>
-                {post?.status === 'published' ? 'Update published post' : 'Publish →'}
+            <div className="admin-status-toggle">
+              <button
+                type="button"
+                className={`admin-status-toggle__opt ${status === 'draft' ? 'is-active' : ''}`}
+                onClick={() => setStatus('draft')}
+              >
+                Draft
               </button>
-              <button type="button" className="admin-btn-secondary" disabled={pending}
-                onClick={() => save('draft')}>
-                Save as draft
+              <button
+                type="button"
+                className={`admin-status-toggle__opt ${status === 'published' ? 'is-active' : ''}`}
+                onClick={() => setStatus('published')}
+              >
+                Published
               </button>
             </div>
-            {saveStatus && <div className="admin-save-status">{saveStatus}</div>}
+            <button
+              type="button"
+              className="admin-btn-primary"
+              disabled={pending}
+              onClick={() => save(status)}
+            >
+              {saveLabel}
+            </button>
             {post?.status === 'published' && post.slug && (
-              <a href={`/thinking/${post.slug}`} target="_blank"
-                className="admin-save-status" style={{ display: 'block', marginTop: '8px', textDecoration: 'underline', opacity: 0.5 }}>
+              <a href={`/thinking/${post.slug}`} target="_blank" className="admin-view-live">
                 View live post ↗
               </a>
             )}
           </div>
 
-          {/* Post settings */}
+          {/* Settings card */}
           <div className="admin-sidebar-card">
             <span className="admin-sidebar-card__title">Settings</span>
             <div className="admin-sidebar-fields">
@@ -123,54 +147,91 @@ export default function PostForm({ post }: Props) {
                   <option>Essay</option>
                   <option>Process note</option>
                   <option>Opinion</option>
+                  <option>Studio</option>
                   <option>Interview</option>
                 </select>
               </div>
               <div className="admin-field">
-                <label>URL slug</label>
-                <input type="text" value={slug}
-                  onChange={e => { setSlug(e.target.value); setSlugTouched(true) }}
-                  placeholder="auto-generated-from-title" />
-              </div>
-              <div className="admin-field">
                 <label>Excerpt</label>
-                <textarea value={excerpt} onChange={e => setExcerpt(e.target.value)}
-                  placeholder="1–2 sentence summary shown in listings and Google previews." />
+                <textarea
+                  value={excerpt}
+                  onChange={e => setExcerpt(e.target.value)}
+                  placeholder="1–2 sentence summary shown in listings and search."
+                />
+                <span className={`admin-char-count ${excerpt.length > 200 ? 'is-over' : ''}`}>
+                  {excerpt.length} / 200
+                </span>
               </div>
               <div className="admin-field">
                 <label>Cover image URL</label>
-                <input type="url" value={coverImage} onChange={e => setCoverImage(e.target.value)}
-                  placeholder="https://…" />
+                <input
+                  type="url"
+                  value={coverImage}
+                  onChange={e => setCoverImage(e.target.value)}
+                  placeholder="https://…"
+                />
+              </div>
+              <div className="admin-field">
+                <label>URL slug</label>
+                <input
+                  type="text"
+                  value={slug}
+                  onChange={e => { setSlug(e.target.value); setSlugTouched(true) }}
+                  placeholder="auto-generated-from-title"
+                />
               </div>
             </div>
           </div>
 
-          {/* SEO */}
-          <div className="admin-sidebar-card">
-            <span className="admin-sidebar-card__title">SEO</span>
-            <div className="admin-sidebar-fields">
-              <div className="admin-field">
-                <label>Meta title</label>
-                <input type="text" value={metaTitle} onChange={e => setMetaTitle(e.target.value)}
-                  placeholder={title || 'Defaults to post title'} />
+          {/* SEO card — collapsed by default */}
+          <div className="admin-sidebar-card admin-sidebar-card--flush">
+            <details>
+              <summary className="admin-sidebar-card__title admin-sidebar-card__summary">
+                SEO
+              </summary>
+              <div className="admin-sidebar-fields admin-sidebar-seo-fields">
+                <div className="admin-field">
+                  <label>Meta title</label>
+                  <input
+                    type="text"
+                    value={metaTitle}
+                    onChange={e => setMetaTitle(e.target.value)}
+                    placeholder={title || 'Defaults to post title'}
+                  />
+                </div>
+                <div className="admin-field">
+                  <label>Meta description</label>
+                  <textarea
+                    value={metaDesc}
+                    onChange={e => setMetaDesc(e.target.value)}
+                    placeholder={excerpt || 'Defaults to excerpt'}
+                  />
+                  <span className={`admin-char-count ${metaDesc.length > 160 ? 'is-over' : ''}`}>
+                    {metaDesc.length} / 160
+                  </span>
+                </div>
+                <div className="admin-field">
+                  <label>OG image URL</label>
+                  <input
+                    type="url"
+                    value={ogImage}
+                    onChange={e => setOgImage(e.target.value)}
+                    placeholder="Defaults to cover image"
+                  />
+                </div>
+                <div className="admin-field">
+                  <label>Focus keyword</label>
+                  <input
+                    type="text"
+                    value={keyword}
+                    onChange={e => setKeyword(e.target.value)}
+                    placeholder="e.g. brand identity"
+                  />
+                </div>
               </div>
-              <div className="admin-field">
-                <label>Meta description</label>
-                <textarea value={metaDesc} onChange={e => setMetaDesc(e.target.value)}
-                  placeholder={excerpt || 'Defaults to excerpt'} />
-              </div>
-              <div className="admin-field">
-                <label>OG image URL</label>
-                <input type="url" value={ogImage} onChange={e => setOgImage(e.target.value)}
-                  placeholder="Shared on social — defaults to cover image" />
-              </div>
-              <div className="admin-field">
-                <label>Focus keyword</label>
-                <input type="text" value={keyword} onChange={e => setKeyword(e.target.value)}
-                  placeholder="e.g. brand identity" />
-              </div>
-            </div>
+            </details>
           </div>
+
         </div>
       </div>
     </div>
