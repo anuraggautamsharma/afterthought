@@ -1,19 +1,14 @@
 'use client'
 import { usePathname } from 'next/navigation'
-import Nav from './Nav'
-import Footer from './Footer'
-import GsapAnimations from './GsapAnimations'
 
-export default function SiteShell({ children }: { children: React.ReactNode }) {
+export function SiteNav({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
-  const isAdmin = pathname.startsWith('/admin')
+  if (pathname.startsWith('/admin')) return null
+  return <>{children}</>
+}
 
-  return (
-    <>
-      {!isAdmin && <Nav />}
-      {children}
-      {!isAdmin && <Footer />}
-      {!isAdmin && <GsapAnimations />}
-    </>
-  )
+export function SiteFooter({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname()
+  if (pathname.startsWith('/admin')) return null
+  return <>{children}</>
 }
