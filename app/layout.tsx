@@ -1,9 +1,7 @@
 import type { Metadata } from 'next'
 import { Inter, JetBrains_Mono, Instrument_Serif } from 'next/font/google'
 import './globals.css'
-import Nav from '@/components/Nav'
-import Footer from '@/components/Footer'
-import GsapAnimations from '@/components/GsapAnimations'
+import SiteShell from '@/components/SiteShell'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -44,10 +42,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${jetbrainsMono.variable} ${instrumentSerif.variable}`}>
       <body>
-        <Nav />
-        {children}
-        <Footer />
-        <GsapAnimations />
+        <SiteShell>{children}</SiteShell>
       </body>
     </html>
   )
