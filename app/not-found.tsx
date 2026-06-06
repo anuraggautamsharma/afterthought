@@ -29,24 +29,23 @@ export default function NotFound() {
 
       <style>{`
         .nf {
-          min-height: 100svh;
+          min-height: calc(100svh - 60px);
           display: flex;
           align-items: center;
-          padding: 120px var(--gutter) 80px;
+          padding: 60px var(--gutter);
           position: relative;
           overflow: hidden;
         }
 
         .nf__bg {
           position: absolute;
-          right: -2vw;
+          right: -1vw;
           top: 50%;
           transform: translateY(-50%);
-          font-size: clamp(180px, 28vw, 380px);
+          font-size: clamp(200px, 30vw, 400px);
           font-variation-settings: 'wght' 800;
           font-weight: 800;
-          color: transparent;
-          -webkit-text-stroke: 1.5px var(--c-hairline);
+          color: #EDEAE4;
           letter-spacing: -0.04em;
           line-height: 1;
           user-select: none;
