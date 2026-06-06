@@ -57,6 +57,18 @@ export default function AdminSidebar() {
           Posts
         </Link>
         <Link
+          href="/admin/work"
+          className={`admin-sidebar__link ${pathname.startsWith('/admin/work') ? 'is-active' : ''}`}
+        >
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+            <rect x="3" y="3" width="7" height="7" rx="1"/>
+            <rect x="14" y="3" width="7" height="7" rx="1"/>
+            <rect x="14" y="14" width="7" height="7" rx="1"/>
+            <rect x="3" y="14" width="7" height="7" rx="1"/>
+          </svg>
+          Work
+        </Link>
+        <Link
           href="/admin/media"
           className={`admin-sidebar__link ${pathname.startsWith('/admin/media') ? 'is-active' : ''}`}
         >
