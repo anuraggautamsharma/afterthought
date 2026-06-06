@@ -1484,3 +1484,119 @@ details[open] > .admin-sidebar-card__summary { border-bottom: 1px solid #EDEAE3;
     width: 100%;
   }
 }
+
+/* ─────────────────────────────────────────────
+   SIDEBAR UNREAD BADGE
+───────────────────────────────────────────── */
+.admin-sidebar__badge {
+  margin-left: auto;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #C0392B;
+  color: #fff;
+  border-radius: 10px;
+  font-size: 11px;
+  font-variation-settings: 'wght' 560;
+  font-weight: 560;
+  line-height: 1;
+}
+
+/* ─────────────────────────────────────────────
+   INBOX
+───────────────────────────────────────────── */
+.admin-inbox-tabs { display: flex; gap: 4px; background: #F0EDE6; border-radius: 999px; padding: 4px; }
+.admin-inbox-tab {
+  padding: 7px 16px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-variation-settings: 'wght' 480;
+  color: #6B6660;
+  text-decoration: none;
+  transition: background 0.15s, color 0.15s;
+}
+.admin-inbox-tab.is-active { background: #fff; color: #1A1916; box-shadow: 0 1px 2px rgba(0,0,0,0.06); }
+
+.admin-inbox-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 20px;
+  border-bottom: 1px solid #EDEAE3;
+  text-decoration: none;
+  color: inherit;
+  transition: background 0.12s;
+}
+.admin-inbox-row:last-child { border-bottom: none; }
+.admin-inbox-row:hover { background: #FAF8F4; }
+
+.admin-inbox-row__dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: transparent; flex-shrink: 0;
+}
+.admin-inbox-row.is-unread .admin-inbox-row__dot { background: #C0392B; }
+.admin-inbox-row.is-unread .admin-inbox-row__name { font-variation-settings: 'wght' 580; font-weight: 580; }
+
+.admin-inbox-badge {
+  flex-shrink: 0;
+  font-size: 11px;
+  font-variation-settings: 'wght' 520;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  padding: 3px 9px;
+  border-radius: 6px;
+  background: #ECE8E0;
+  color: #57534E;
+}
+.admin-inbox-badge--contact { background: #DCEFD9; color: #2F5E32; }
+.admin-inbox-badge--newsletter { background: #E5E2F7; color: #463F8C; }
+.admin-inbox-badge--application { background: #FBE6C8; color: #8A5A12; }
+.admin-inbox-badge--freelance { background: #F8D9E2; color: #8C3656; }
+
+.admin-inbox-row__name { flex-shrink: 0; min-width: 140px; font-size: 14px; }
+.admin-inbox-row__subject {
+  flex: 1; min-width: 0;
+  font-size: 13px; color: #78736C;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.admin-inbox-row__time { flex-shrink: 0; font-size: 12px; color: #A8A29A; }
+
+/* Detail */
+.admin-inbox-detail__head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
+.admin-inbox-detail__time { font-size: 12px; color: #A8A29A; font-family: var(--font-mono, monospace); }
+.admin-inbox-detail__name { font-size: 28px; letter-spacing: -0.5px; font-variation-settings: 'wght' 500; font-weight: 500; margin-bottom: 4px; }
+.admin-inbox-detail__email { display: inline-block; font-size: 15px; color: #C0392B; text-decoration: none; border-bottom: 1px solid currentColor; }
+.admin-inbox-detail__subject { margin-top: 16px; font-size: 16px; font-variation-settings: 'wght' 500; }
+.admin-inbox-detail__message { margin-top: 20px; font-size: 15px; line-height: 1.65; color: #2C2925; }
+.admin-inbox-detail__message p { margin: 0 0 8px; }
+
+.admin-inbox-detail__fields {
+  margin-top: 28px;
+  border-top: 1px solid #EDEAE3;
+  padding-top: 8px;
+}
+.admin-inbox-detail__field {
+  display: flex;
+  gap: 16px;
+  padding: 12px 0;
+  border-bottom: 1px solid #F1EEE8;
+}
+.admin-inbox-detail__field-label {
+  flex-shrink: 0;
+  width: 180px;
+  font-size: 13px;
+  color: #8A857E;
+  font-variation-settings: 'wght' 500;
+}
+.admin-inbox-detail__field-value { font-size: 14px; color: #2C2925; word-break: break-word; }
+.admin-inbox-detail__field-value a { color: #C0392B; text-decoration: none; border-bottom: 1px solid currentColor; }
+
+@media (max-width: 640px) {
+  .admin-inbox-row__subject { display: none; }
+  .admin-inbox-row__name { min-width: 0; }
+  .admin-inbox-detail__field { flex-direction: column; gap: 2px; }
+  .admin-inbox-detail__field-label { width: auto; }
+}

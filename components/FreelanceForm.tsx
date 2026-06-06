@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { submitForm } from '@/app/actions/forms'
 
 const niches = [
   'Brand Design',
@@ -16,9 +17,33 @@ const niches = [
 export default function FreelanceForm() {
   const [selected, setSelected] = useState<string[]>([])
   const [submitted, setSubmitted] = useState(false)
+  const [pending, setPending] = useState(false)
+  const [error, setError] = useState('')
 
   const toggle = (n: string) =>
     setSelected(prev => prev.includes(n) ? prev.filter(x => x !== n) : [...prev, n])
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    if (pending) return
+    setPending(true)
+    setError('')
+    const fd = new FormData(e.currentTarget)
+    const res = await submitForm({
+      type: 'freelance',
+      name: String(fd.get('name') ?? ''),
+      email: String(fd.get('email') ?? ''),
+      subject: 'Freelance roster application',
+      message: String(fd.get('about') ?? ''),
+      data: {
+        disciplines: selected,
+        portfolio: String(fd.get('portfolio') ?? ''),
+      },
+    })
+    setPending(false)
+    if (res.ok) setSubmitted(true)
+    else setError(res.error ?? 'Something went wrong. Please try again.')
+  }
 
   if (submitted) {
     return (
@@ -35,16 +60,16 @@ export default function FreelanceForm() {
     <form
       className="contact-form"
       style={{ marginTop: '36px', background: 'transparent', padding: 0 }}
-      onSubmit={(e) => { e.preventDefault(); setSubmitted(true) }}
+      onSubmit={handleSubmit}
     >
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' }}>
         <div className="form-row">
           <label>Name</label>
-          <input type="text" required placeholder="Anurag Gautam" />
+          <input name="name" type="text" required placeholder="Anurag Gautam" />
         </div>
         <div className="form-row">
           <label>Email</label>
-          <input type="email" required placeholder="you@studio.com" />
+          <input name="email" type="email" required placeholder="you@studio.com" />
         </div>
       </div>
 
@@ -62,15 +87,16 @@ export default function FreelanceForm() {
 
       <div className="form-row" style={{ marginBottom: '16px' }}>
         <label>Portfolio or work link</label>
-        <input type="url" placeholder="https://your-work.com" />
+        <input name="portfolio" type="url" placeholder="https://your-work.com" />
       </div>
 
       <div className="form-row" style={{ marginBottom: '24px' }}>
         <label>A few words about your work</label>
-        <textarea placeholder="What kind of briefs do you do your best work on?" style={{ minHeight: '100px' }} />
+        <textarea name="about" placeholder="What kind of briefs do you do your best work on?" style={{ minHeight: '100px' }} />
       </div>
 
-      <button type="submit" className="btn btn-on-color">Send application →</button>
+      {error && <p className="caption" style={{ marginBottom: '12px', color: '#b91c1c' }}>{error}</p>}
+      <button type="submit" className="btn btn-on-color" disabled={pending}>{pending ? 'Sending…' : 'Send application →'}</button>
     </form>
   )
 }

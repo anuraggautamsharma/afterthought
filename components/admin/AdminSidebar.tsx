@@ -6,7 +6,7 @@ import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import { logoutAction } from '@/app/admin/login/actions'
 
-export default function AdminSidebar() {
+export default function AdminSidebar({ unread = 0 }: { unread?: number }) {
   const pathname = usePathname()
   const [open, setOpen] = useState(false)
 
@@ -43,6 +43,17 @@ export default function AdminSidebar() {
       </div>
 
       <nav className="admin-sidebar__nav">
+        <Link
+          href="/admin/inbox"
+          className={`admin-sidebar__link ${pathname.startsWith('/admin/inbox') ? 'is-active' : ''}`}
+        >
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+            <polyline points="22,6 12,13 2,6"/>
+          </svg>
+          Inbox
+          {unread > 0 && <span className="admin-sidebar__badge">{unread}</span>}
+        </Link>
         <Link
           href="/admin/posts"
           className={`admin-sidebar__link ${pathname.startsWith('/admin/posts') ? 'is-active' : ''}`}

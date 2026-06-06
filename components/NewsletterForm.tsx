@@ -1,21 +1,33 @@
 'use client'
 
 import { useState } from 'react'
+import { submitForm } from '@/app/actions/forms'
 
 export default function NewsletterForm() {
   const [subscribed, setSubscribed] = useState(false)
+  const [email, setEmail] = useState('')
+  const [pending, setPending] = useState(false)
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (pending || subscribed) return
+    setPending(true)
+    const res = await submitForm({ type: 'newsletter', email, subject: 'Newsletter signup' })
+    setPending(false)
+    if (res.ok) setSubscribed(true)
+  }
 
   return (
     <form
       style={{ marginTop: '32px', display: 'flex', gap: '12px', flexWrap: 'wrap', maxWidth: '540px' }}
-      onSubmit={(e) => {
-        e.preventDefault()
-        setSubscribed(true)
-      }}
+      onSubmit={handleSubmit}
     >
       <input
         type="email"
         required
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        disabled={subscribed}
         placeholder="your@email.com"
         style={{
           flex: 1,
@@ -30,8 +42,8 @@ export default function NewsletterForm() {
           outline: 'none',
         }}
       />
-      <button type="submit" className="btn btn-primary">
-        {subscribed ? 'Welcome →' : 'Subscribe →'}
+      <button type="submit" className="btn btn-primary" disabled={pending || subscribed}>
+        {subscribed ? 'Welcome →' : pending ? 'Subscribing…' : 'Subscribe →'}
       </button>
     </form>
   )

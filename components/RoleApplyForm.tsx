@@ -1,6 +1,19 @@
 'use client'
 
 import { useState } from 'react'
+import { submitForm } from '@/app/actions/forms'
+
+type Payload = {
+  name: string
+  email: string
+  message: string
+  data: Record<string, unknown>
+}
+
+const ROLE_TITLES: Record<string, string> = {
+  'motion-designer': 'Motion Designer',
+  'visual-designer': 'Visual / Brand Designer',
+}
 
 function Chips({ options, selected, onChange }: {
   options: string[]
@@ -19,7 +32,20 @@ function Chips({ options, selected, onChange }: {
   )
 }
 
-function MotionForm({ onSubmit }: { onSubmit: () => void }) {
+function SubmitRow({ pending, error }: { pending: boolean; error: string }) {
+  return (
+    <div className="submit-row">
+      <button type="submit" className="btn btn-primary" disabled={pending}>
+        {pending ? 'Sending…' : 'Send application →'}
+      </button>
+      <span className="caption" style={{ opacity: error ? 1 : 0.5, color: error ? '#b91c1c' : undefined }}>
+        {error || 'We read every one.'}
+      </span>
+    </div>
+  )
+}
+
+function MotionForm({ onSubmit, pending, error }: { onSubmit: (p: Payload) => void; pending: boolean; error: string }) {
   const [tools,    setTools]    = useState<string[]>([])
   const [types,    setTypes]    = useState<string[]>([])
   const [exp,      setExp]      = useState<string[]>([])
@@ -29,11 +55,27 @@ function MotionForm({ onSubmit }: { onSubmit: () => void }) {
   const toggle = (set: React.Dispatch<React.SetStateAction<string[]>>) => (v: string) =>
     set(prev => prev.includes(v) ? prev.filter(x => x !== v) : [...prev, v])
 
+  const handle = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    const fd = new FormData(e.currentTarget)
+    onSubmit({
+      name: String(fd.get('name') ?? ''),
+      email: String(fd.get('email') ?? ''),
+      message: String(fd.get('why') ?? ''),
+      data: {
+        experience: exp, tools, motion_types: types,
+        portfolio: String(fd.get('portfolio') ?? ''),
+        proud_project: String(fd.get('proud') ?? ''),
+        availability: avail, work_type: workType,
+      },
+    })
+  }
+
   return (
-    <form className="contact-form" style={{ background: 'transparent', padding: 0 }} onSubmit={e => { e.preventDefault(); onSubmit() }}>
+    <form className="contact-form" style={{ background: 'transparent', padding: 0 }} onSubmit={handle}>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-        <div className="form-row"><label>Full name</label><input type="text" required placeholder="Your name" /></div>
-        <div className="form-row"><label>Email</label><input type="email" required placeholder="you@email.com" /></div>
+        <div className="form-row"><label>Full name</label><input name="name" type="text" required placeholder="Your name" /></div>
+        <div className="form-row"><label>Email</label><input name="email" type="email" required placeholder="you@email.com" /></div>
       </div>
 
       <div className="form-row">
@@ -53,12 +95,12 @@ function MotionForm({ onSubmit }: { onSubmit: () => void }) {
 
       <div className="form-row">
         <label>Portfolio / reel link <span style={{ opacity: 0.5 }}>(required)</span></label>
-        <input type="url" required placeholder="https://your-reel.com" />
+        <input name="portfolio" type="url" required placeholder="https://your-reel.com" />
       </div>
 
       <div className="form-row">
         <label>A specific project you're proud of <span style={{ opacity: 0.5 }}>(link or describe)</span></label>
-        <input type="text" placeholder="Link or name of the project" />
+        <input name="proud" type="text" placeholder="Link or name of the project" />
       </div>
 
       <div className="form-row">
@@ -73,18 +115,15 @@ function MotionForm({ onSubmit }: { onSubmit: () => void }) {
 
       <div className="form-row">
         <label>Why Afterthought? What kind of briefs bring out your best work?</label>
-        <textarea placeholder="Keep it real — a few sentences is fine." />
+        <textarea name="why" placeholder="Keep it real — a few sentences is fine." />
       </div>
 
-      <div className="submit-row">
-        <button type="submit" className="btn btn-primary">Send application →</button>
-        <span className="caption" style={{ opacity: 0.5 }}>We read every one.</span>
-      </div>
+      <SubmitRow pending={pending} error={error} />
     </form>
   )
 }
 
-function VisualForm({ onSubmit }: { onSubmit: () => void }) {
+function VisualForm({ onSubmit, pending, error }: { onSubmit: (p: Payload) => void; pending: boolean; error: string }) {
   const [tools,     setTools]     = useState<string[]>([])
   const [strengths, setStrengths] = useState<string[]>([])
   const [projects,  setProjects]  = useState<string[]>([])
@@ -94,11 +133,27 @@ function VisualForm({ onSubmit }: { onSubmit: () => void }) {
   const toggle = (set: React.Dispatch<React.SetStateAction<string[]>>) => (v: string) =>
     set(prev => prev.includes(v) ? prev.filter(x => x !== v) : [...prev, v])
 
+  const handle = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    const fd = new FormData(e.currentTarget)
+    onSubmit({
+      name: String(fd.get('name') ?? ''),
+      email: String(fd.get('email') ?? ''),
+      message: String(fd.get('approach') ?? ''),
+      data: {
+        projects_completed: projects, tools, strengths,
+        portfolio: String(fd.get('portfolio') ?? ''),
+        case_study: String(fd.get('casestudy') ?? ''),
+        availability: avail, work_type: workType,
+      },
+    })
+  }
+
   return (
-    <form className="contact-form" style={{ background: 'transparent', padding: 0 }} onSubmit={e => { e.preventDefault(); onSubmit() }}>
+    <form className="contact-form" style={{ background: 'transparent', padding: 0 }} onSubmit={handle}>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-        <div className="form-row"><label>Full name</label><input type="text" required placeholder="Your name" /></div>
-        <div className="form-row"><label>Email</label><input type="email" required placeholder="you@email.com" /></div>
+        <div className="form-row"><label>Full name</label><input name="name" type="text" required placeholder="Your name" /></div>
+        <div className="form-row"><label>Email</label><input name="email" type="email" required placeholder="you@email.com" /></div>
       </div>
 
       <div className="form-row">
@@ -118,12 +173,12 @@ function VisualForm({ onSubmit }: { onSubmit: () => void }) {
 
       <div className="form-row">
         <label>Portfolio link <span style={{ opacity: 0.5 }}>(required)</span></label>
-        <input type="url" required placeholder="https://your-portfolio.com" />
+        <input name="portfolio" type="url" required placeholder="https://your-portfolio.com" />
       </div>
 
       <div className="form-row">
         <label>Link to one complete brand identity case study</label>
-        <input type="url" placeholder="https://case-study-link.com" />
+        <input name="casestudy" type="url" placeholder="https://case-study-link.com" />
       </div>
 
       <div className="form-row">
@@ -138,34 +193,45 @@ function VisualForm({ onSubmit }: { onSubmit: () => void }) {
 
       <div className="form-row">
         <label>Walk us through how you approach a brand brief — from first conversation to final delivery.</label>
-        <textarea placeholder="~150 words. We want to understand how you think, not just what you make." style={{ minHeight: '120px' }} />
+        <textarea name="approach" placeholder="~150 words. We want to understand how you think, not just what you make." style={{ minHeight: '120px' }} />
       </div>
 
-      <div className="submit-row">
-        <button type="submit" className="btn btn-primary">Send application →</button>
-        <span className="caption" style={{ opacity: 0.5 }}>We read every one.</span>
-      </div>
+      <SubmitRow pending={pending} error={error} />
     </form>
   )
 }
 
-function GenericForm({ onSubmit }: { onSubmit: () => void }) {
+function GenericForm({ onSubmit, pending, error }: { onSubmit: (p: Payload) => void; pending: boolean; error: string }) {
   const [avail,    setAvail]    = useState<string[]>([])
   const [workType, setWorkType] = useState<string[]>([])
 
   const toggle = (set: React.Dispatch<React.SetStateAction<string[]>>) => (v: string) =>
     set(prev => prev.includes(v) ? prev.filter(x => x !== v) : [...prev, v])
 
+  const handle = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    const fd = new FormData(e.currentTarget)
+    onSubmit({
+      name: String(fd.get('name') ?? ''),
+      email: String(fd.get('email') ?? ''),
+      message: String(fd.get('why') ?? ''),
+      data: {
+        portfolio: String(fd.get('portfolio') ?? ''),
+        availability: avail, work_type: workType,
+      },
+    })
+  }
+
   return (
-    <form className="contact-form" style={{ background: 'transparent', padding: 0 }} onSubmit={e => { e.preventDefault(); onSubmit() }}>
+    <form className="contact-form" style={{ background: 'transparent', padding: 0 }} onSubmit={handle}>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-        <div className="form-row"><label>Full name</label><input type="text" required placeholder="Your name" /></div>
-        <div className="form-row"><label>Email</label><input type="email" required placeholder="you@email.com" /></div>
+        <div className="form-row"><label>Full name</label><input name="name" type="text" required placeholder="Your name" /></div>
+        <div className="form-row"><label>Email</label><input name="email" type="email" required placeholder="you@email.com" /></div>
       </div>
 
       <div className="form-row">
         <label>Portfolio / work link <span style={{ opacity: 0.5 }}>(required)</span></label>
-        <input type="url" required placeholder="https://your-work.com" />
+        <input name="portfolio" type="url" required placeholder="https://your-work.com" />
       </div>
 
       <div className="form-row">
@@ -180,32 +246,50 @@ function GenericForm({ onSubmit }: { onSubmit: () => void }) {
 
       <div className="form-row">
         <label>Why Afterthought? Tell us a bit about yourself and the work you want to do.</label>
-        <textarea placeholder="Keep it real — a few sentences is fine." style={{ minHeight: '120px' }} />
+        <textarea name="why" placeholder="Keep it real — a few sentences is fine." style={{ minHeight: '120px' }} />
       </div>
 
-      <div className="submit-row">
-        <button type="submit" className="btn btn-primary">Send application →</button>
-        <span className="caption" style={{ opacity: 0.5 }}>We read every one.</span>
-      </div>
+      <SubmitRow pending={pending} error={error} />
     </form>
   )
 }
 
 export default function RoleApplyForm({ id }: { id: string }) {
   const [submitted, setSubmitted] = useState(false)
+  const [pending, setPending] = useState(false)
+  const [error, setError] = useState('')
+
+  const roleTitle = ROLE_TITLES[id] ?? id.replace(/-/g, ' ')
+
+  const handleSubmit = async (p: Payload) => {
+    if (pending) return
+    setPending(true)
+    setError('')
+    const res = await submitForm({
+      type: 'application',
+      name: p.name,
+      email: p.email,
+      subject: `Application — ${roleTitle}`,
+      message: p.message,
+      data: { role: roleTitle, role_id: id, ...p.data },
+    })
+    setPending(false)
+    if (res.ok) setSubmitted(true)
+    else setError(res.error ?? 'Something went wrong. Please try again.')
+  }
 
   if (submitted) {
     return (
       <div style={{ padding: '48px 0' }}>
         <p style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', fontSize: 'clamp(24px, 3vw, 36px)', letterSpacing: '-0.5px', marginBottom: '12px' }}>
-          Application received. We'll be in touch.
+          Application received. We&apos;ll be in touch.
         </p>
-        <p className="body-sm" style={{ opacity: 0.65 }}>We read every application personally. If there's a fit, we'll reach out directly.</p>
+        <p className="body-sm" style={{ opacity: 0.65 }}>We read every application personally. If there&apos;s a fit, we&apos;ll reach out directly.</p>
       </div>
     )
   }
 
-  if (id === 'motion-designer') return <MotionForm onSubmit={() => setSubmitted(true)} />
-  if (id === 'visual-designer') return <VisualForm onSubmit={() => setSubmitted(true)} />
-  return <GenericForm onSubmit={() => setSubmitted(true)} />
+  if (id === 'motion-designer') return <MotionForm onSubmit={handleSubmit} pending={pending} error={error} />
+  if (id === 'visual-designer') return <VisualForm onSubmit={handleSubmit} pending={pending} error={error} />
+  return <GenericForm onSubmit={handleSubmit} pending={pending} error={error} />
 }
