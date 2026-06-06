@@ -1,13 +1,22 @@
 import type { Metadata } from 'next'
 import JobCard from '@/components/JobCard'
-import { roles } from '@/lib/roles'
+import { getOpenJobs } from '@/lib/jobs'
+
+export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'Careers — Afterthought',
   description: 'Work with Afterthought — open roles and freelance collaborations at an independent design studio in Bangalore.',
 }
 
-export default function Careers() {
+export default async function Careers() {
+  let jobs: Awaited<ReturnType<typeof getOpenJobs>> = []
+  try {
+    jobs = await getOpenJobs()
+  } catch {
+    jobs = []
+  }
+
   return (
     <>
       {/* ── PAGE HEADER ── */}
@@ -30,12 +39,18 @@ export default function Careers() {
         <div style={{ marginBottom: '80px' }}>
           <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: '32px', paddingBottom: '20px', borderBottom: '1px solid var(--c-hairline)' }}>
             <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '1.2px', textTransform: 'uppercase', opacity: 0.45 }}>Open roles</span>
-            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '1.2px', textTransform: 'uppercase', opacity: 0.45 }}>{roles.length} open</span>
+            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '1.2px', textTransform: 'uppercase', opacity: 0.45 }}>{jobs.length} open</span>
           </div>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-            {roles.map(role => <JobCard key={role.id} role={role} />)}
-          </div>
+          {jobs.length > 0 ? (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              {jobs.map(job => <JobCard key={job.id} job={job} />)}
+            </div>
+          ) : (
+            <p className="body-lg" style={{ opacity: 0.55 }}>
+              No open roles right now — but we&apos;re always glad to hear from people we should know. Say hello through the freelance &amp; collaborations route below.
+            </p>
+          )}
         </div>
 
         {/* ── FREELANCE ── */}

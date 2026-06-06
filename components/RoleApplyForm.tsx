@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import type { RoleId } from '@/lib/roles'
 
 function Chips({ options, selected, onChange }: {
   options: string[]
@@ -150,7 +149,49 @@ function VisualForm({ onSubmit }: { onSubmit: () => void }) {
   )
 }
 
-export default function RoleApplyForm({ id }: { id: RoleId }) {
+function GenericForm({ onSubmit }: { onSubmit: () => void }) {
+  const [avail,    setAvail]    = useState<string[]>([])
+  const [workType, setWorkType] = useState<string[]>([])
+
+  const toggle = (set: React.Dispatch<React.SetStateAction<string[]>>) => (v: string) =>
+    set(prev => prev.includes(v) ? prev.filter(x => x !== v) : [...prev, v])
+
+  return (
+    <form className="contact-form" style={{ background: 'transparent', padding: 0 }} onSubmit={e => { e.preventDefault(); onSubmit() }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+        <div className="form-row"><label>Full name</label><input type="text" required placeholder="Your name" /></div>
+        <div className="form-row"><label>Email</label><input type="email" required placeholder="you@email.com" /></div>
+      </div>
+
+      <div className="form-row">
+        <label>Portfolio / work link <span style={{ opacity: 0.5 }}>(required)</span></label>
+        <input type="url" required placeholder="https://your-work.com" />
+      </div>
+
+      <div className="form-row">
+        <label>Availability</label>
+        <Chips options={['Immediate', 'Within 1 month', '3+ months']} selected={avail} onChange={toggle(setAvail)} />
+      </div>
+
+      <div className="form-row">
+        <label>Work type preference</label>
+        <Chips options={['Full-time', 'Contract / Freelance']} selected={workType} onChange={toggle(setWorkType)} />
+      </div>
+
+      <div className="form-row">
+        <label>Why Afterthought? Tell us a bit about yourself and the work you want to do.</label>
+        <textarea placeholder="Keep it real — a few sentences is fine." style={{ minHeight: '120px' }} />
+      </div>
+
+      <div className="submit-row">
+        <button type="submit" className="btn btn-primary">Send application →</button>
+        <span className="caption" style={{ opacity: 0.5 }}>We read every one.</span>
+      </div>
+    </form>
+  )
+}
+
+export default function RoleApplyForm({ id }: { id: string }) {
   const [submitted, setSubmitted] = useState(false)
 
   if (submitted) {
@@ -164,7 +205,7 @@ export default function RoleApplyForm({ id }: { id: RoleId }) {
     )
   }
 
-  return id === 'motion-designer'
-    ? <MotionForm onSubmit={() => setSubmitted(true)} />
-    : <VisualForm onSubmit={() => setSubmitted(true)} />
+  if (id === 'motion-designer') return <MotionForm onSubmit={() => setSubmitted(true)} />
+  if (id === 'visual-designer') return <VisualForm onSubmit={() => setSubmitted(true)} />
+  return <GenericForm onSubmit={() => setSubmitted(true)} />
 }

@@ -1,15 +1,13 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { roles, getRoleById } from '@/lib/roles'
+import { getJobBySlug } from '@/lib/jobs'
 import RoleApplyForm from '@/components/RoleApplyForm'
 
-export function generateStaticParams() {
-  return roles.map(r => ({ slug: r.id }))
-}
+export const dynamic = 'force-dynamic'
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params
-  const role = getRoleById(slug)
+  const role = await getJobBySlug(slug)
   if (!role) return {}
   return {
     title: `${role.title} — Careers at Afterthought`,
@@ -19,8 +17,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function RolePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
-  const role = getRoleById(slug)
-  if (!role) notFound()
+  const role = await getJobBySlug(slug)
+  if (!role || role.status !== 'open') notFound()
 
   return (
     <>
@@ -78,7 +76,7 @@ export default async function RolePage({ params }: { params: Promise<{ slug: str
         <div className="role-page__section">
           <span className="role-section-label">What you&apos;ll do</span>
           <ul className="role-list">
-            {role.whatYoullDo.map((item, i) => <li key={i}>{item}</li>)}
+            {role.what_youll_do.map((item, i) => <li key={i}>{item}</li>)}
           </ul>
         </div>
 
@@ -87,15 +85,15 @@ export default async function RolePage({ params }: { params: Promise<{ slug: str
           <div>
             <span className="role-section-label">What we&apos;re looking for</span>
             <ul className="role-list">
-              {role.lookingFor.map((item, i) => <li key={i}>{item}</li>)}
+              {role.looking_for.map((item, i) => <li key={i}>{item}</li>)}
             </ul>
           </div>
           <div>
             <span className="role-section-label">Nice to have</span>
-            <p className="body-md" style={{ opacity: 0.7, lineHeight: 1.7 }}>{role.niceToHave}</p>
+            <p className="body-md" style={{ opacity: 0.7, lineHeight: 1.7 }}>{role.nice_to_have}</p>
 
             <span className="role-section-label" style={{ marginTop: '40px' }}>Why Afterthought</span>
-            <p className="body-md" style={{ opacity: 0.7, lineHeight: 1.7 }}>{role.whyAfterThought}</p>
+            <p className="body-md" style={{ opacity: 0.7, lineHeight: 1.7 }}>{role.why_afterthought}</p>
           </div>
         </div>
 
@@ -110,7 +108,7 @@ export default async function RolePage({ params }: { params: Promise<{ slug: str
               No cover letter needed — just fill this in honestly. We care more about how you think than how you write about yourself.
             </p>
           </div>
-          <RoleApplyForm id={role.id} />
+          <RoleApplyForm id={role.slug} />
         </div>
 
       </div>
