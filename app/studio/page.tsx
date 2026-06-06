@@ -1,4 +1,8 @@
 import type { Metadata } from 'next'
+import { getTeam } from '@/lib/team'
+import { TEAM_SEED } from '@/lib/team-seed'
+
+export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'Studio — Afterthought',
@@ -6,7 +10,17 @@ export const metadata: Metadata = {
     'About Afterthought — a two-founder design studio by Anurag Gautam and Tina Gidwani, based in Bangalore, working internationally.',
 }
 
-export default function Studio() {
+export default async function Studio() {
+  let team: Awaited<ReturnType<typeof getTeam>> = []
+  try {
+    team = await getTeam()
+  } catch {
+    team = []
+  }
+
+  // Fall back to the seed copy so the page never looks empty before import.
+  const founders = team.length ? team : TEAM_SEED
+
   return (
     <>
       <section className="page-header container">
@@ -42,35 +56,30 @@ export default function Studio() {
         </div>
 
         <div className="founders-grid">
-          <article className="founder">
-            <div className="founder__portrait founder__portrait--anurag">
-              <div className="founder__initials">AG</div>
-            </div>
-            <span className="founder__role">Co-founder · Design lead</span>
-            <h3 className="founder__name">Anurag Gautam</h3>
-            <p className="founder__bio">Anurag leads the visual side of the studio — identity, type, packaging, the way a system holds up six months after it ships. Before Afterthought, he was a senior designer at studios in London and Bangalore, working on identities for hospitality groups, museums and one well-known airline he is too polite to name.</p>
-            <p className="founder__bio">He draws better than he writes and, to his own surprise, has begun to enjoy writing about why.</p>
-            <div className="founder__links">
-              <a href="mailto:anurag@afterthought.studio">anurag@afterthought.studio</a>
-              <a href="#">Are.na ↗</a>
-              <a href="#">LinkedIn ↗</a>
-            </div>
-          </article>
-
-          <article className="founder">
-            <div className="founder__portrait founder__portrait--tina">
-              <div className="founder__initials">TG</div>
-            </div>
-            <span className="founder__role">Co-founder · Strategy &amp; words</span>
-            <h3 className="founder__name">Tina Gidwani</h3>
-            <p className="founder__bio">Tina runs strategy and verbal identity — the brief, the name, and the sentence we keep coming back to. She spent six years at a larger studio in New York leading naming and positioning for early-stage companies in climate, health and finance, then a year at a publishing house re-thinking the tone of voice of a 70-year-old magazine.</p>
-            <p className="founder__bio">She is the studio&apos;s first reader, the studio&apos;s last editor, and the reason we don&apos;t ship the first round.</p>
-            <div className="founder__links">
-              <a href="mailto:tina@afterthought.studio">tina@afterthought.studio</a>
-              <a href="#">Are.na ↗</a>
-              <a href="#">LinkedIn ↗</a>
-            </div>
-          </article>
+          {founders.map((f, idx) => (
+            <article className="founder" key={f.name ?? idx}>
+              <div
+                className="founder__portrait"
+                style={
+                  f.photo
+                    ? { backgroundImage: `url(${f.photo})`, backgroundSize: 'cover', backgroundPosition: 'center' }
+                    : { background: f.accent_color }
+                }
+              >
+                {!f.photo && <div className="founder__initials">{f.initials}</div>}
+              </div>
+              <span className="founder__role">{f.role}</span>
+              <h3 className="founder__name">{f.name}</h3>
+              {(f.bio ?? '').split('\n\n').map((para, i) => (
+                <p key={i} className="founder__bio">{para}</p>
+              ))}
+              <div className="founder__links">
+                {f.email && <a href={`mailto:${f.email}`}>{f.email}</a>}
+                {f.arena_url && <a href={f.arena_url} target="_blank" rel="noopener noreferrer">Are.na ↗</a>}
+                {f.linkedin_url && <a href={f.linkedin_url} target="_blank" rel="noopener noreferrer">LinkedIn ↗</a>}
+              </div>
+            </article>
+          ))}
         </div>
       </section>
 

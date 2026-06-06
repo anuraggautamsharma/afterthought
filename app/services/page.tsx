@@ -1,79 +1,32 @@
 import type { Metadata } from 'next'
 import { ServiceCards } from '@/components/ServiceCards'
-import type { Service } from '@/components/ServiceCards'
+import type { Service as ServiceCard } from '@/components/ServiceCards'
+import { getServices } from '@/lib/services'
+
+export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'Services — Afterthought',
   description: 'Brand identity, naming, motion, packaging, and digital — what Afterthought does, how it works, and what we don\'t take on.',
 }
 
-const services: Service[] = [
-  {
-    num: '01',
-    color: 'lime',
-    title: 'Brand Identity & Strategy',
-    tags: ['Visual', 'Verbal', 'Systems'],
-    description: 'The full thing — from a single positioning sentence to a working visual system. We research the category, write the brief in our own words, then build an identity that holds up across every surface it needs to touch.',
-    deliverables: ['Brand strategy & positioning', 'Logo & mark system', 'Colour, type, and grid', 'Brand guidelines (usable, not decorative)', 'Core application suite'],
-    for: 'Founders building from scratch. Established businesses who\'ve outgrown their identity.',
-  },
-  {
-    num: '02',
-    color: 'cream',
-    title: 'Naming & Verbal Identity',
-    tags: ['Naming', 'Tone of voice', 'Copy'],
-    description: 'We find the name that says the thing you didn\'t know you meant. Then we build the language system around it — tone, voice, the sentence that goes on the homepage, the words that hold up in a pitch.',
-    deliverables: ['Name candidates + rationale', 'Linguistic and trademark screening', 'Taglines and positioning lines', 'Tone of voice guidelines', 'Core copy (web, pitch, packaging)'],
-    for: 'New ventures. Re-launches. Companies whose name no longer tells the right story.',
-  },
-  {
-    num: '03',
-    color: 'sky',
-    title: 'Motion & Animation',
-    tags: ['Brand motion', 'Film', 'UI animation'],
-    description: 'Brand identity systems that move. We design motion for logos, campaigns, social content, and product UI — always from brand first, never decoration for its own sake.',
-    deliverables: ['Motion identity system', 'Brand film & social content', 'Animated logo suite (Lottie / After Effects)', 'Title sequences and transitions', 'UI animation specs'],
-    for: 'Brands that live on screen. Founders who need their story told in 30 seconds.',
-  },
-  {
-    num: '04',
-    color: 'coral',
-    title: 'Packaging & Retail Systems',
-    tags: ['CPG', 'Hospitality', 'Print'],
-    description: 'Physical identity — the thing that sits on a shelf, arrives in a bag, or greets someone at a door. We design for production reality, not just for the render.',
-    deliverables: ['Structural and surface design', 'Typography and illustration direction', 'Production-ready print files', 'Retail environment touchpoints', 'Range architecture'],
-    for: 'Consumer brands. Hospitality groups. Anyone whose product touches a person\'s hands.',
-  },
-  {
-    num: '05',
-    color: 'mint',
-    title: 'Digital & Web',
-    tags: ['Web', 'Product', 'Design systems'],
-    description: 'Design for screens that need to do something. We work at the intersection of brand and product — from marketing sites to internal tools — and hand off work that developers can actually build.',
-    deliverables: ['Marketing site design', 'Design system & component library', 'Product UX & interface design', 'Developer-ready specs (Figma)', 'Motion and interaction guidelines'],
-    for: 'Startups launching a product. Established brands rebuilding their digital presence.',
-  },
-  {
-    num: '06',
-    color: 'lilac',
-    title: 'Campaigns & Creative Direction',
-    tags: ['Launch', 'OOH', 'Brand films'],
-    description: 'The moment a brand goes public — we help plan it and make it. From launch campaigns to annual brand films, we concept, direct, and produce. For production at scale, we bring in our trusted collaborators.',
-    deliverables: ['Campaign concept & art direction', 'OOH and print design', 'Social campaign suite', 'Brand film concept and direction', 'Photography direction'],
-    for: 'Brands making a deliberate public moment. Founders who need the launch to count.',
-  },
-  {
-    num: '07',
-    color: 'pink',
-    title: 'Social Media & Distribution',
-    tags: ['Content', 'Social', 'Distribution'],
-    description: 'We help brands build a real presence — not just post more. That means a content system rooted in the brand, a point of view worth following, and a distribution strategy that compounds over time rather than chasing the algorithm.',
-    deliverables: ['Content strategy & editorial calendar', 'Social identity system (templates, formats, type)', 'Platform-native content production', 'Caption and copy voice', 'Distribution playbook & channel strategy'],
-    for: 'Brands with something to say but no system to say it consistently. Founders building an audience alongside a product.',
-  },
-]
+export default async function Services() {
+  let services: ServiceCard[] = []
+  try {
+    const rows = await getServices()
+    services = rows.map(s => ({
+      num: s.num,
+      color: s.color,
+      title: s.title,
+      tags: s.tags ?? [],
+      description: s.description,
+      deliverables: s.deliverables ?? [],
+      for: s.who_for,
+    }))
+  } catch {
+    services = []
+  }
 
-export default function Services() {
   return (
     <>
       <section className="page-header container">

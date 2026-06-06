@@ -1,0 +1,48 @@
+'use server'
+
+import { createTeamMember, updateTeamMember, deleteTeamMember, countTeam, type TeamInput } from '@/lib/team'
+import { TEAM_SEED } from '@/lib/team-seed'
+import { revalidatePath } from 'next/cache'
+import { redirect } from 'next/navigation'
+
+export async function saveTeamAction(
+  id: string | null,
+  data: TeamInput
+): Promise<{ id?: string; error?: string }> {
+  try {
+    if (id) {
+      await updateTeamMember(id, data)
+      revalidatePath('/studio')
+      return { id }
+    } else {
+      const member = await createTeamMember(data)
+      revalidatePath('/studio')
+      return { id: member.id }
+    }
+  } catch (e) {
+    return { error: e instanceof Error ? e.message : 'Failed to save team member' }
+  }
+}
+
+export async function deleteTeamAction(id: string) {
+  try {
+    await deleteTeamMember(id)
+    revalidatePath('/studio')
+  } catch {
+    // continue
+  }
+  redirect('/admin/team')
+}
+
+export async function seedTeamAction(): Promise<{ error?: string; count?: number }> {
+  try {
+    const existing = await countTeam()
+    if (existing > 0) return { error: 'Team already exists — import skipped.' }
+    for (const m of TEAM_SEED) await createTeamMember(m)
+    revalidatePath('/studio')
+    revalidatePath('/admin/team')
+    return { count: TEAM_SEED.length }
+  } catch (e) {
+    return { error: e instanceof Error ? e.message : 'Import failed' }
+  }
+}
