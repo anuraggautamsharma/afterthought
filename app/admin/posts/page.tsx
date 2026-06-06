@@ -16,6 +16,7 @@ export default async function PostsPage() {
   try {
     posts = await getAllPosts()
   } catch (e) {
+    console.error('[admin/posts] getAllPosts failed:', e)
     dbError = e instanceof Error ? e.message : String(e)
   }
 
