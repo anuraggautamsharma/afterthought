@@ -1,33 +1,27 @@
 import type { Metadata } from 'next'
+import { getPublishedPosts } from '@/lib/posts'
 import NewsletterForm from '@/components/NewsletterForm'
+import Link from 'next/link'
+
+export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'Thinking — Afterthought',
   description: 'The Afterthought journal — essays on design, craft, and practice from the studio.',
 }
 
-const posts = [
-  {
-    slug: 'the-future-of-design-belongs-to-the-messy-middle',
-    title: 'The Future of Design Belongs to the Messy Middle.',
-    titleJsx: <>The Future of Design Belongs to the <em>Messy Middle</em>.</>,
-    category: 'Essay',
-    issue: 'Issue 01',
-    date: 'Jun 2026',
-    readTime: '8 min',
-    bg: 'var(--c-block-navy)',
-    textColor: 'rgba(255,255,255,0.92)',
-    excerpt: 'Design today lives in the space between speed and taste, automation and intuition, business pressure and creative freedom. That is where the real work begins.',
-    featured: true,
-  },
-]
+function formatDate(str: string | null) {
+  if (!str) return ''
+  return new Date(str).toLocaleDateString('en-GB', { month: 'short', year: 'numeric' })
+}
 
-const featured = posts[0]
+export default async function Thinking() {
+  const posts = await getPublishedPosts()
+  const featured = posts[0] ?? null
+  const rest = posts.slice(1)
 
-export default function Thinking() {
   return (
     <>
-      {/* ── PAGE HEADER ── */}
       <section className="page-header container">
         <div className="page-header__eyebrow eyebrow">
           <span className="pulse"></span>
@@ -39,49 +33,68 @@ export default function Thinking() {
 
       <div className="container" style={{ paddingBottom: 'var(--s-section)' }}>
 
-        {/* ── FEATURED ARTICLE ── */}
-        <a className="j-feat" href={`/thinking/${featured.slug}`}>
-          <div className="j-feat__img" style={{ background: featured.bg }}>
-            <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '48px' }}>
-              <div style={{ textAlign: 'center' }}>
-                <div style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', fontSize: 'clamp(32px, 5vw, 68px)', lineHeight: 1.06, letterSpacing: '-2px', color: featured.textColor, maxWidth: '700px' }}>
-                  The Messy Middle.
-                </div>
-                <div style={{ marginTop: '24px', fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '1.5px', textTransform: 'uppercase', color: 'rgba(255,255,255,0.35)' }}>
-                  Design · AI · Craft · 2026
+        {featured ? (
+          <Link className="j-feat" href={`/thinking/${featured.slug}`}>
+            <div className="j-feat__img" style={{ background: 'var(--c-block-navy)' }}>
+              <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '48px' }}>
+                <div style={{ textAlign: 'center' }}>
+                  <div style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', fontSize: 'clamp(32px, 5vw, 68px)', lineHeight: 1.06, letterSpacing: '-2px', color: 'rgba(255,255,255,0.92)', maxWidth: '700px' }}>
+                    {featured.title}
+                  </div>
+                  <div style={{ marginTop: '24px', fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '1.5px', textTransform: 'uppercase', color: 'rgba(255,255,255,0.35)' }}>
+                    {featured.category} · {formatDate(featured.published_at)}
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          <div className="j-feat__gradient"></div>
-          <div className="j-feat__content">
-            <div className="j-feat__kicker">
-              <span className="j-feat__dot"></span>
-              <span>Latest · {featured.category} · {featured.issue}</span>
+            <div className="j-feat__gradient" />
+            <div className="j-feat__content">
+              <div className="j-feat__kicker">
+                <span className="j-feat__dot" />
+                <span>Latest · {featured.category}</span>
+              </div>
+              <h2 className="j-feat__title">{featured.title}</h2>
+              <div className="j-feat__meta">
+                <span>{formatDate(featured.published_at)}</span>
+                <span className="j-feat__meta-sep">·</span>
+                <span>{featured.read_time} min read</span>
+                <span className="j-feat__meta-sep">·</span>
+                <span>Read the essay →</span>
+              </div>
             </div>
-            <h2 className="j-feat__title">{featured.titleJsx ?? featured.title}</h2>
-            <div className="j-feat__meta">
-              <span>{featured.date}</span>
-              <span className="j-feat__meta-sep">·</span>
-              <span>{featured.readTime} read</span>
-              <span className="j-feat__meta-sep">·</span>
-              <span>Read the essay →</span>
-            </div>
+          </Link>
+        ) : (
+          <div className="j-more-box" style={{ padding: '48px', background: 'var(--c-surface-soft)', borderRadius: 'var(--r-lg)', textAlign: 'center' }}>
+            <div style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', fontSize: 'clamp(22px, 3vw, 32px)', letterSpacing: '-0.5px', marginBottom: '16px' }}>First essay coming soon.</div>
+            <p className="body-sm" style={{ opacity: 0.6, maxWidth: '440px', margin: '0 auto' }}>We publish four times a year — subscribe below and we&apos;ll send it when it&apos;s ready.</p>
           </div>
-        </a>
+        )}
 
-        {/* ── MORE ESSAYS ── */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginTop: '64px', marginBottom: '20px' }}>
-          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '1.2px', textTransform: 'uppercase', opacity: 0.42 }}>From the archive</span>
-          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '1.2px', textTransform: 'uppercase', opacity: 0.42 }}>{posts.length} published</span>
-        </div>
+        {rest.length > 0 && (
+          <>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginTop: '64px', marginBottom: '20px' }}>
+              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '1.2px', textTransform: 'uppercase', opacity: 0.42 }}>From the archive</span>
+              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '1.2px', textTransform: 'uppercase', opacity: 0.42 }}>{rest.length} more</span>
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0' }}>
+              {rest.map(post => (
+                <Link key={post.id} href={`/thinking/${post.slug}`} className="j-list__item"
+                  style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: '24px', padding: '20px 0', borderTop: '1px solid var(--c-hairline)', textDecoration: 'none', color: 'inherit' }}>
+                  <span style={{ fontSize: '18px', fontVariationSettings: "'wght' 460", fontWeight: 460, letterSpacing: '-0.2px' }}>{post.title}</span>
+                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', opacity: 0.4, flexShrink: 0 }}>{formatDate(post.published_at)}</span>
+                </Link>
+              ))}
+            </div>
+          </>
+        )}
 
-        <div className="j-more-box" style={{ padding: '48px', background: 'var(--c-surface-soft)', borderRadius: 'var(--r-lg)', textAlign: 'center' }}>
-          <div style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', fontSize: 'clamp(22px, 3vw, 32px)', letterSpacing: '-0.5px', marginBottom: '16px' }}>More on the way.</div>
-          <p className="body-sm" style={{ opacity: 0.6, maxWidth: '440px', margin: '0 auto' }}>We publish four times a year — essays on practice, process, and the occasional opinion we&apos;re willing to defend. Subscribe below and we&apos;ll send the next one when it&apos;s ready.</p>
-        </div>
+        {!featured && (
+          <div className="j-more-box" style={{ padding: '48px', background: 'var(--c-surface-soft)', borderRadius: 'var(--r-lg)', textAlign: 'center', marginTop: '48px' }}>
+            <div style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', fontSize: 'clamp(22px, 3vw, 32px)', letterSpacing: '-0.5px', marginBottom: '16px' }}>More on the way.</div>
+            <p className="body-sm" style={{ opacity: 0.6, maxWidth: '440px', margin: '0 auto' }}>We publish four times a year — essays on practice, process, and the occasional opinion we&apos;re willing to defend. Subscribe below and we&apos;ll send the next one when it&apos;s ready.</p>
+          </div>
+        )}
 
-        {/* ── NEWSLETTER ── */}
         <div id="newsletter" style={{ marginTop: '96px' }}>
           <div className="color-block color-block--lime">
             <span className="eyebrow cb-eyebrow">The newsletter</span>
@@ -91,7 +104,6 @@ export default function Thinking() {
             <p className="caption" style={{ opacity: 0.6, marginTop: '16px' }}>Four notes a year. Unsubscribe in one click.</p>
           </div>
         </div>
-
       </div>
     </>
   )
