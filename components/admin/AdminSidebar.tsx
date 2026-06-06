@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import { logoutAction } from '@/app/admin/login/actions'
 
@@ -10,8 +11,17 @@ export default function AdminSidebar() {
   return (
     <aside className="admin-sidebar">
       <div className="admin-sidebar__brand">
-        <span className="admin-sidebar__brand-name">Afterthought</span>
-        <span className="admin-sidebar__brand-sub">CMS</span>
+        <Image
+          src="/assets/logo-mark.png"
+          alt="Afterthought"
+          width={28}
+          height={28}
+          className="admin-sidebar__logo"
+        />
+        <div>
+          <span className="admin-sidebar__brand-name">Afterthought</span>
+          <span className="admin-sidebar__brand-sub">CMS</span>
+        </div>
       </div>
 
       <nav className="admin-sidebar__nav">
