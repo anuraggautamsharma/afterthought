@@ -8,23 +8,31 @@ export const metadata: Metadata = {
 export default function NotFound() {
   return (
     <main className="nf">
-
-      <div className="nf__bg" aria-hidden="true">404</div>
-
       <div className="nf__inner">
+
+        <div className="nf__digits" aria-label="404">
+          <div className="nf__digit nf__digit--a" aria-hidden="true">4</div>
+          <div className="nf__digit nf__digit--b" aria-hidden="true">0</div>
+          <div className="nf__digit nf__digit--c" aria-hidden="true">4</div>
+        </div>
+
         <p className="nf__eyebrow">Error 404</p>
+
         <h1 className="nf__title">
           This wasn&apos;t<br />
           <em>in the brief.</em>
         </h1>
+
         <p className="nf__sub">
           The page you&apos;re looking for doesn&apos;t exist —<br className="nf__br" />
           or has moved on to better things.
         </p>
+
         <div className="nf__actions">
           <Link href="/" className="nf__btn">Take me home</Link>
           <Link href="/work" className="nf__ghost">See our work ↗</Link>
         </div>
+
       </div>
 
       <style>{`
@@ -34,50 +42,76 @@ export default function NotFound() {
           align-items: center;
           justify-content: center;
           padding: 60px 32px;
-          position: relative;
-          overflow: hidden;
           text-align: center;
-        }
-
-        .nf__bg {
-          position: absolute;
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%, -50%);
-          font-size: clamp(200px, 30vw, 420px);
-          font-variation-settings: 'wght' 800;
-          font-weight: 800;
-          color: #EDEAE4;
-          letter-spacing: -0.05em;
-          line-height: 1;
-          user-select: none;
-          pointer-events: none;
-          white-space: nowrap;
+          background:
+            radial-gradient(ellipse 60% 50% at 20% 60%, rgba(215,242,108,0.18) 0%, transparent 70%),
+            radial-gradient(ellipse 50% 50% at 80% 40%, rgba(205,186,242,0.18) 0%, transparent 70%),
+            #FFFFFF;
         }
 
         .nf__inner {
-          position: relative;
-          max-width: 560px;
+          max-width: 540px;
           width: 100%;
         }
 
+        /* ── Coloured digit blocks ── */
+        .nf__digits {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 14px;
+          margin-bottom: 52px;
+        }
+
+        .nf__digit {
+          width: 116px;
+          height: 152px;
+          border-radius: 22px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 76px;
+          font-variation-settings: 'wght' 720;
+          font-weight: 720;
+          letter-spacing: -4px;
+          line-height: 1;
+          color: rgba(0,0,0,0.75);
+          transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1);
+        }
+
+        .nf__digit:hover { transform: rotate(0deg) scale(1.08) !important; }
+
+        .nf__digit--a {
+          background: #D7F26C;
+          transform: rotate(-4deg) translateY(4px);
+        }
+        .nf__digit--b {
+          background: #CDBAF2;
+          transform: rotate(2.5deg) translateY(-6px);
+        }
+        .nf__digit--c {
+          background: #F4A887;
+          transform: rotate(-2deg) translateY(2px);
+        }
+
+        /* ── Text ── */
         .nf__eyebrow {
           font-family: var(--font-mono);
           font-size: 10px;
           letter-spacing: 2px;
           text-transform: uppercase;
           opacity: 0.3;
-          margin-bottom: 24px;
+          margin-bottom: 20px;
         }
 
         .nf__title {
-          font-size: clamp(48px, 7vw, 80px);
+          font-size: clamp(42px, 6.5vw, 72px);
           font-variation-settings: 'wght' 340;
           font-weight: 340;
           letter-spacing: -2px;
-          line-height: 1.02;
+          line-height: 1.04;
           color: var(--c-ink);
-          margin-bottom: 24px;
+          margin-bottom: 20px;
         }
 
         .nf__title em {
@@ -125,14 +159,19 @@ export default function NotFound() {
           text-decoration: none;
           opacity: 0.38;
           transition: opacity 0.15s;
-          letter-spacing: -0.1px;
         }
 
         .nf__ghost:hover { opacity: 1; }
 
         @media (max-width: 600px) {
           .nf__br { display: none; }
-          .nf__bg { font-size: 52vw; }
+          .nf__digit {
+            width: 88px;
+            height: 116px;
+            font-size: 58px;
+            border-radius: 16px;
+          }
+          .nf__digits { gap: 10px; margin-bottom: 40px; }
         }
       `}</style>
     </main>
