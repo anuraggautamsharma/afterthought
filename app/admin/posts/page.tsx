@@ -1,6 +1,6 @@
 import { getAllPosts } from '@/lib/posts'
 import Link from 'next/link'
-import { deletePostAction } from './actions'
+import DeletePostButton from '@/components/admin/DeletePostButton'
 
 export const dynamic = 'force-dynamic'
 
@@ -74,12 +74,7 @@ export default async function PostsPage() {
                 {post.status === 'published' && (
                   <Link href={`/thinking/${post.slug}`} target="_blank" className="admin-btn-ghost">View ↗</Link>
                 )}
-                <form action={deletePostAction.bind(null, post.id)} style={{ display: 'inline' }}>
-                  <button type="submit" className="admin-btn-ghost admin-btn-ghost--danger"
-                    onClick={e => { if (!confirm('Delete this post?')) e.preventDefault() }}>
-                    Delete
-                  </button>
-                </form>
+                <DeletePostButton id={post.id} />
               </div>
             </div>
           ))}
