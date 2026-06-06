@@ -2,111 +2,138 @@ import Link from 'next/link'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: '404 — Page not found · Afterthought',
+  title: '404 — Not found · Afterthought',
 }
 
 export default function NotFound() {
   return (
-    <main className="not-found">
-      <div className="not-found__inner">
-        <span className="not-found__code">404</span>
-        <h1 className="not-found__title">
-          This page doesn&apos;t<br /><em>exist yet.</em>
+    <main className="nf">
+
+      {/* Giant background number */}
+      <div className="nf__bg" aria-hidden="true">404</div>
+
+      <div className="nf__content">
+        <p className="nf__eyebrow">Error 404</p>
+        <h1 className="nf__title">
+          This wasn&apos;t<br />
+          <em>in the brief.</em>
         </h1>
-        <p className="not-found__body">
-          The link might be wrong, or this page may have moved.<br />
-          Let&apos;s get you back somewhere useful.
+        <p className="nf__sub">
+          The page you&apos;re looking for doesn&apos;t exist — or has moved on to better things.
         </p>
-        <div className="not-found__links">
-          <Link href="/" className="not-found__cta">← Back to home</Link>
-          <Link href="/work" className="not-found__link">View our work</Link>
-          <Link href="/contact" className="not-found__link">Get in touch</Link>
+        <div className="nf__actions">
+          <Link href="/" className="nf__btn">Take me home</Link>
+          <Link href="/work" className="nf__ghost">See our work ↗</Link>
         </div>
       </div>
 
       <style>{`
-        .not-found {
-          min-height: 100vh;
+        .nf {
+          min-height: 100svh;
           display: flex;
           align-items: center;
-          justify-content: center;
-          padding: 80px var(--gutter);
-          background: var(--c-canvas);
+          padding: 120px var(--gutter) 80px;
+          position: relative;
+          overflow: hidden;
         }
 
-        .not-found__inner {
-          max-width: 560px;
-          width: 100%;
+        .nf__bg {
+          position: absolute;
+          right: -2vw;
+          top: 50%;
+          transform: translateY(-50%);
+          font-size: clamp(180px, 28vw, 380px);
+          font-variation-settings: 'wght' 800;
+          font-weight: 800;
+          color: transparent;
+          -webkit-text-stroke: 1.5px var(--c-hairline);
+          letter-spacing: -0.04em;
+          line-height: 1;
+          user-select: none;
+          pointer-events: none;
         }
 
-        .not-found__code {
-          display: block;
+        .nf__content {
+          position: relative;
+          max-width: 580px;
+        }
+
+        .nf__eyebrow {
           font-family: var(--font-mono);
-          font-size: 11px;
+          font-size: 10px;
           letter-spacing: 2px;
           text-transform: uppercase;
-          color: var(--c-ink);
-          opacity: 0.28;
+          opacity: 0.3;
           margin-bottom: 28px;
         }
 
-        .not-found__title {
-          font-size: clamp(44px, 7vw, 72px);
+        .nf__title {
+          font-size: clamp(52px, 8vw, 88px);
           font-variation-settings: 'wght' 340;
           font-weight: 340;
-          letter-spacing: -1.5px;
-          line-height: 1.05;
+          letter-spacing: -2px;
+          line-height: 1.02;
           color: var(--c-ink);
-          margin-bottom: 24px;
+          margin-bottom: 28px;
         }
 
-        .not-found__title em {
+        .nf__title em {
           font-family: var(--font-serif);
           font-style: italic;
           font-weight: 400;
+          letter-spacing: -1px;
         }
 
-        .not-found__body {
+        .nf__sub {
           font-size: 17px;
           line-height: 1.65;
-          opacity: 0.45;
-          margin-bottom: 48px;
+          opacity: 0.4;
+          max-width: 380px;
+          margin-bottom: 52px;
         }
 
-        .not-found__links {
+        .nf__actions {
           display: flex;
           align-items: center;
-          gap: 24px;
+          gap: 20px;
           flex-wrap: wrap;
         }
 
-        .not-found__cta {
-          font-size: 15px;
-          font-variation-settings: 'wght' 500;
-          font-weight: 500;
-          color: var(--c-ink);
-          text-decoration: none;
+        .nf__btn {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
           background: var(--c-ink);
           color: var(--c-canvas);
-          padding: 12px 24px;
+          font-size: 14px;
+          font-variation-settings: 'wght' 500;
+          font-weight: 500;
+          letter-spacing: -0.1px;
+          padding: 14px 28px;
           border-radius: var(--r-pill);
+          text-decoration: none;
+          transition: opacity 0.15s;
+        }
+
+        .nf__btn:hover { opacity: 0.75; }
+
+        .nf__ghost {
+          font-size: 14px;
+          font-variation-settings: 'wght' 460;
+          font-weight: 460;
+          color: var(--c-ink);
+          text-decoration: none;
+          opacity: 0.38;
           transition: opacity 0.15s;
           letter-spacing: -0.1px;
         }
 
-        .not-found__cta:hover { opacity: 0.78; }
+        .nf__ghost:hover { opacity: 1; }
 
-        .not-found__link {
-          font-size: 15px;
-          color: var(--c-ink);
-          text-decoration: none;
-          opacity: 0.45;
-          transition: opacity 0.15s;
-          border-bottom: 1px solid currentColor;
-          padding-bottom: 1px;
+        @media (max-width: 600px) {
+          .nf { padding: 100px 24px 60px; }
+          .nf__bg { right: -8vw; opacity: 0.6; }
         }
-
-        .not-found__link:hover { opacity: 1; }
       `}</style>
     </main>
   )
