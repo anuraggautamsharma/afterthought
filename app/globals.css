@@ -2346,8 +2346,8 @@ img { max-width: 100%; display: block; }
 }
 @media (max-width: 768px) {
   :root { --gutter: 20px; }
-  /* Hero — reduce the excessive top gap */
-  .hero { padding-top: 64px; padding-bottom: 0; }
+  /* Hero — more breathing room below nav (nav = 64px fixed) */
+  .hero { padding-top: 104px; padding-bottom: 0; }
   .hero__head { margin-bottom: 24px; }
   .hero__bg-word { font-size: 100px; letter-spacing: -4px; right: -4%; bottom: -2%; }
   .hero__badge { display: none; }
@@ -2360,7 +2360,6 @@ img { max-width: 100%; display: block; }
   .display-md { font-size: 32px; letter-spacing: -0.4px; }
   .section { padding-top: 40px; padding-bottom: 56px; }
   .section-head { margin-bottom: 28px; }
-  .showreel { padding: 32px 0 0; }
   .work-grid { grid-template-columns: 1fr; }
   .work-grid .tile-wide { grid-column: span 1; }
   .vis-helio { grid-template-columns: 1fr; }
@@ -2403,16 +2402,16 @@ img { max-width: 100%; display: block; }
   .freelance-niches { grid-template-columns: 1fr; }
   .freelance-niche:nth-child(-n+3) { border-top: none; }
   .freelance-niche:first-child { border-top: 1px solid var(--c-hairline); }
-  /* Showreel */
-  .showreel { padding: 0 0 48px; }
+  /* Showreel — gap below ticker, consistent bottom */
+  .showreel { padding: 56px 0 48px; }
 }
 @media (max-width: 560px) {
   :root { --gutter: 16px; }
   .nav-overlay__label { letter-spacing: -2px; }
   .nav-overlay__desc { display: none; }
   .nav-overlay__socials { display: none; }
-  /* Hero — tight on small phones */
-  .hero { padding-top: 48px; padding-bottom: 0; }
+  /* Hero — breathing room on small phones (nav = 64px) */
+  .hero { padding-top: 88px; padding-bottom: 0; }
   .hero__head { margin-bottom: 16px; }
   .hero__bg-word { display: none; }
   .hero__eyebrow { font-size: 10px; }
@@ -2422,7 +2421,7 @@ img { max-width: 100%; display: block; }
   .display-xl { font-size: 36px; letter-spacing: -0.6px; line-height: 1.1; }
   .display-lg { font-size: 30px; letter-spacing: -0.4px; }
   .section { padding-top: 32px; padding-bottom: 44px; }
-  .showreel { padding: 24px 0 0; }
+  .showreel { padding: 40px 0 24px; }
   .manifesto-grid { grid-template-columns: 1fr; }
   .footer__cols { grid-template-columns: 1fr 1fr; }
   .footer__wordmark { letter-spacing: -3px; }
