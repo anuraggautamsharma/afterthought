@@ -1,7 +1,6 @@
 import './admin.css'
 import { getSession } from '@/lib/auth'
-
-import AdminTopbar from '@/components/admin/AdminTopbar'
+import AdminSidebar from '@/components/admin/AdminSidebar'
 
 export const metadata = { title: 'Afterthought CMS' }
 
@@ -12,13 +11,19 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   } catch {}
 
   if (!session) {
-    return <div className="admin-shell"><div className="admin-content">{children}</div></div>
+    return (
+      <div className="admin-shell">
+        <div className="admin-main">{children}</div>
+      </div>
+    )
   }
 
   return (
     <div className="admin-shell">
-      <AdminTopbar />
-      <div className="admin-content">{children}</div>
+      <AdminSidebar />
+      <div className="admin-main">
+        <div className="admin-content">{children}</div>
+      </div>
     </div>
   )
 }

@@ -7,6 +7,7 @@ import Link from 'next/link'
 import type { Post } from '@/lib/posts'
 import { savePostAction } from '@/app/admin/posts/actions'
 import { slugify } from '@/lib/slugify'
+import ImagePicker from './ImagePicker'
 
 const PostEditor = dynamic(() => import('./PostEditor'), { ssr: false })
 
@@ -29,6 +30,7 @@ export default function PostForm({ post }: Props) {
   const [ogImage,     setOgImage]     = useState(post?.og_image ?? '')
   const [keyword,     setKeyword]     = useState(post?.focus_keyword ?? '')
   const [saveStatus,  setSaveStatus]  = useState('')
+  const [pickerOpen,  setPickerOpen]  = useState(false)
 
   const handleTitleChange = (val: string) => {
     setTitle(val)
@@ -163,14 +165,28 @@ export default function PostForm({ post }: Props) {
                 </span>
               </div>
               <div className="admin-field">
-                <label>Cover image URL</label>
+                <label>Cover image</label>
+                {coverImage && (
+                  <div className="admin-cover-preview">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={coverImage} alt="Cover" />
+                    <button type="button" className="admin-cover-remove" onClick={() => setCoverImage('')}>✕</button>
+                  </div>
+                )}
+                <div className="admin-cover-actions">
+                  <button type="button" className="admin-btn-secondary" style={{ fontSize: '12px', padding: '8px 14px' }} onClick={() => setPickerOpen(true)}>
+                    {coverImage ? 'Change image' : 'Choose from media'}
+                  </button>
+                </div>
                 <input
                   type="url"
                   value={coverImage}
                   onChange={e => setCoverImage(e.target.value)}
-                  placeholder="https://…"
+                  placeholder="or paste URL…"
+                  style={{ marginTop: '6px' }}
                 />
               </div>
+              <ImagePicker open={pickerOpen} onClose={() => setPickerOpen(false)} onSelect={url => { setCoverImage(url); setPickerOpen(false) }} />
               <div className="admin-field">
                 <label>URL slug</label>
                 <input
