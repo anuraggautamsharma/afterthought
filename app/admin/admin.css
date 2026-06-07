@@ -2942,3 +2942,63 @@ details[open] > .admin-sidebar-card__summary { border-bottom: 1px solid #EDEAE3;
   font-size: 13px;
   margin-bottom: 20px;
 }
+
+/* ═══════════════════════════════════════════════════
+   SKELETON LOADER SYSTEM
+═══════════════════════════════════════════════════ */
+
+@keyframes admin-shimmer {
+  0%   { background-position: -600px 0 }
+  100% { background-position:  600px 0 }
+}
+
+.admin-skel {
+  background: linear-gradient(90deg, #EDEAE3 25%, #F5F3EE 50%, #EDEAE3 75%);
+  background-size: 1200px 100%;
+  animation: admin-shimmer 1.6s ease-in-out infinite;
+  border-radius: 5px;
+  display: block;
+  flex-shrink: 0;
+}
+
+.admin-skel--title    { height: 28px; width: 200px; max-width: 55%; }
+.admin-skel--subtitle { height: 14px; width: 160px; max-width: 40%; margin-top: 6px; border-radius: 4px; }
+.admin-skel--line     { height: 14px; width: 100%; border-radius: 4px; }
+.admin-skel--line-sm  { height: 13px; width: 60%; border-radius: 4px; }
+.admin-skel--line-xs  { height: 12px; width: 40%; border-radius: 4px; }
+.admin-skel--btn      { height: 32px; width: 110px; border-radius: 6px; }
+.admin-skel--btn-sm   { height: 28px; width: 88px; border-radius: 6px; }
+.admin-skel--badge    { height: 20px; width: 64px; border-radius: 99px; }
+.admin-skel--avatar   { width: 40px; height: 40px; border-radius: 50%; }
+.admin-skel--thumb    { width: 44px; height: 44px; border-radius: 6px; }
+.admin-skel--image    { width: 100%; aspect-ratio: 16/9; border-radius: 8px; }
+.admin-skel--label    { height: 12px; width: 72px; border-radius: 4px; }
+.admin-skel--input    { height: 38px; width: 100%; border-radius: 6px; }
+.admin-skel--textarea { height: 100px; width: 100%; border-radius: 7px; }
+.admin-skel--richtext { height: 300px; width: 100%; border-radius: 8px; }
+
+/* Page header */
+.admin-skel-head { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 32px; }
+.admin-skel-head__left { display: flex; flex-direction: column; gap: 0; }
+
+/* Table */
+.admin-skel-table { display: flex; flex-direction: column; }
+.admin-skel-thead { display: flex; gap: 16px; padding: 10px 12px; border-bottom: 2px solid #E5E3DC; margin-bottom: 0; }
+.admin-skel-trow  { display: flex; align-items: center; gap: 16px; padding: 13px 12px; border-bottom: 1px solid #F0EDE6; }
+
+/* Card grid */
+.admin-skel-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+.admin-skel-card { background: #FFFFFF; border: 1px solid #E5E3DC; border-radius: 10px; padding: 20px; display: flex; flex-direction: column; gap: 12px; }
+
+/* Editor */
+.admin-skel-field  { display: flex; flex-direction: column; gap: 7px; }
+.admin-skel-fields { display: flex; flex-direction: column; gap: 20px; }
+
+/* Topbar for editor pages (bleeds to edge) */
+.admin-skel-topbar { display: flex; align-items: center; justify-content: space-between; padding: 10px 0 24px; border-bottom: 1px solid #E5E3DC; margin-bottom: 32px; }
+.admin-skel-topbar__left  { display: flex; align-items: center; gap: 12px; }
+.admin-skel-topbar__right { display: flex; align-items: center; gap: 8px; }
+
+/* Stat row */
+.admin-skel-stats { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 28px; }
+.admin-skel-stat  { flex: 1; min-width: 110px; background: #FFFFFF; border: 1px solid #E5E3DC; border-radius: 8px; padding: 16px 20px; display: flex; flex-direction: column; gap: 8px; }
