@@ -1,6 +1,8 @@
 import type { Metadata } from 'next'
-import ContactForm from '@/components/ContactForm'
+import EmbeddedForm from '@/components/forms/EmbeddedForm'
 import { getSettings } from '@/lib/settings'
+
+export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'Contact — Afterthought',
@@ -22,7 +24,10 @@ export default async function Contact() {
 
       <section id="start" className="container">
         <div className="contact-grid">
-          <ContactForm />
+          <div className="contact-form-panel">
+            <h3 className="contact-form-panel__title">Start a brief.</h3>
+            <EmbeddedForm role="contact" hideHeader />
+          </div>
 
           <aside className="contact-side">
             <h3>Or, more directly.</h3>

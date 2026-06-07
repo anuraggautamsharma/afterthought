@@ -32,6 +32,8 @@ interface FormRendererProps {
   sections: FormSection[]
   fields: FormField[]
   onSubmit: typeof submitFormAction
+  /** Hide the form's own title/description (host page provides context). */
+  hideHeader?: boolean
 }
 
 // ── Condition evaluation ─────────────────────────────────────────────────────
@@ -114,7 +116,7 @@ function shuffleArray<T>(arr: T[]): T[] {
 
 // ── Main component ─────────────────────────────────────────────────────────────
 
-export default function FormRenderer({ form, sections, fields, onSubmit }: FormRendererProps) {
+export default function FormRenderer({ form, sections, fields, onSubmit, hideHeader }: FormRendererProps) {
   const router = useRouter()
 
   // ── Shuffled fields/options (stable on mount) ──────────────────────────────
@@ -362,7 +364,7 @@ export default function FormRenderer({ form, sections, fields, onSubmit }: FormR
         )}
 
         {/* Show form title/description on first section */}
-        {currentSectionIndex === 0 && !currentSection.title && (
+        {!hideHeader && currentSectionIndex === 0 && !currentSection.title && (
           <div className="form-section__header">
             <h1 className="form-title">{form.title}</h1>
             {form.description && (

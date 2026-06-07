@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Inter, JetBrains_Mono, Instrument_Serif } from 'next/font/google'
 import './globals.css'
+import './forms/forms.css'
 import { SiteNav, SiteFooter } from '@/components/SiteShell'
 import Nav from '@/components/Nav'
 import Footer from '@/components/Footer'

@@ -1,5 +1,7 @@
 import type { Metadata } from 'next'
-import FreelanceForm from '@/components/FreelanceForm'
+import EmbeddedForm from '@/components/forms/EmbeddedForm'
+
+export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'Freelance & Collaborations — Afterthought',
@@ -96,7 +98,9 @@ export default function FreelancePage() {
               Tell us what you do and show us your work. We keep applications on file and reach out when there's a project that fits.
             </p>
           </div>
-          <FreelanceForm />
+          <div style={{ marginTop: '36px', maxWidth: '640px' }}>
+            <EmbeddedForm role="freelance" hideHeader />
+          </div>
         </div>
 
       </div>

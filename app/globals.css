@@ -1803,6 +1803,18 @@ img { max-width: 100%; display: block; }
   padding: 48px;
   border-radius: var(--r-lg);
 }
+/* Embedded form-builder form on the Contact page (replaces .contact-form) */
+.contact-form-panel {
+  background: var(--c-surface-soft);
+  padding: 48px;
+  border-radius: var(--r-lg);
+}
+.contact-form-panel__title {
+  font-size: 28px; letter-spacing: -0.4px;
+  font-variation-settings: "wght" 480; font-weight: 480;
+  margin-bottom: 24px;
+}
+@media (max-width: 768px) { .contact-form-panel { padding: 28px; } }
 .contact-form h3 { font-size: 28px; letter-spacing: -0.4px; font-variation-settings: "wght" 480; font-weight: 480; margin-bottom: 24px; }
 .contact-form .form-row { margin-bottom: 18px; }
 .contact-form .form-row label {
