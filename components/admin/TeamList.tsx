@@ -3,7 +3,9 @@
 import { useState, useTransition } from 'react'
 import Link from 'next/link'
 import type { TeamMember } from '@/lib/team'
-import { deleteTeamAction, seedTeamAction } from '@/app/admin/team/actions'
+import { deleteTeamAction, seedTeamAction, reorderTeamAction } from '@/app/admin/team/actions'
+import { openConfirm } from '@/lib/confirmStore'
+import { toast } from '@/lib/toastStore'
 
 export default function TeamList({ team }: { team: TeamMember[] }) {
   const [pending, startTransition] = useTransition()
@@ -18,8 +20,26 @@ export default function TeamList({ team }: { team: TeamMember[] }) {
   }
 
   const handleDelete = (id: string) => {
-    if (!confirm('Delete this team member?')) return
-    startTransition(() => { deleteTeamAction(id) })
+    startTransition(async () => {
+      const confirmed = await openConfirm({
+        title: 'Delete team member?',
+        message: 'This cannot be undone.',
+        confirmLabel: 'Delete',
+        danger: true,
+      })
+      if (!confirmed) return
+      await deleteTeamAction(id)
+    })
+  }
+
+  const handleReorder = (id: string, direction: 'up' | 'down') => {
+    startTransition(async () => {
+      try {
+        await reorderTeamAction(id, direction)
+      } catch {
+        toast.error('Failed to reorder')
+      }
+    })
   }
 
   return (
@@ -49,8 +69,26 @@ export default function TeamList({ team }: { team: TeamMember[] }) {
         </div>
       ) : (
         <div className="admin-posts-table">
-          {team.map(m => (
+          {team.map((m, idx) => (
             <div key={m.id} className="admin-posts-table__row">
+              <div className="admin-reorder-col">
+                <button
+                  className="admin-reorder-btn"
+                  disabled={idx === 0 || pending}
+                  onClick={() => handleReorder(m.id, 'up')}
+                  aria-label="Move up"
+                >
+                  ↑
+                </button>
+                <button
+                  className="admin-reorder-btn"
+                  disabled={idx === team.length - 1 || pending}
+                  onClick={() => handleReorder(m.id, 'down')}
+                  aria-label="Move down"
+                >
+                  ↓
+                </button>
+              </div>
               <div className="admin-post-content">
                 <div className="admin-post-title-row">
                   <Link href={`/admin/team/${m.id}`} className="admin-post-title-link">{m.name || '(Unnamed)'}</Link>

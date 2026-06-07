@@ -6,9 +6,22 @@ import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import { logoutAction } from '@/app/admin/login/actions'
 
+function getActiveSection(pathname: string): string {
+  if (pathname.startsWith('/admin/inbox')) return 'inbox'
+  if (pathname.startsWith('/admin/posts')) return 'posts'
+  if (pathname.startsWith('/admin/work')) return 'work'
+  if (pathname.startsWith('/admin/media')) return 'media'
+  if (pathname.startsWith('/admin/services')) return 'services'
+  if (pathname.startsWith('/admin/jobs')) return 'jobs'
+  if (pathname.startsWith('/admin/team')) return 'team'
+  if (pathname.startsWith('/admin/settings')) return 'settings'
+  return ''
+}
+
 export default function AdminSidebar({ unread = 0 }: { unread?: number }) {
   const pathname = usePathname()
   const [open, setOpen] = useState(false)
+  const activeSection = getActiveSection(pathname)
 
   // Close drawer on route change
   useEffect(() => { setOpen(false) }, [pathname])
@@ -45,6 +58,7 @@ export default function AdminSidebar({ unread = 0 }: { unread?: number }) {
       <nav className="admin-sidebar__nav">
         <Link
           href="/admin/inbox"
+          data-section="inbox"
           className={`admin-sidebar__link ${pathname.startsWith('/admin/inbox') ? 'is-active' : ''}`}
         >
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
@@ -56,6 +70,7 @@ export default function AdminSidebar({ unread = 0 }: { unread?: number }) {
         </Link>
         <Link
           href="/admin/posts"
+          data-section="posts"
           className={`admin-sidebar__link ${pathname.startsWith('/admin/posts') ? 'is-active' : ''}`}
         >
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
@@ -69,6 +84,7 @@ export default function AdminSidebar({ unread = 0 }: { unread?: number }) {
         </Link>
         <Link
           href="/admin/work"
+          data-section="work"
           className={`admin-sidebar__link ${pathname.startsWith('/admin/work') ? 'is-active' : ''}`}
         >
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
@@ -81,6 +97,7 @@ export default function AdminSidebar({ unread = 0 }: { unread?: number }) {
         </Link>
         <Link
           href="/admin/media"
+          data-section="media"
           className={`admin-sidebar__link ${pathname.startsWith('/admin/media') ? 'is-active' : ''}`}
         >
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
@@ -92,6 +109,7 @@ export default function AdminSidebar({ unread = 0 }: { unread?: number }) {
         </Link>
         <Link
           href="/admin/services"
+          data-section="services"
           className={`admin-sidebar__link ${pathname.startsWith('/admin/services') ? 'is-active' : ''}`}
         >
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
@@ -103,6 +121,7 @@ export default function AdminSidebar({ unread = 0 }: { unread?: number }) {
         </Link>
         <Link
           href="/admin/jobs"
+          data-section="jobs"
           className={`admin-sidebar__link ${pathname.startsWith('/admin/jobs') ? 'is-active' : ''}`}
         >
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
@@ -113,6 +132,7 @@ export default function AdminSidebar({ unread = 0 }: { unread?: number }) {
         </Link>
         <Link
           href="/admin/team"
+          data-section="team"
           className={`admin-sidebar__link ${pathname.startsWith('/admin/team') ? 'is-active' : ''}`}
         >
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
@@ -125,6 +145,7 @@ export default function AdminSidebar({ unread = 0 }: { unread?: number }) {
         </Link>
         <Link
           href="/admin/settings"
+          data-section="settings"
           className={`admin-sidebar__link ${pathname.startsWith('/admin/settings') ? 'is-active' : ''}`}
         >
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
@@ -171,7 +192,7 @@ export default function AdminSidebar({ unread = 0 }: { unread?: number }) {
       )}
 
       {/* Sidebar */}
-      <aside className={`admin-sidebar ${open ? 'is-open' : ''}`}>
+      <aside className={`admin-sidebar ${open ? 'is-open' : ''}`} data-section={activeSection}>
         {nav}
       </aside>
     </>

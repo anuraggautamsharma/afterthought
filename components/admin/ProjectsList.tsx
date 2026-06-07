@@ -5,6 +5,7 @@ import Link from 'next/link'
 import type { Project } from '@/lib/projects'
 import { stripEmphasis } from '@/lib/projects'
 import { deleteProjectAction, seedProjectsAction } from '@/app/admin/work/actions'
+import { openConfirm } from '@/lib/confirmStore'
 
 export default function ProjectsList({ projects }: { projects: Project[] }) {
   const [pending, startTransition] = useTransition()
@@ -22,8 +23,16 @@ export default function ProjectsList({ projects }: { projects: Project[] }) {
   }
 
   const handleDelete = (id: string) => {
-    if (!confirm('Delete this project?')) return
-    startTransition(() => { deleteProjectAction(id) })
+    startTransition(async () => {
+      const confirmed = await openConfirm({
+        title: 'Delete this project?',
+        message: 'This cannot be undone.',
+        confirmLabel: 'Delete',
+        danger: true,
+      })
+      if (!confirmed) return
+      await deleteProjectAction(id)
+    })
   }
 
   return (

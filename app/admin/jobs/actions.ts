@@ -1,6 +1,6 @@
 'use server'
 
-import { createJob, updateJob, deleteJob, countJobs, type JobInput } from '@/lib/jobs'
+import { createJob, updateJob, deleteJob, countJobs, getAllJobs, type JobInput } from '@/lib/jobs'
 import { roles } from '@/lib/roles'
 import { slugify } from '@/lib/slugify'
 import { revalidatePath } from 'next/cache'
@@ -38,6 +38,21 @@ export async function deleteJobAction(id: string) {
     // continue to redirect regardless
   }
   redirect('/admin/jobs')
+}
+
+export async function reorderJobAction(id: string, direction: 'up' | 'down'): Promise<void> {
+  const all = await getAllJobs()
+  const idx = all.findIndex(j => j.id === id)
+  if (idx === -1) return
+  const swapIdx = direction === 'up' ? idx - 1 : idx + 1
+  if (swapIdx < 0 || swapIdx >= all.length) return
+  const a = all[idx], b = all[swapIdx]
+  await Promise.all([
+    updateJob(a.id, { sort_order: b.sort_order }),
+    updateJob(b.id, { sort_order: a.sort_order }),
+  ])
+  revalidatePath('/careers')
+  revalidatePath('/admin/jobs')
 }
 
 /** One-time migration: seed the jobs table from the legacy hardcoded roles. */

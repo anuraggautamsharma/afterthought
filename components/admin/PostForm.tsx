@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useCallback, useTransition } from 'react'
+import { useState, useCallback, useTransition, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
@@ -8,10 +8,17 @@ import type { Post } from '@/lib/posts'
 import { savePostAction } from '@/app/admin/posts/actions'
 import { slugify } from '@/lib/slugify'
 import ImagePicker from './ImagePicker'
+import SaveBar from './SaveBar'
 
 const PostEditor = dynamic(() => import('./PostEditor'), { ssr: false })
 
 interface Props { post: Post | null }
+
+function countWords(node: Record<string, unknown>): number {
+  if (node.type === 'text') return String(node.text ?? '').split(/\s+/).filter(Boolean).length
+  const children = (node.content ?? []) as Record<string, unknown>[]
+  return children.reduce((sum, n) => sum + countWords(n), 0)
+}
 
 export default function PostForm({ post }: Props) {
   const router = useRouter()
@@ -29,17 +36,31 @@ export default function PostForm({ post }: Props) {
   const [metaDesc,    setMetaDesc]    = useState(post?.meta_description ?? '')
   const [ogImage,     setOgImage]     = useState(post?.og_image ?? '')
   const [keyword,     setKeyword]     = useState(post?.focus_keyword ?? '')
-  const [saveStatus,  setSaveStatus]  = useState('')
   const [pickerOpen,  setPickerOpen]  = useState(false)
+
+  const [saveState,   setSaveState]   = useState<'idle' | 'dirty' | 'saving' | 'saved' | 'error'>('idle')
+  const [savedAt,     setSavedAt]     = useState<Date | null>(null)
+  const [errorMsg,    setErrorMsg]    = useState('')
+  const [isDirty,     setIsDirty]     = useState(false)
+
+  const statusRef = useRef(status)
+  useEffect(() => { statusRef.current = status }, [status])
+
+  const markDirty = useCallback(() => {
+    setIsDirty(true)
+    setSaveState('dirty')
+  }, [])
 
   const handleTitleChange = (val: string) => {
     setTitle(val)
     if (!slugTouched) setSlug(slugify(val))
+    markDirty()
   }
 
   const save = useCallback((targetStatus: 'draft' | 'published') => {
     startTransition(async () => {
-      setSaveStatus('Saving…')
+      setSaveState('saving')
+      setIsDirty(false)
       const result = await savePostAction(post?.id ?? null, {
         title, slug, excerpt, content, category,
         cover_image: coverImage || null,
@@ -52,16 +73,52 @@ export default function PostForm({ post }: Props) {
       })
 
       if (result.error) {
-        setSaveStatus(`Error: ${result.error}`)
+        setSaveState('error')
+        setErrorMsg(result.error)
       } else {
-        setSaveStatus('Saved')
+        setSaveState('saved')
+        setSavedAt(new Date())
         if (!post?.id && result.id) {
           router.replace(`/admin/posts/${result.id}`)
         }
-        setTimeout(() => setSaveStatus(''), 2500)
       }
     })
   }, [title, slug, excerpt, content, category, coverImage, metaTitle, metaDesc, ogImage, keyword, post, router])
+
+  // Auto-save: debounce 3s for existing posts
+  useEffect(() => {
+    if (!isDirty || !post?.id) return
+    const timer = setTimeout(() => {
+      save(statusRef.current)
+    }, 3000)
+    return () => clearTimeout(timer)
+  }, [isDirty, post?.id, save])
+
+  // Cmd+S / Ctrl+S
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 's') {
+        e.preventDefault()
+        save(statusRef.current)
+      }
+    }
+    document.addEventListener('keydown', onKey)
+    return () => document.removeEventListener('keydown', onKey)
+  }, [save])
+
+  // beforeunload warning
+  useEffect(() => {
+    if (saveState !== 'dirty') return
+    const handler = (e: BeforeUnloadEvent) => {
+      e.preventDefault()
+      e.returnValue = ''
+    }
+    window.addEventListener('beforeunload', handler)
+    return () => window.removeEventListener('beforeunload', handler)
+  }, [saveState])
+
+  const wordCount = countWords(content as Record<string, unknown>)
+  const readTime = Math.max(1, Math.round(wordCount / 200))
 
   const saveLabel = pending
     ? 'Saving…'
@@ -75,11 +132,12 @@ export default function PostForm({ post }: Props) {
     <div>
       <div className="admin-editor-topbar">
         <Link href="/admin/posts" className="admin-editor-back">← Posts</Link>
-        {saveStatus && (
-          <span className={`admin-save-pill ${saveStatus.startsWith('Error') ? 'is-error' : ''}`}>
-            {saveStatus}
-          </span>
-        )}
+        <SaveBar
+          state={saveState}
+          savedAt={savedAt}
+          errorMsg={errorMsg}
+          onRetry={() => save(statusRef.current)}
+        />
       </div>
 
       <div className="admin-editor-shell">
@@ -100,7 +158,10 @@ export default function PostForm({ post }: Props) {
             />
           </div>
           <div className="admin-editor-divider" />
-          <PostEditor content={content} onChange={setContent} />
+          <PostEditor content={content} onChange={v => { setContent(v); markDirty() }} />
+          <div className="admin-wordcount">
+            {wordCount} word{wordCount !== 1 ? 's' : ''} · ~{readTime} min read
+          </div>
         </div>
 
         {/* Sidebar */}
@@ -112,14 +173,14 @@ export default function PostForm({ post }: Props) {
               <button
                 type="button"
                 className={`admin-status-toggle__opt ${status === 'draft' ? 'is-active' : ''}`}
-                onClick={() => setStatus('draft')}
+                onClick={() => { setStatus('draft'); markDirty() }}
               >
                 Draft
               </button>
               <button
                 type="button"
                 className={`admin-status-toggle__opt ${status === 'published' ? 'is-active' : ''}`}
-                onClick={() => setStatus('published')}
+                onClick={() => { setStatus('published'); markDirty() }}
               >
                 Published
               </button>
@@ -145,7 +206,7 @@ export default function PostForm({ post }: Props) {
             <div className="admin-sidebar-fields">
               <div className="admin-field">
                 <label>Category</label>
-                <select value={category} onChange={e => setCategory(e.target.value)}>
+                <select value={category} onChange={e => { setCategory(e.target.value); markDirty() }}>
                   <option>Essay</option>
                   <option>Process note</option>
                   <option>Opinion</option>
@@ -157,7 +218,7 @@ export default function PostForm({ post }: Props) {
                 <label>Excerpt</label>
                 <textarea
                   value={excerpt}
-                  onChange={e => setExcerpt(e.target.value)}
+                  onChange={e => { setExcerpt(e.target.value); markDirty() }}
                   placeholder="1–2 sentence summary shown in listings and search."
                 />
                 <span className={`admin-char-count ${excerpt.length > 200 ? 'is-over' : ''}`}>
@@ -170,7 +231,7 @@ export default function PostForm({ post }: Props) {
                   <div className="admin-cover-preview">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img src={coverImage} alt="Cover" />
-                    <button type="button" className="admin-cover-remove" onClick={() => setCoverImage('')}>✕</button>
+                    <button type="button" className="admin-cover-remove" onClick={() => { setCoverImage(''); markDirty() }}>✕</button>
                   </div>
                 )}
                 <div className="admin-cover-actions">
@@ -181,20 +242,21 @@ export default function PostForm({ post }: Props) {
                 <input
                   type="url"
                   value={coverImage}
-                  onChange={e => setCoverImage(e.target.value)}
+                  onChange={e => { setCoverImage(e.target.value); markDirty() }}
                   placeholder="or paste URL…"
                   style={{ marginTop: '6px' }}
                 />
               </div>
-              <ImagePicker open={pickerOpen} onClose={() => setPickerOpen(false)} onSelect={url => { setCoverImage(url); setPickerOpen(false) }} />
+              <ImagePicker open={pickerOpen} onClose={() => setPickerOpen(false)} onSelect={url => { setCoverImage(url); setPickerOpen(false); markDirty() }} />
               <div className="admin-field">
                 <label>URL slug</label>
                 <input
                   type="text"
                   value={slug}
-                  onChange={e => { setSlug(e.target.value); setSlugTouched(true) }}
+                  onChange={e => { setSlug(e.target.value); setSlugTouched(true); markDirty() }}
                   placeholder="auto-generated-from-title"
                 />
+                <span className="admin-field__hint">Auto-generated from title. Edit to lock it.</span>
               </div>
             </div>
           </div>
@@ -211,7 +273,7 @@ export default function PostForm({ post }: Props) {
                   <input
                     type="text"
                     value={metaTitle}
-                    onChange={e => setMetaTitle(e.target.value)}
+                    onChange={e => { setMetaTitle(e.target.value); markDirty() }}
                     placeholder={title || 'Defaults to post title'}
                   />
                 </div>
@@ -219,7 +281,7 @@ export default function PostForm({ post }: Props) {
                   <label>Meta description</label>
                   <textarea
                     value={metaDesc}
-                    onChange={e => setMetaDesc(e.target.value)}
+                    onChange={e => { setMetaDesc(e.target.value); markDirty() }}
                     placeholder={excerpt || 'Defaults to excerpt'}
                   />
                   <span className={`admin-char-count ${metaDesc.length > 160 ? 'is-over' : ''}`}>
@@ -231,18 +293,20 @@ export default function PostForm({ post }: Props) {
                   <input
                     type="url"
                     value={ogImage}
-                    onChange={e => setOgImage(e.target.value)}
+                    onChange={e => { setOgImage(e.target.value); markDirty() }}
                     placeholder="Defaults to cover image"
                   />
+                  <span className="admin-field__hint">Overrides the cover image for social media shares.</span>
                 </div>
                 <div className="admin-field">
                   <label>Focus keyword</label>
                   <input
                     type="text"
                     value={keyword}
-                    onChange={e => setKeyword(e.target.value)}
+                    onChange={e => { setKeyword(e.target.value); markDirty() }}
                     placeholder="e.g. brand identity"
                   />
+                  <span className="admin-field__hint">The main phrase this post should rank for in Google.</span>
                 </div>
               </div>
             </details>

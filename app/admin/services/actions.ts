@@ -1,6 +1,6 @@
 'use server'
 
-import { createService, updateService, deleteService, countServices, type ServiceInput } from '@/lib/services'
+import { createService, updateService, deleteService, countServices, getServices, type ServiceInput } from '@/lib/services'
 import { SERVICES_SEED } from '@/lib/services-seed'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
@@ -32,6 +32,21 @@ export async function deleteServiceAction(id: string) {
     // continue
   }
   redirect('/admin/services')
+}
+
+export async function reorderServiceAction(id: string, direction: 'up' | 'down'): Promise<void> {
+  const all = await getServices()
+  const idx = all.findIndex(s => s.id === id)
+  if (idx === -1) return
+  const swapIdx = direction === 'up' ? idx - 1 : idx + 1
+  if (swapIdx < 0 || swapIdx >= all.length) return
+  const a = all[idx], b = all[swapIdx]
+  await Promise.all([
+    updateService(a.id, { sort_order: b.sort_order }),
+    updateService(b.id, { sort_order: a.sort_order }),
+  ])
+  revalidatePath('/services')
+  revalidatePath('/admin/services')
 }
 
 export async function seedServicesAction(): Promise<{ error?: string; count?: number }> {

@@ -1,6 +1,6 @@
 'use server'
 
-import { createTeamMember, updateTeamMember, deleteTeamMember, countTeam, type TeamInput } from '@/lib/team'
+import { createTeamMember, updateTeamMember, deleteTeamMember, countTeam, getTeam, type TeamInput } from '@/lib/team'
 import { TEAM_SEED } from '@/lib/team-seed'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
@@ -32,6 +32,21 @@ export async function deleteTeamAction(id: string) {
     // continue
   }
   redirect('/admin/team')
+}
+
+export async function reorderTeamAction(id: string, direction: 'up' | 'down'): Promise<void> {
+  const all = await getTeam()
+  const idx = all.findIndex(m => m.id === id)
+  if (idx === -1) return
+  const swapIdx = direction === 'up' ? idx - 1 : idx + 1
+  if (swapIdx < 0 || swapIdx >= all.length) return
+  const a = all[idx], b = all[swapIdx]
+  await Promise.all([
+    updateTeamMember(a.id, { sort_order: b.sort_order }),
+    updateTeamMember(b.id, { sort_order: a.sort_order }),
+  ])
+  revalidatePath('/studio')
+  revalidatePath('/admin/team')
 }
 
 export async function seedTeamAction(): Promise<{ error?: string; count?: number }> {

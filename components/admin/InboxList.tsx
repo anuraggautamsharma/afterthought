@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import Link from 'next/link'
 import type { Submission } from '@/lib/submissions'
 
@@ -8,6 +9,16 @@ const TYPE_LABELS: Record<string, string> = {
   newsletter: 'Newsletter',
   application: 'Job application',
   freelance: 'Freelance',
+}
+
+type TypeFilter = 'all' | 'contact' | 'application' | 'freelance' | 'newsletter'
+
+const TAB_LABELS: Record<TypeFilter, string> = {
+  all: 'All',
+  contact: 'Brief',
+  application: 'Application',
+  freelance: 'Freelance',
+  newsletter: 'Newsletter',
 }
 
 function timeAgo(iso: string) {
@@ -24,6 +35,15 @@ function timeAgo(iso: string) {
 }
 
 export default function InboxList({ submissions, showArchived }: { submissions: Submission[]; showArchived: boolean }) {
+  const [typeFilter, setTypeFilter] = useState<TypeFilter>('all')
+
+  const filtered = typeFilter === 'all'
+    ? submissions
+    : submissions.filter(s => s.type === typeFilter)
+
+  const countFor = (t: TypeFilter) =>
+    t === 'all' ? submissions.length : submissions.filter(s => s.type === t).length
+
   return (
     <>
       <div className="admin-page-head">
@@ -39,7 +59,22 @@ export default function InboxList({ submissions, showArchived }: { submissions: 
         </div>
       </div>
 
-      {submissions.length === 0 ? (
+      {submissions.length > 0 && (
+        <div className="admin-filter-tabs">
+          {(['all', 'contact', 'application', 'freelance', 'newsletter'] as TypeFilter[]).map(tab => (
+            <button
+              key={tab}
+              className={`admin-filter-tab ${typeFilter === tab ? 'is-active' : ''}`}
+              onClick={() => setTypeFilter(tab)}
+            >
+              {TAB_LABELS[tab]}
+              <span className="admin-filter-tab__count">{countFor(tab)}</span>
+            </button>
+          ))}
+        </div>
+      )}
+
+      {filtered.length === 0 ? (
         <div className="admin-posts-table">
           <div className="admin-empty">
             <div className="admin-empty__title">{showArchived ? 'Nothing archived.' : 'No messages yet.'}</div>
@@ -48,7 +83,7 @@ export default function InboxList({ submissions, showArchived }: { submissions: 
         </div>
       ) : (
         <div className="admin-posts-table">
-          {submissions.map(s => (
+          {filtered.map(s => (
             <Link key={s.id} href={`/admin/inbox/${s.id}`} className={`admin-inbox-row ${!s.is_read ? 'is-unread' : ''}`}>
               <span className="admin-inbox-row__dot" aria-hidden="true" />
               <span className={`admin-inbox-badge admin-inbox-badge--${s.type}`}>{TYPE_LABELS[s.type] ?? s.type}</span>

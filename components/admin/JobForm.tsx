@@ -1,11 +1,12 @@
 'use client'
 
-import { useState, useTransition } from 'react'
+import { useState, useCallback, useTransition, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import type { Job } from '@/lib/jobs'
 import { saveJobAction } from '@/app/admin/jobs/actions'
 import { slugify } from '@/lib/slugify'
+import SaveBar from './SaveBar'
 
 const linesToArray = (s: string) => s.split('\n').map(l => l.trim()).filter(Boolean)
 const arrayToLines = (a: string[] | undefined) => (a ?? []).join('\n')
@@ -26,44 +27,95 @@ export default function JobForm({ job }: { job: Job | null }) {
   const [lookingFor,  setLookingFor]  = useState(arrayToLines(job?.looking_for))
   const [niceToHave,  setNiceToHave]  = useState(job?.nice_to_have ?? '')
   const [why,         setWhy]         = useState(job?.why_afterthought ?? '')
-  const [saveStatus,  setSaveStatus]  = useState('')
+
+  const [saveState,  setSaveState]  = useState<'idle' | 'dirty' | 'saving' | 'saved' | 'error'>('idle')
+  const [savedAt,    setSavedAt]    = useState<Date | null>(null)
+  const [errorMsg,   setErrorMsg]   = useState('')
+  const [isDirty,    setIsDirty]    = useState(false)
+
+  const statusRef = useRef(status)
+  useEffect(() => { statusRef.current = status }, [status])
+
+  const markDirty = useCallback(() => {
+    setIsDirty(true)
+    setSaveState('dirty')
+  }, [])
 
   const onTitle = (v: string) => {
     setTitle(v)
     if (!slugTouched) setSlug(slugify(v))
+    markDirty()
   }
 
-  const save = () => {
+  const save = useCallback(() => {
     startTransition(async () => {
-      setSaveStatus('Saving…')
+      setSaveState('saving')
+      setIsDirty(false)
       const res = await saveJobAction(job?.id ?? null, {
-        title, slug, type, location, status, summary, description,
+        title, slug, type, location, status: statusRef.current, summary, description,
         what_youll_do: linesToArray(whatYoullDo),
         looking_for: linesToArray(lookingFor),
         nice_to_have: niceToHave,
         why_afterthought: why,
         sort_order: job?.sort_order ?? 0,
       })
-      if (res.error) setSaveStatus(`Error: ${res.error}`)
-      else {
-        setSaveStatus('Saved')
+      if (res.error) {
+        setSaveState('error')
+        setErrorMsg(res.error)
+      } else {
+        setSaveState('saved')
+        setSavedAt(new Date())
         if (!job?.id && res.id) router.replace(`/admin/jobs/${res.id}`)
-        setTimeout(() => setSaveStatus(''), 2500)
       }
     })
-  }
+  }, [title, slug, type, location, summary, description, whatYoullDo, lookingFor, niceToHave, why, job, router])
+
+  // Auto-save: debounce 3s for existing jobs
+  useEffect(() => {
+    if (!isDirty || !job?.id) return
+    const timer = setTimeout(() => {
+      save()
+    }, 3000)
+    return () => clearTimeout(timer)
+  }, [isDirty, job?.id, save])
+
+  // Cmd+S / Ctrl+S
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 's') {
+        e.preventDefault()
+        save()
+      }
+    }
+    document.addEventListener('keydown', onKey)
+    return () => document.removeEventListener('keydown', onKey)
+  }, [save])
+
+  // beforeunload warning
+  useEffect(() => {
+    if (saveState !== 'dirty') return
+    const handler = (e: BeforeUnloadEvent) => {
+      e.preventDefault()
+      e.returnValue = ''
+    }
+    window.addEventListener('beforeunload', handler)
+    return () => window.removeEventListener('beforeunload', handler)
+  }, [saveState])
 
   return (
     <div className="admin-jobform">
       <div className="admin-editor-topbar">
         <Link href="/admin/jobs" className="admin-editor-back">← Jobs</Link>
         <div className="admin-settings__save">
-          {saveStatus && (
-            <span className={`admin-save-pill ${saveStatus.startsWith('Error') ? 'is-error' : ''}`}>{saveStatus}</span>
-          )}
+          <SaveBar
+            state={saveState}
+            savedAt={savedAt}
+            errorMsg={errorMsg}
+            onRetry={save}
+          />
           <div className="admin-status-toggle" style={{ marginBottom: 0 }}>
-            <button type="button" className={`admin-status-toggle__opt ${status === 'open' ? 'is-active' : ''}`} onClick={() => setStatus('open')}>Open</button>
-            <button type="button" className={`admin-status-toggle__opt ${status === 'closed' ? 'is-active' : ''}`} onClick={() => setStatus('closed')}>Closed</button>
+            <button type="button" className={`admin-status-toggle__opt ${status === 'open' ? 'is-active' : ''}`} onClick={() => { setStatus('open'); markDirty() }}>Open</button>
+            <button type="button" className={`admin-status-toggle__opt ${status === 'closed' ? 'is-active' : ''}`} onClick={() => { setStatus('closed'); markDirty() }}>Closed</button>
           </div>
           <button className="admin-btn-primary" disabled={pending} onClick={save}
             style={{ width: 'auto', padding: '10px 22px' }}>
@@ -80,19 +132,19 @@ export default function JobForm({ job }: { job: Job | null }) {
           </div>
           <div className="admin-field">
             <label>Type</label>
-            <input type="text" value={type} onChange={e => setType(e.target.value)} placeholder="Full-time" />
+            <input type="text" value={type} onChange={e => { setType(e.target.value); markDirty() }} placeholder="Full-time" />
           </div>
           <div className="admin-field">
             <label>Location</label>
-            <input type="text" value={location} onChange={e => setLocation(e.target.value)} />
+            <input type="text" value={location} onChange={e => { setLocation(e.target.value); markDirty() }} />
           </div>
           <div className="admin-field admin-field--wide">
             <label>URL slug</label>
-            <input type="text" value={slug} onChange={e => { setSlug(e.target.value); setSlugTouched(true) }} placeholder="auto-generated" />
+            <input type="text" value={slug} onChange={e => { setSlug(e.target.value); setSlugTouched(true); markDirty() }} placeholder="auto-generated" />
           </div>
           <div className="admin-field admin-field--wide">
             <label>Summary <span style={{ opacity: 0.5 }}>(shown on the careers list card)</span></label>
-            <textarea value={summary} onChange={e => setSummary(e.target.value)} placeholder="One or two sentences." />
+            <textarea value={summary} onChange={e => { setSummary(e.target.value); markDirty() }} placeholder="One or two sentences." />
           </div>
         </div>
       </section>
@@ -101,7 +153,7 @@ export default function JobForm({ job }: { job: Job | null }) {
         <h2 className="admin-settings-card__title">Overview</h2>
         <p className="admin-settings-card__hint">Full description. Separate paragraphs with a blank line.</p>
         <div className="admin-field">
-          <textarea value={description} onChange={e => setDescription(e.target.value)} style={{ minHeight: '160px' }} />
+          <textarea value={description} onChange={e => { setDescription(e.target.value); markDirty() }} style={{ minHeight: '160px' }} />
         </div>
       </section>
 
@@ -109,7 +161,7 @@ export default function JobForm({ job }: { job: Job | null }) {
         <h2 className="admin-settings-card__title">What you&apos;ll do</h2>
         <p className="admin-settings-card__hint">One bullet point per line.</p>
         <div className="admin-field">
-          <textarea value={whatYoullDo} onChange={e => setWhatYoullDo(e.target.value)} style={{ minHeight: '140px' }} />
+          <textarea value={whatYoullDo} onChange={e => { setWhatYoullDo(e.target.value); markDirty() }} style={{ minHeight: '140px' }} />
         </div>
       </section>
 
@@ -117,7 +169,7 @@ export default function JobForm({ job }: { job: Job | null }) {
         <h2 className="admin-settings-card__title">What we&apos;re looking for</h2>
         <p className="admin-settings-card__hint">One bullet point per line.</p>
         <div className="admin-field">
-          <textarea value={lookingFor} onChange={e => setLookingFor(e.target.value)} style={{ minHeight: '140px' }} />
+          <textarea value={lookingFor} onChange={e => { setLookingFor(e.target.value); markDirty() }} style={{ minHeight: '140px' }} />
         </div>
       </section>
 
@@ -125,11 +177,11 @@ export default function JobForm({ job }: { job: Job | null }) {
         <div className="admin-settings-grid">
           <div className="admin-field admin-field--wide">
             <label>Nice to have</label>
-            <textarea value={niceToHave} onChange={e => setNiceToHave(e.target.value)} />
+            <textarea value={niceToHave} onChange={e => { setNiceToHave(e.target.value); markDirty() }} />
           </div>
           <div className="admin-field admin-field--wide">
             <label>Why Afterthought</label>
-            <textarea value={why} onChange={e => setWhy(e.target.value)} />
+            <textarea value={why} onChange={e => { setWhy(e.target.value); markDirty() }} />
           </div>
         </div>
       </section>

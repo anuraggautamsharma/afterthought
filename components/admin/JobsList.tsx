@@ -3,7 +3,9 @@
 import { useState, useTransition } from 'react'
 import Link from 'next/link'
 import type { Job } from '@/lib/jobs'
-import { deleteJobAction, seedJobsAction } from '@/app/admin/jobs/actions'
+import { deleteJobAction, seedJobsAction, reorderJobAction } from '@/app/admin/jobs/actions'
+import { openConfirm } from '@/lib/confirmStore'
+import { toast } from '@/lib/toastStore'
 
 export default function JobsList({ jobs }: { jobs: Job[] }) {
   const [pending, startTransition] = useTransition()
@@ -21,8 +23,26 @@ export default function JobsList({ jobs }: { jobs: Job[] }) {
   }
 
   const handleDelete = (id: string) => {
-    if (!confirm('Delete this job?')) return
-    startTransition(() => { deleteJobAction(id) })
+    startTransition(async () => {
+      const confirmed = await openConfirm({
+        title: 'Delete this job?',
+        message: 'This cannot be undone.',
+        confirmLabel: 'Delete',
+        danger: true,
+      })
+      if (!confirmed) return
+      await deleteJobAction(id)
+    })
+  }
+
+  const handleReorder = (id: string, direction: 'up' | 'down') => {
+    startTransition(async () => {
+      try {
+        await reorderJobAction(id, direction)
+      } catch {
+        toast.error('Failed to reorder')
+      }
+    })
   }
 
   return (
@@ -58,14 +78,32 @@ export default function JobsList({ jobs }: { jobs: Job[] }) {
         </div>
       ) : (
         <div className="admin-posts-table">
-          {jobs.map(job => (
+          {jobs.map((job, idx) => (
             <div key={job.id} className="admin-posts-table__row">
+              <div className="admin-reorder-col">
+                <button
+                  className="admin-reorder-btn"
+                  disabled={idx === 0 || pending}
+                  onClick={() => handleReorder(job.id, 'up')}
+                  aria-label="Move up"
+                >
+                  ↑
+                </button>
+                <button
+                  className="admin-reorder-btn"
+                  disabled={idx === jobs.length - 1 || pending}
+                  onClick={() => handleReorder(job.id, 'down')}
+                  aria-label="Move down"
+                >
+                  ↓
+                </button>
+              </div>
               <div className="admin-post-content">
                 <div className="admin-post-title-row">
                   <Link href={`/admin/jobs/${job.id}`} className="admin-post-title-link">
                     {job.title || '(Untitled)'}
                   </Link>
-                  <span className={`admin-status-badge admin-status-badge--${job.status === 'open' ? 'published' : 'draft'}`}>
+                  <span className={`admin-status-badge admin-status-badge--${job.status}`}>
                     <span className="admin-status-badge__dot" />
                     {job.status}
                   </span>

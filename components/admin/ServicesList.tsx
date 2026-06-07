@@ -3,7 +3,9 @@
 import { useState, useTransition } from 'react'
 import Link from 'next/link'
 import type { Service } from '@/lib/services'
-import { deleteServiceAction, seedServicesAction } from '@/app/admin/services/actions'
+import { deleteServiceAction, seedServicesAction, reorderServiceAction } from '@/app/admin/services/actions'
+import { openConfirm } from '@/lib/confirmStore'
+import { toast } from '@/lib/toastStore'
 
 export default function ServicesList({ services }: { services: Service[] }) {
   const [pending, startTransition] = useTransition()
@@ -18,8 +20,26 @@ export default function ServicesList({ services }: { services: Service[] }) {
   }
 
   const handleDelete = (id: string) => {
-    if (!confirm('Delete this service?')) return
-    startTransition(() => { deleteServiceAction(id) })
+    startTransition(async () => {
+      const confirmed = await openConfirm({
+        title: 'Delete service?',
+        message: 'This cannot be undone.',
+        confirmLabel: 'Delete',
+        danger: true,
+      })
+      if (!confirmed) return
+      await deleteServiceAction(id)
+    })
+  }
+
+  const handleReorder = (id: string, direction: 'up' | 'down') => {
+    startTransition(async () => {
+      try {
+        await reorderServiceAction(id, direction)
+      } catch {
+        toast.error('Failed to reorder')
+      }
+    })
   }
 
   return (
@@ -49,8 +69,26 @@ export default function ServicesList({ services }: { services: Service[] }) {
         </div>
       ) : (
         <div className="admin-posts-table">
-          {services.map(svc => (
+          {services.map((svc, idx) => (
             <div key={svc.id} className="admin-posts-table__row">
+              <div className="admin-reorder-col">
+                <button
+                  className="admin-reorder-btn"
+                  disabled={idx === 0 || pending}
+                  onClick={() => handleReorder(svc.id, 'up')}
+                  aria-label="Move up"
+                >
+                  ↑
+                </button>
+                <button
+                  className="admin-reorder-btn"
+                  disabled={idx === services.length - 1 || pending}
+                  onClick={() => handleReorder(svc.id, 'down')}
+                  aria-label="Move down"
+                >
+                  ↓
+                </button>
+              </div>
               <div className="admin-post-content">
                 <div className="admin-post-title-row">
                   <Link href={`/admin/services/${svc.id}`} className="admin-post-title-link">
