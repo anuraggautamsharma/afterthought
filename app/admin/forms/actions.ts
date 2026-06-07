@@ -6,9 +6,11 @@ import {
   createForm, updateForm, deleteForm,
   createSection, updateSection, deleteSection,
   createField, updateField, deleteField, reorderFields,
+  createFullForm, getFormBySiteRole,
   type FormInput, type FieldInput, type SectionInput, type FormField,
   defaultFieldProps,
 } from '@/lib/forms'
+import { SYSTEM_FORM_SEEDS } from '@/lib/forms-seed'
 import { slugify } from '@/lib/slugify'
 import { supabase } from '@/lib/supabase'
 
@@ -45,6 +47,26 @@ export async function closeFormAction(id: string) {
   await updateForm(id, { status: 'closed' })
   revalidatePath('/admin/forms')
   revalidatePath(`/admin/forms/${id}/edit`)
+}
+
+/**
+ * Idempotently creates the built-in system forms (Contact, Freelance) if a form
+ * for that site role doesn't already exist. Safe to call repeatedly.
+ */
+export async function ensureSystemFormsAction(): Promise<{ created: string[] }> {
+  const created: string[] = []
+  for (const seed of SYSTEM_FORM_SEEDS) {
+    if (!seed.site_role) continue
+    const existing = await getFormBySiteRole(seed.site_role)
+    if (existing) continue
+    await createFullForm(seed)
+    created.push(seed.title)
+  }
+  if (created.length > 0) {
+    revalidatePath('/admin/forms')
+    revalidatePath('/admin/inbox')
+  }
+  return { created }
 }
 
 // ── Sections ──────────────────────────────────────────────────────────────────

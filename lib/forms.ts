@@ -145,12 +145,32 @@ export interface FormSection {
   created_at: string
 }
 
+export type FormCategory =
+  | 'contact' | 'application' | 'freelance' | 'newsletter'
+  | 'survey' | 'event' | 'general'
+
+export const FORM_CATEGORY_LABELS: Record<FormCategory, string> = {
+  contact: 'Contact',
+  application: 'Job application',
+  freelance: 'Freelance',
+  newsletter: 'Newsletter',
+  survey: 'Survey',
+  event: 'Event',
+  general: 'General',
+}
+
+// Built-in site slots a form can be bound to. Null = link/embed only.
+export type SiteRole = 'contact' | 'freelance' | null
+
 export interface Form {
   id: string
   title: string
   slug: string
   description: string
   status: 'draft' | 'published' | 'closed'
+  category: FormCategory
+  site_role: SiteRole
+  is_system: boolean
   theme_color: string
   header_image: string | null
   custom_font: string
@@ -244,6 +264,11 @@ export async function getFormById(id: string): Promise<Form | null> {
 
 export async function getFormBySlug(slug: string): Promise<Form | null> {
   const { data } = await supabase.from('forms').select('*').eq('slug', slug).single()
+  return data as Form | null
+}
+
+export async function getFormBySiteRole(role: NonNullable<SiteRole>): Promise<Form | null> {
+  const { data } = await supabase.from('forms').select('*').eq('site_role', role).maybeSingle()
   return data as Form | null
 }
 
@@ -341,6 +366,69 @@ export async function reorderFields(updates: { id: string; sort_order: number; s
   await Promise.all(updates.map(({ id, sort_order, section_id }) =>
     supabase.from('form_fields').update({ sort_order, ...(section_id !== undefined ? { section_id } : {}) }).eq('id', id)
   ))
+}
+
+// ── Full form creation (seeding) ─────────────────────────────────────────────
+
+export interface SeedFieldSpec {
+  type: FieldType
+  label: string
+  required?: boolean
+  description?: string
+  placeholder?: string
+  options?: FieldOption[]
+}
+
+export interface SeedFormSpec {
+  title: string
+  slug: string
+  description?: string
+  category: FormCategory
+  site_role?: NonNullable<SiteRole>
+  is_system?: boolean
+  status?: Form['status']
+  submit_label?: string
+  confirmation_message?: string
+  fields: SeedFieldSpec[]
+}
+
+/**
+ * Creates a form with a single default section and the given fields, atomically
+ * enough for seeding. Returns the created form.
+ */
+export async function createFullForm(spec: SeedFormSpec): Promise<Form> {
+  const form = await createForm({
+    title: spec.title,
+    slug: spec.slug,
+    description: spec.description ?? '',
+    category: spec.category,
+    site_role: spec.site_role ?? null,
+    is_system: spec.is_system ?? false,
+    status: spec.status ?? 'published',
+    submit_label: spec.submit_label,
+    confirmation_message: spec.confirmation_message,
+  })
+
+  const section = await createSection({ form_id: form.id, title: '', description: '', sort_order: 0 })
+
+  let order = 0
+  for (const f of spec.fields) {
+    const defaults = defaultFieldProps(f.type)
+    await createField({
+      ...defaults,
+      form_id: form.id,
+      section_id: section.id,
+      type: f.type,
+      label: f.label,
+      required: f.required ?? false,
+      description: f.description ?? '',
+      placeholder: f.placeholder ?? defaults.placeholder ?? '',
+      options: f.options ?? defaults.options ?? [],
+      sort_order: order++,
+    } as FieldInput)
+  }
+
+  return form
 }
 
 // ── Full form fetch ──────────────────────────────────────────────────────────

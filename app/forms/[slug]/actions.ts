@@ -72,13 +72,12 @@ export async function submitFormAction(
     }
 
     await createSubmission({
-      type: 'contact',
+      type: form.category ?? 'general',
       name,
       email,
-      data: {
-        form_id: formId,
-        responses,
-      },
+      subject: form.title,
+      form_id: formId,
+      responses,
     })
 
     // Fire webhook if configured

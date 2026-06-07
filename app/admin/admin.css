@@ -2943,6 +2943,22 @@ details[open] > .admin-sidebar-card__summary { border-bottom: 1px solid #EDEAE3;
   margin-bottom: 20px;
 }
 
+/* Setup banner (e.g. "set up built-in forms") */
+.admin-setup-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  background: #F4F2EE;
+  border: 1px solid #E5E3DC;
+  border-radius: 10px;
+  padding: 16px 20px;
+  margin-bottom: 24px;
+}
+.admin-setup-banner__text { display: flex; flex-direction: column; gap: 3px; }
+.admin-setup-banner__text strong { font-size: 14px; color: #1A1916; }
+.admin-setup-banner__text span { font-size: 13px; color: rgba(0,0,0,.55); line-height: 1.45; }
+
 /* ═══════════════════════════════════════════════════
    SKELETON LOADER SYSTEM
 ═══════════════════════════════════════════════════ */

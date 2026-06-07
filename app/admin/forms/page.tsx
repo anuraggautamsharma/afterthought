@@ -3,6 +3,8 @@ import { redirect } from 'next/navigation'
 import { getAllForms, getFormResponseCount } from '@/lib/forms'
 import type { Form } from '@/lib/forms'
 import { createFormAction } from './actions'
+import SystemFormsSetup from '@/components/admin/forms/SystemFormsSetup'
+import { SYSTEM_FORM_SEEDS } from '@/lib/forms-seed'
 
 export const dynamic = 'force-dynamic'
 
@@ -113,6 +115,12 @@ export default async function FormsPage() {
   const published = forms.filter(f => f.status === 'published').length
   const drafts = forms.filter(f => f.status === 'draft').length
 
+  // Which built-in (system) forms haven't been created yet?
+  const existingRoles = new Set(forms.map(f => f.site_role).filter(Boolean))
+  const missingSystem = SYSTEM_FORM_SEEDS
+    .filter(s => s.site_role && !existingRoles.has(s.site_role))
+    .map(s => s.title)
+
   return (
     <>
       {dbError && (
@@ -130,6 +138,8 @@ export default async function FormsPage() {
         </div>
         <CreateFormButton />
       </div>
+
+      {!dbError && <SystemFormsSetup missing={missingSystem} />}
 
       {forms.length === 0 ? (
         <div className="admin-empty">
