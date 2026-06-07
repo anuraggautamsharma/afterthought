@@ -13,6 +13,7 @@ export interface Job {
   nice_to_have: string
   why_afterthought: string
   status: 'open' | 'closed'
+  application_form_id: string | null
   sort_order: number
   created_at: string
   updated_at: string

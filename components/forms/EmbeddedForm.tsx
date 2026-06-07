@@ -1,21 +1,29 @@
-import { getFormBySiteRole, getSections, getFields, type SiteRole } from '@/lib/forms'
+import { getFormBySiteRole, getFormById, getSections, getFields, type SiteRole } from '@/lib/forms'
 import FormRenderer from './FormRenderer'
 import { submitFormAction } from '@/app/forms/[slug]/actions'
 
 interface Props {
-  role: NonNullable<SiteRole>
+  /** Resolve the form by its built-in site slot… */
+  role?: NonNullable<SiteRole>
+  /** …or directly by form id (e.g. a job's dedicated application form). */
+  formId?: string
   /** Hide the form's own title/description when the page already provides it. */
   hideHeader?: boolean
 }
 
 /**
- * Renders a built-in (site_role) form inline within a site page — the Contact
- * page, the Freelance page, etc. Pulls the form assigned to the given role and
- * renders the themed FormRenderer. If the form hasn't been set up yet, shows a
+ * Renders a builder form inline within a site page — the Contact page, the
+ * Freelance page, or a Job's apply section. Resolves the form by site_role or by
+ * id and renders the themed FormRenderer. If the form isn't available, shows a
  * gentle fallback rather than breaking the page.
  */
-export default async function EmbeddedForm({ role, hideHeader }: Props) {
-  const form = await getFormBySiteRole(role).catch(() => null)
+export default async function EmbeddedForm({ role, formId, hideHeader }: Props) {
+  const form = await (formId
+    ? getFormById(formId)
+    : role
+      ? getFormBySiteRole(role)
+      : Promise.resolve(null)
+  ).catch(() => null)
 
   if (!form || form.status !== 'published') {
     return (

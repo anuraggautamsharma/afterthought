@@ -275,9 +275,11 @@ export async function getFormBySiteRole(role: NonNullable<SiteRole>): Promise<Fo
 export async function createForm(input: FormInput = {}): Promise<Form> {
   const title = input.title ?? 'Untitled form'
   const slug = input.slug ?? await uniqueFormSlug(slugify(title))
+  // Spread input first so the computed title/slug always win (input may carry
+  // an undefined slug which would otherwise clobber the generated one).
   const { data, error } = await supabase
     .from('forms')
-    .insert({ title, slug, ...input })
+    .insert({ ...input, title, slug })
     .select().single()
   if (error) throw error
   return data as Form
@@ -381,7 +383,7 @@ export interface SeedFieldSpec {
 
 export interface SeedFormSpec {
   title: string
-  slug: string
+  slug?: string
   description?: string
   category: FormCategory
   site_role?: NonNullable<SiteRole>

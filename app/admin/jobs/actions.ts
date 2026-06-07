@@ -1,10 +1,36 @@
 'use server'
 
-import { createJob, updateJob, deleteJob, countJobs, getAllJobs, type JobInput } from '@/lib/jobs'
+import { createJob, updateJob, deleteJob, countJobs, getAllJobs, getJobById, type JobInput } from '@/lib/jobs'
+import { createFullForm } from '@/lib/forms'
+import { applicationFormSpec } from '@/lib/forms-seed'
 import { roles } from '@/lib/roles'
 import { slugify } from '@/lib/slugify'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
+
+/** Creates a dedicated application form for a job and links it. Returns form id. */
+async function ensureJobApplicationForm(jobId: string, jobTitle: string): Promise<string> {
+  const form = await createFullForm(applicationFormSpec(jobTitle))
+  await updateJob(jobId, { application_form_id: form.id })
+  return form.id
+}
+
+/** Creates + links an application form for an existing job (editor button). */
+export async function createApplicationFormAction(
+  jobId: string
+): Promise<{ formId?: string; error?: string }> {
+  try {
+    const job = await getJobById(jobId)
+    if (!job) return { error: 'Job not found' }
+    if (job.application_form_id) return { formId: job.application_form_id }
+    const formId = await ensureJobApplicationForm(jobId, job.title)
+    revalidatePath(`/admin/jobs/${jobId}`)
+    revalidatePath('/admin/forms')
+    return { formId }
+  } catch (e) {
+    return { error: e instanceof Error ? e.message : 'Failed to create form' }
+  }
+}
 
 export async function saveJobAction(
   id: string | null,
@@ -21,8 +47,15 @@ export async function saveJobAction(
       return { id }
     } else {
       const job = await createJob(input)
+      // Give every new job its own dedicated application form.
+      try {
+        await ensureJobApplicationForm(job.id, job.title)
+      } catch (e) {
+        console.error('[saveJobAction] failed to create application form:', e)
+      }
       revalidatePath('/careers')
       revalidatePath(`/careers/${job.slug}`)
+      revalidatePath('/admin/forms')
       return { id: job.id }
     }
   } catch (e) {

@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { getJobBySlug } from '@/lib/jobs'
 import RoleApplyForm from '@/components/RoleApplyForm'
+import EmbeddedForm from '@/components/forms/EmbeddedForm'
 
 export const dynamic = 'force-dynamic'
 
@@ -108,7 +109,13 @@ export default async function RolePage({ params }: { params: Promise<{ slug: str
               No cover letter needed — just fill this in honestly. We care more about how you think than how you write about yourself.
             </p>
           </div>
-          <RoleApplyForm id={role.slug} />
+          {role.application_form_id ? (
+            <div style={{ maxWidth: '640px' }}>
+              <EmbeddedForm formId={role.application_form_id} hideHeader />
+            </div>
+          ) : (
+            <RoleApplyForm id={role.slug} />
+          )}
         </div>
 
       </div>

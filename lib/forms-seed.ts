@@ -92,3 +92,42 @@ export const FREELANCE_FORM_SEED: SeedFormSpec = {
 }
 
 export const SYSTEM_FORM_SEEDS: SeedFormSpec[] = [CONTACT_FORM_SEED, FREELANCE_FORM_SEED]
+
+// ── Per-job application form (a fresh copy is created for each job) ─────────────
+export function applicationFormSpec(jobTitle: string): SeedFormSpec {
+  return {
+    title: `Application — ${jobTitle}`,
+    description: `Apply for the ${jobTitle} role. No cover letter needed — just fill this in honestly.`,
+    category: 'application',
+    is_system: false,
+    status: 'published',
+    submit_label: 'Send application',
+    confirmation_message:
+      'Application received. We’ll be in touch. We read every application personally — if there’s a fit, we’ll reach out directly.',
+    fields: [
+      { type: 'short_text', label: 'Full name', required: true, placeholder: 'Your name' },
+      { type: 'email', label: 'Email', required: true, placeholder: 'you@email.com' },
+      { type: 'url', label: 'Portfolio / work link', required: true, placeholder: 'https://your-work.com' },
+      {
+        type: 'dropdown',
+        label: 'Years of experience',
+        options: opts(['0–2 years', '2–5 years', '5+ years']),
+      },
+      {
+        type: 'dropdown',
+        label: 'Availability',
+        options: opts(['Immediate', 'Within 1 month', '3+ months']),
+      },
+      {
+        type: 'dropdown',
+        label: 'Work type preference',
+        options: opts(['Full-time', 'Contract / Freelance']),
+      },
+      {
+        type: 'paragraph',
+        label: 'Why Afterthought? What kind of work brings out your best?',
+        placeholder: 'Keep it real — a few sentences is fine.',
+      },
+    ],
+  }
+}

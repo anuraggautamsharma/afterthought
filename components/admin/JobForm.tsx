@@ -4,8 +4,9 @@ import { useState, useCallback, useTransition, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import type { Job } from '@/lib/jobs'
-import { saveJobAction } from '@/app/admin/jobs/actions'
+import { saveJobAction, createApplicationFormAction } from '@/app/admin/jobs/actions'
 import { slugify } from '@/lib/slugify'
+import { toast } from '@/lib/toastStore'
 import SaveBar from './SaveBar'
 
 const linesToArray = (s: string) => s.split('\n').map(l => l.trim()).filter(Boolean)
@@ -32,6 +33,23 @@ export default function JobForm({ job }: { job: Job | null }) {
   const [savedAt,    setSavedAt]    = useState<Date | null>(null)
   const [errorMsg,   setErrorMsg]   = useState('')
   const [isDirty,    setIsDirty]    = useState(false)
+  const [appFormId,  setAppFormId]  = useState<string | null>(job?.application_form_id ?? null)
+  const [creatingForm, setCreatingForm] = useState(false)
+
+  const handleCreateAppForm = () => {
+    if (!job?.id) return
+    setCreatingForm(true)
+    startTransition(async () => {
+      const res = await createApplicationFormAction(job.id)
+      setCreatingForm(false)
+      if (res.formId) {
+        setAppFormId(res.formId)
+        toast.success('Application form created')
+      } else {
+        toast.error(res.error ?? 'Failed to create form')
+      }
+    })
+  }
 
   const statusRef = useRef(status)
   useEffect(() => { statusRef.current = status }, [status])
@@ -184,6 +202,35 @@ export default function JobForm({ job }: { job: Job | null }) {
             <textarea value={why} onChange={e => { setWhy(e.target.value); markDirty() }} />
           </div>
         </div>
+      </section>
+
+      <section className="admin-settings-card">
+        <h2 className="admin-settings-card__title">Application form</h2>
+        <p className="admin-settings-card__hint">
+          This job has its own application form. Candidates fill it in on the public job
+          page, and responses land in your Inbox under this job.
+        </p>
+        {!job?.id ? (
+          <p className="admin-settings-card__hint" style={{ marginTop: 8 }}>
+            Save the job first — its application form is created automatically.
+          </p>
+        ) : appFormId ? (
+          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginTop: 4 }}>
+            <Link href={`/admin/forms/${appFormId}/edit`} className="admin-btn-primary"
+              style={{ width: 'auto', padding: '10px 18px', textDecoration: 'none' }}>
+              Edit application form →
+            </Link>
+            <Link href={`/admin/inbox?form=${appFormId}`} className="admin-btn-ghost">
+              View responses
+            </Link>
+          </div>
+        ) : (
+          <button type="button" className="admin-btn-primary"
+            style={{ width: 'auto', padding: '10px 18px', marginTop: 4 }}
+            disabled={pending} onClick={handleCreateAppForm}>
+            {creatingForm ? 'Creating…' : 'Create application form'}
+          </button>
+        )}
       </section>
     </div>
   )
