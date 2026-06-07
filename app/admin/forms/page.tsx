@@ -60,7 +60,7 @@ async function FormCard({ form }: { form: Form }) {
           Edit
         </Link>
         <Link
-          href={`/admin/forms/${form.id}/responses`}
+          href={`/admin/inbox?form=${form.id}`}
           className="admin-btn-ghost"
         >
           Responses
