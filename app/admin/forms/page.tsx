@@ -4,6 +4,7 @@ import { getAllForms, getFormResponseCount } from '@/lib/forms'
 import type { Form } from '@/lib/forms'
 import { createFormAction } from './actions'
 import SystemFormsSetup from '@/components/admin/forms/SystemFormsSetup'
+import ShareFormButton from '@/components/admin/forms/ShareFormButton'
 import { SYSTEM_FORM_SEEDS } from '@/lib/forms-seed'
 
 export const dynamic = 'force-dynamic'
@@ -71,6 +72,7 @@ async function FormCard({ form }: { form: Form }) {
         >
           Settings
         </Link>
+        <ShareFormButton formId={form.id} slug={form.slug} status={form.status} />
         {form.status === 'published' && (
           <Link
             href={`/forms/${form.slug}`}

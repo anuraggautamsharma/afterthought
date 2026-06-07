@@ -6,10 +6,11 @@ import {
   createForm, updateForm, deleteForm,
   createSection, updateSection, deleteSection,
   createField, updateField, deleteField, reorderFields,
-  createFullForm, getFormBySiteRole,
+  createFullForm, getFormBySiteRole, getFormById,
   type FormInput, type FieldInput, type SectionInput, type FormField,
   defaultFieldProps,
 } from '@/lib/forms'
+import { getJobByApplicationFormId } from '@/lib/jobs'
 import { SYSTEM_FORM_SEEDS } from '@/lib/forms-seed'
 import { slugify } from '@/lib/slugify'
 import { supabase } from '@/lib/supabase'
@@ -129,6 +130,37 @@ export async function checkSlugAction(slug: string, excludeId?: string): Promise
     .neq('id', excludeId ?? '')
     .limit(1)
   return (data ?? []).length === 0
+}
+
+// ── Share / usage info ─────────────────────────────────────────────────────────
+
+export type FormUsage =
+  | { kind: 'page'; label: string; path: string }
+  | { kind: 'job'; label: string; path: string }
+  | { kind: 'standalone' }
+
+export interface FormShareInfo {
+  slug: string
+  status: 'draft' | 'published' | 'closed'
+  usage: FormUsage
+}
+
+/** Resolves where a form is surfaced on the site, for the Share panel. */
+export async function getFormUsageAction(formId: string): Promise<FormShareInfo | null> {
+  const form = await getFormById(formId)
+  if (!form) return null
+
+  let usage: FormUsage = { kind: 'standalone' }
+  if (form.site_role === 'contact') {
+    usage = { kind: 'page', label: 'Contact page', path: '/contact' }
+  } else if (form.site_role === 'freelance') {
+    usage = { kind: 'page', label: 'Freelance page', path: '/careers/freelance' }
+  } else {
+    const job = await getJobByApplicationFormId(formId).catch(() => null)
+    if (job) usage = { kind: 'job', label: job.title, path: `/careers/${job.slug}` }
+  }
+
+  return { slug: form.slug, status: form.status, usage }
 }
 
 // ── CSV Export ────────────────────────────────────────────────────────────────

@@ -31,6 +31,7 @@ import SaveBar from '@/components/admin/SaveBar'
 import FieldPalette from './FieldPalette'
 import FormCanvas from './FormCanvas'
 import FieldSettingsPanel from './FieldSettingsPanel'
+import ShareFormButton from './ShareFormButton'
 
 type SaveState = 'idle' | 'dirty' | 'saving' | 'saved' | 'error'
 
@@ -426,6 +427,7 @@ export default function FormBuilder({ initial }: Props) {
                 View live ↗
               </Link>
             )}
+            <ShareFormButton formId={form.id} slug={form.slug} status={form.status} />
             <button
               type="button"
               className="admin-btn-secondary"

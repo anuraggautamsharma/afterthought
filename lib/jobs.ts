@@ -62,6 +62,16 @@ export async function getJobById(id: string): Promise<Job | null> {
   return data as Job
 }
 
+export async function getJobByApplicationFormId(formId: string): Promise<Job | null> {
+  const { data, error } = await supabase
+    .from('jobs')
+    .select('*')
+    .eq('application_form_id', formId)
+    .maybeSingle()
+  if (error) return null
+  return data as Job | null
+}
+
 export async function createJob(input: JobInput): Promise<Job> {
   const { data, error } = await supabase.from('jobs').insert(input).select().single()
   if (error) throw error
