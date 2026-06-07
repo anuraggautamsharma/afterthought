@@ -7,7 +7,7 @@ export const dynamic = 'force-dynamic'
 export const metadata: Metadata = {
   title: 'Studio — Afterthought',
   description:
-    'About Afterthought — a two-founder design studio by Anurag Gautam and Tina Gidwani, based in Bangalore, working internationally.',
+    'About Afterthought — a design studio led by Anurag Gautam and Tina Gidwani, based in Bangalore, working internationally across brand identity, naming, motion, and digital.',
 }
 
 export default async function Studio() {
@@ -27,8 +27,8 @@ export default async function Studio() {
         <div className="page-header__eyebrow eyebrow">
           <span>The studio · Bangalore — Working internationally</span>
         </div>
-        <h1 className="display-xl page-header__title">A small studio, two stubborn opinions, and a long list of things we won&apos;t <em>quite</em> do.</h1>
-        <p className="page-header__sub body-lg">Afterthought is a design and creative studio founded in 2025 by Anurag Gautam and Tina Gidwani. We work on brand identity, naming, packaging and digital — with founders, institutions and the occasional well-meaning monopoly.</p>
+        <h1 className="display-xl page-header__title">A focused studio, two stubborn opinions, and a long list of things we won&apos;t <em>quite</em> do.</h1>
+        <p className="page-header__sub body-lg">Afterthought is a design and creative studio led by Anurag Gautam and Tina Gidwani, based in Bangalore. We work on brand identity, naming, packaging and digital — with startups, enterprises, institutions and the occasional well-meaning monopoly.</p>
       </section>
 
       <section className="container">
@@ -37,8 +37,8 @@ export default async function Studio() {
             <span className="eyebrow">A short introduction</span>
           </div>
           <div className="studio-intro__body">
-            <p>We are two designers who have spent the last decade in other people&apos;s studios. Most of what we learned there was useful. Some of it was that the best work tends to happen when the two people in the room are the two people doing it, and that the worst work happens when there are too many people in the room.</p>
-            <p>So we made a small studio. Two founders, a roster of trusted collaborators, and roughly four engagements a year. We work across two cities because that is where we live; we work in two languages because that is who we are; and we do most of our best thinking on the second pass, which is where the name comes from.</p>
+            <p>We are a studio of ten, led by two designers who spent their careers in other people&apos;s studios before starting their own. Most of what we learned there was useful. Some of it was that the best work happens when the people doing the brief are the people who wrote it — and that the work suffers when the brief is handed off too many times.</p>
+            <p>So we built a studio where that doesn&apos;t happen. Two founders lead every engagement, backed by a ten-person team across strategy, design, motion and production. We work across two cities because that is where we live; we work in two languages because that is who we are; and we do most of our best thinking on the second pass, which is where the name comes from.</p>
             <p><em>Afterthought</em> — the thing you would have said, if you&apos;d had a minute more.</p>
           </div>
         </div>
@@ -51,7 +51,7 @@ export default async function Studio() {
             <h2 className="display-lg section-head__title">Two of us. We answer the email ourselves.</h2>
           </div>
           <div className="section-head__right">
-            <p className="body-sm">We met in 2018 on a re-brand neither of us were quite leading. We&apos;ve worked on most of the same projects since. Afterthought is the first thing we&apos;ve started together.</p>
+            <p className="body-sm">We met in 2018 on a re-brand neither of us were quite leading. We&apos;ve worked on the same projects since — client-side, then together. Eventually it made more sense to run the studio than to work for someone else&apos;s.</p>
           </div>
         </div>
 
@@ -121,7 +121,7 @@ export default async function Studio() {
         <div className="color-block color-block--lime">
           <span className="eyebrow cb-eyebrow">What we make</span>
           <h2 className="cb-title display-lg">Seven disciplines. <em>One clear point of view.</em></h2>
-          <p className="body-lg cb-body">Brand identity, naming, motion, packaging, digital, campaigns, and social — all of it done with two founders, not handed off after the pitch.</p>
+          <p className="body-lg cb-body">Brand identity, naming, motion, packaging, digital, campaigns, and social — led by two founders, backed by a team of ten.</p>
           <div style={{ marginTop: '40px' }}>
             <a className="btn btn-primary" href="/services">See all services →</a>
           </div>

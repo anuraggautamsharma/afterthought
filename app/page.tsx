@@ -4,7 +4,7 @@ import { getSettings } from '@/lib/settings'
 export const metadata: Metadata = {
   title: 'Afterthought — A design & creative studio',
   description:
-    'Afterthought is an independent design & creative studio based in Bangalore, working internationally. Brand identity, naming, packaging and digital, by Anurag Gautam and Tina Gidwani.',
+    'Afterthought is a design & creative studio based in Bangalore, working internationally. Brand identity, naming, packaging, motion, and digital — for companies from early-stage to enterprise.',
 }
 
 export default async function Home() {
@@ -31,7 +31,7 @@ export default async function Home() {
             <span className="hero__clip"><span>thoughts that brands</span></span>
             <span className="hero__clip"><span>wish they&apos;d had <em>first</em>.</span></span>
           </h1>
-          <p className="hero__sub">Brand identity, naming & motion — for founders who know what they stand for but haven&apos;t yet found how it looks.</p>
+          <p className="hero__sub">Brand identity, naming & motion — for brands that know what they stand for but haven&apos;t yet found how it looks.</p>
         </div>
         <div className="hero__ticker" aria-hidden="true">
           <div className="hero__ticker-track">
@@ -96,11 +96,11 @@ export default async function Home() {
       <section className="container section">
         <div className="section-head">
           <div className="section-head__left">
-            <span className="caption">Selected work — 2025</span>
+            <span className="caption">Selected work</span>
             <h2 className="display-lg section-head__title">Two projects. Identity, script, and motion.</h2>
           </div>
           <div className="section-head__right">
-            <p className="body-sm">We started Afterthought in 2025. Below are the first two engagements — a brand identity for a men&apos;s salon and a motion piece for a B2B GTM agency.</p>
+            <p className="body-sm">Two recent engagements — a brand identity for a men&apos;s salon and a motion piece for a B2B GTM agency.</p>
           </div>
         </div>
 
@@ -117,7 +117,7 @@ export default async function Home() {
             </div>
             <div className="tile__meta">
               <div className="tile__meta-left">
-                <span className="tile__eyebrow">Case 001 · Justach · Naming · Logo · Identity · 2025</span>
+                <span className="tile__eyebrow">Case 001 · Justach · Naming · Logo · Identity</span>
                 <div className="tile__title">A men&apos;s salon built around one unforgettable symbol.</div>
               </div>
               <div className="tile__arrow">→</div>
@@ -148,7 +148,7 @@ export default async function Home() {
             </div>
             <div className="tile__meta">
               <div className="tile__meta-left">
-                <span className="tile__eyebrow">Case 002 · The Pipeline Lab · Script · Motion Design · 2025</span>
+                <span className="tile__eyebrow">Case 002 · The Pipeline Lab · Script · Motion Design</span>
                 <div className="tile__title">Thirty seconds to explain a revenue engine.</div>
               </div>
               <div className="tile__arrow">→</div>
@@ -161,7 +161,7 @@ export default async function Home() {
         <div className="color-block color-block--navy">
           <span className="eyebrow cb-eyebrow">What we&apos;re after</span>
           <h2 className="cb-title display-lg">The brands that don&apos;t know what they look like <em>yet</em>.</h2>
-          <p className="body-lg cb-body" style={{ opacity: 0.85 }}>We&apos;re most interested in the moment before a category has a visual language — young companies, new products, and founders who know what they stand for but haven&apos;t yet found how it looks. The brief that arrives without all the answers is the one we want. We&apos;re less useful when the solution is already obvious.</p>
+          <p className="body-lg cb-body" style={{ opacity: 0.85 }}>We&apos;re most interested in the moment before a category has a visual language — across D2C, AI, SaaS, healthcare, hospitality, aerospace, and wherever the work is honest. Whether you&apos;re launching or rebuilding, the brief that arrives without all the answers is the one we want. We&apos;re less useful when the solution is already obvious.</p>
           <div style={{ marginTop: '56px', paddingTop: '24px', borderTop: '1px solid rgba(255,255,255,0.20)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '24px' }}>
             <span className="caption" style={{ opacity: 0.7 }}>Bangalore · Working internationally</span>
             <a className="btn btn-secondary-dark" href="/work">See the work →</a>

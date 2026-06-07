@@ -38,7 +38,7 @@ export default async function Services() {
           Seven disciplines. <em>One clear point of view.</em>
         </h1>
         <p className="page-header__sub body-lg">
-          We take on roughly four engagements a year. Every project gets two founders, not a team assigned after the pitch. Below is what we do, what we deliver, and who it&apos;s for.
+          Every engagement is led by a founder, backed by a focused team. We work across industries — D2C, SaaS, AI, healthcare, hospitality, aerospace and beyond. Below is what we do, what we deliver, and who it&apos;s for.
         </p>
       </section>
 

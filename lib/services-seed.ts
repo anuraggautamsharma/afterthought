@@ -6,15 +6,15 @@ export const SERVICES_SEED: ServiceInput[] = [
     tags: ['Visual', 'Verbal', 'Systems'],
     description: 'The full thing — from a single positioning sentence to a working visual system. We research the category, write the brief in our own words, then build an identity that holds up across every surface it needs to touch.',
     deliverables: ['Brand strategy & positioning', 'Logo & mark system', 'Colour, type, and grid', 'Brand guidelines (usable, not decorative)', 'Core application suite'],
-    who_for: 'Founders building from scratch. Established businesses who’ve outgrown their identity.',
+    who_for: 'D2C brands, SaaS companies, healthcare providers and institutions ready to build or rebuild what they stand for. Early-stage and enterprise alike.',
     sort_order: 0,
   },
   {
     num: '02', color: 'cream', title: 'Naming & Verbal Identity',
     tags: ['Naming', 'Tone of voice', 'Copy'],
-    description: 'We find the name that says the thing you didn’t know you meant. Then we build the language system around it — tone, voice, the sentence that goes on the homepage, the words that hold up in a pitch.',
+    description: 'We find the name that says the thing you didn\'t know you meant. Then we build the language system around it — tone, voice, the sentence that goes on the homepage, the words that hold up in a pitch.',
     deliverables: ['Name candidates + rationale', 'Linguistic and trademark screening', 'Taglines and positioning lines', 'Tone of voice guidelines', 'Core copy (web, pitch, packaging)'],
-    who_for: 'New ventures. Re-launches. Companies whose name no longer tells the right story.',
+    who_for: 'New ventures and established businesses re-entering a market. Companies in AI, fintech, healthcare or any category where the name needs to do serious work.',
     sort_order: 1,
   },
   {
@@ -22,7 +22,7 @@ export const SERVICES_SEED: ServiceInput[] = [
     tags: ['Brand motion', 'Film', 'UI animation'],
     description: 'Brand identity systems that move. We design motion for logos, campaigns, social content, and product UI — always from brand first, never decoration for its own sake.',
     deliverables: ['Motion identity system', 'Brand film & social content', 'Animated logo suite (Lottie / After Effects)', 'Title sequences and transitions', 'UI animation specs'],
-    who_for: 'Brands that live on screen. Founders who need their story told in 30 seconds.',
+    who_for: 'Brands that live on screen — AI platforms, SaaS products, D2C launches, hospitality groups. Anyone who needs their story told in 30 seconds.',
     sort_order: 2,
   },
   {
@@ -30,7 +30,7 @@ export const SERVICES_SEED: ServiceInput[] = [
     tags: ['CPG', 'Hospitality', 'Print'],
     description: 'Physical identity — the thing that sits on a shelf, arrives in a bag, or greets someone at a door. We design for production reality, not just for the render.',
     deliverables: ['Structural and surface design', 'Typography and illustration direction', 'Production-ready print files', 'Retail environment touchpoints', 'Range architecture'],
-    who_for: 'Consumer brands. Hospitality groups. Anyone whose product touches a person’s hands.',
+    who_for: 'D2C consumer brands, hospitality groups, healthcare and wellness companies. Anyone whose product touches a person\'s hands.',
     sort_order: 3,
   },
   {
@@ -38,7 +38,7 @@ export const SERVICES_SEED: ServiceInput[] = [
     tags: ['Web', 'Product', 'Design systems'],
     description: 'Design for screens that need to do something. We work at the intersection of brand and product — from marketing sites to internal tools — and hand off work that developers can actually build.',
     deliverables: ['Marketing site design', 'Design system & component library', 'Product UX & interface design', 'Developer-ready specs (Figma)', 'Motion and interaction guidelines'],
-    who_for: 'Startups launching a product. Established brands rebuilding their digital presence.',
+    who_for: 'SaaS and AI companies launching a product. Enterprises, institutions and established brands rebuilding their digital presence.',
     sort_order: 4,
   },
   {
@@ -46,7 +46,7 @@ export const SERVICES_SEED: ServiceInput[] = [
     tags: ['Launch', 'OOH', 'Brand films'],
     description: 'The moment a brand goes public — we help plan it and make it. From launch campaigns to annual brand films, we concept, direct, and produce. For production at scale, we bring in our trusted collaborators.',
     deliverables: ['Campaign concept & art direction', 'OOH and print design', 'Social campaign suite', 'Brand film concept and direction', 'Photography direction'],
-    who_for: 'Brands making a deliberate public moment. Founders who need the launch to count.',
+    who_for: 'Brands making a deliberate public moment — from startup launches to enterprise rebrands, across any sector where the moment needs to land.',
     sort_order: 5,
   },
   {
@@ -54,7 +54,7 @@ export const SERVICES_SEED: ServiceInput[] = [
     tags: ['Content', 'Social', 'Distribution'],
     description: 'We help brands build a real presence — not just post more. That means a content system rooted in the brand, a point of view worth following, and a distribution strategy that compounds over time rather than chasing the algorithm.',
     deliverables: ['Content strategy & editorial calendar', 'Social identity system (templates, formats, type)', 'Platform-native content production', 'Caption and copy voice', 'Distribution playbook & channel strategy'],
-    who_for: 'Brands with something to say but no system to say it consistently. Founders building an audience alongside a product.',
+    who_for: 'Brands with something to say but no system to say it consistently — across D2C, hospitality, healthcare, aerospace and beyond. Companies building an audience, not just a feed.',
     sort_order: 6,
   },
 ]
