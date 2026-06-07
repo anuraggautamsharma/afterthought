@@ -9,6 +9,7 @@ import { logoutAction } from '@/app/admin/login/actions'
 function getActiveSection(pathname: string): string {
   if (pathname.startsWith('/admin/inbox')) return 'inbox'
   if (pathname.startsWith('/admin/posts')) return 'posts'
+  if (pathname.startsWith('/admin/forms')) return 'forms'
   if (pathname.startsWith('/admin/work')) return 'work'
   if (pathname.startsWith('/admin/media')) return 'media'
   if (pathname.startsWith('/admin/services')) return 'services'
@@ -81,6 +82,18 @@ export default function AdminSidebar({ unread = 0 }: { unread?: number }) {
             <polyline points="10,9 9,9 8,9"/>
           </svg>
           Posts
+        </Link>
+        <Link
+          href="/admin/forms"
+          data-section="forms"
+          className={`admin-sidebar__link ${pathname.startsWith('/admin/forms') ? 'is-active' : ''}`}
+        >
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+            <rect x="3" y="3" width="18" height="18" rx="2"/>
+            <line x1="3" y1="9" x2="21" y2="9"/>
+            <line x1="9" y1="21" x2="9" y2="9"/>
+          </svg>
+          Forms
         </Link>
         <Link
           href="/admin/work"

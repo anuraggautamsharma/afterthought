@@ -3,6 +3,7 @@ import { getSubmissions, countUnread } from '@/lib/submissions'
 import { getAllPosts, getPublishedPosts } from '@/lib/posts'
 import { getAllProjects, getPublishedProjects } from '@/lib/projects'
 import { getOpenJobs } from '@/lib/jobs'
+import { getAllForms, getFormResponseCount } from '@/lib/forms'
 
 export const dynamic = 'force-dynamic'
 
@@ -34,6 +35,8 @@ export default async function AdminDashboard() {
   let allProjects: Awaited<ReturnType<typeof getAllProjects>> = []
   let publishedProjects: Awaited<ReturnType<typeof getPublishedProjects>> = []
   let openJobs: Awaited<ReturnType<typeof getOpenJobs>> = []
+  let allForms: Awaited<ReturnType<typeof getAllForms>> = []
+  let formsResponsesThisWeek = 0
 
   try { unread = await countUnread() } catch {}
   try { submissions = await getSubmissions() } catch {}
@@ -42,7 +45,15 @@ export default async function AdminDashboard() {
   try { allProjects = await getAllProjects() } catch {}
   try { publishedProjects = await getPublishedProjects() } catch {}
   try { openJobs = await getOpenJobs() } catch {}
+  try {
+    allForms = await getAllForms()
+    const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
+    const publishedForms = allForms.filter(f => f.status === 'published')
+    const counts = await Promise.all(publishedForms.map(f => getFormResponseCount(f.id).catch(() => 0)))
+    formsResponsesThisWeek = counts.reduce((a, b) => a + b, 0)
+  } catch {}
 
+  const publishedForms = allForms.filter(f => f.status === 'published')
   const recentSubmissions = submissions.slice(0, 5)
   const briefs = submissions.filter(s => s.type === 'contact').length
   const applications = submissions.filter(s => s.type === 'application').length
@@ -133,6 +144,37 @@ export default async function AdminDashboard() {
             <Link href="/admin/jobs/new" className="admin-btn-secondary"
               style={{ width: 'auto', fontSize: '13px', padding: '9px 16px', textDecoration: 'none' }}>
               + New job
+            </Link>
+          </div>
+        </div>
+
+        {/* Forms card */}
+        <div className="admin-dash-card">
+          <div className="admin-dash-card__title">Forms</div>
+
+          <div style={{ display: 'flex', gap: '20px', marginBottom: '20px', flexWrap: 'wrap' }}>
+            <div className="admin-dash-stat">
+              <span className="admin-dash-stat__num">{publishedForms.length}</span>
+              <span className="admin-dash-stat__label">published form{publishedForms.length !== 1 ? 's' : ''}</span>
+            </div>
+            <div className="admin-dash-stat">
+              <span className="admin-dash-stat__num">{formsResponsesThisWeek}</span>
+              <span className="admin-dash-stat__label">responses this week</span>
+            </div>
+          </div>
+
+          <p style={{ fontSize: '12px', opacity: 0.4, marginBottom: '16px', fontFamily: 'var(--font-mono)' }}>
+            {allForms.length} total form{allForms.length !== 1 ? 's' : ''}
+          </p>
+
+          <div className="admin-dash-quick-actions">
+            <Link href="/admin/forms/new" className="admin-btn-secondary"
+              style={{ width: 'auto', fontSize: '13px', padding: '9px 16px', textDecoration: 'none' }}>
+              + New form
+            </Link>
+            <Link href="/admin/forms" className="admin-btn-secondary"
+              style={{ width: 'auto', fontSize: '13px', padding: '9px 16px', textDecoration: 'none' }}>
+              View all
             </Link>
           </div>
         </div>
