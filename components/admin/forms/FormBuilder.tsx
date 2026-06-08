@@ -367,6 +367,7 @@ export default function FormBuilder({ initial }: Props) {
 
     const movedField = fields[oldIndex]
     const targetField = fields[newIndex]
+    const prevFields = fields // for rollback if the save fails
 
     setFields(prev => {
       const sectionId = targetField.section_id
@@ -397,7 +398,20 @@ export default function FormBuilder({ initial }: Props) {
     markSaving()
     reorderFieldsAction(
       reordered.map((f, i) => ({ id: f.id, sort_order: i, section_id: sectionId }))
-    ).then(markSaved).catch(() => { markError('Failed to reorder'); toast.error('Failed to reorder fields') })
+    ).then(res => {
+      if (res.ok) {
+        markSaved()
+      } else {
+        setFields(prevFields) // roll back so the UI matches the DB
+        markError(res.error || 'Failed to reorder')
+        toast.error(res.error ? `Reorder failed: ${res.error}` : 'Failed to reorder fields')
+      }
+    }).catch(err => {
+      setFields(prevFields)
+      const msg = err instanceof Error ? err.message : 'Failed to reorder'
+      markError(msg)
+      toast.error(`Reorder failed: ${msg}`)
+    })
   }, [fields, getActiveSectionId, handleAddField, markSaving, markSaved, markError])
 
   const selectedField = fields.find(f => f.id === selectedFieldId) ?? null

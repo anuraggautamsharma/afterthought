@@ -365,9 +365,13 @@ export async function deleteField(id: string): Promise<void> {
 }
 
 export async function reorderFields(updates: { id: string; sort_order: number; section_id?: string | null }[]): Promise<void> {
-  await Promise.all(updates.map(({ id, sort_order, section_id }) =>
-    supabase.from('form_fields').update({ sort_order, ...(section_id !== undefined ? { section_id } : {}) }).eq('id', id)
-  ))
+  // Sequential + error-checked: avoids parallel write races and surfaces real errors.
+  for (const { id, sort_order, section_id } of updates) {
+    const patch: Record<string, unknown> = { sort_order }
+    if (section_id !== undefined) patch.section_id = section_id
+    const { error } = await supabase.from('form_fields').update(patch).eq('id', id)
+    if (error) throw new Error(error.message)
+  }
 }
 
 // ── Full form creation (seeding) ─────────────────────────────────────────────

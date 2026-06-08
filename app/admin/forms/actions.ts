@@ -134,8 +134,14 @@ export async function deleteFieldAction(id: string, formId: string) {
 
 export async function reorderFieldsAction(
   updates: { id: string; sort_order: number; section_id?: string | null }[]
-) {
-  await reorderFields(updates)
+): Promise<{ ok: boolean; error?: string }> {
+  try {
+    await reorderFields(updates)
+    return { ok: true }
+  } catch (e) {
+    console.error('[reorderFieldsAction] failed:', e)
+    return { ok: false, error: e instanceof Error ? e.message : 'Reorder failed' }
+  }
 }
 
 // ── Slug uniqueness check ──────────────────────────────────────────────────
