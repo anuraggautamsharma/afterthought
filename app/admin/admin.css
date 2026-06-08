@@ -1979,7 +1979,7 @@ details[open] > .admin-sidebar-card__summary { border-bottom: 1px solid #EDEAE3;
 
 /* Canvas */
 .admin-fb-canvas { overflow-y: auto; background: #f5f4f0; display: flex; flex-direction: column; align-items: center; padding: 40px 24px; gap: 24px; }
-.admin-fb-canvas__paper { width: 100%; max-width: 640px; background: #fff; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,.08), 0 4px 20px rgba(0,0,0,.06); overflow: hidden; }
+.admin-fb-canvas__paper { width: 100%; max-width: 640px; flex-shrink: 0; background: #fff; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,.08), 0 4px 20px rgba(0,0,0,.06); overflow: hidden; }
 .admin-fb-canvas__form-header { padding: 32px 32px 0; }
 .admin-fb-canvas__title { font-size: 24px; font-weight: 600; line-height: 1.2; border: none; outline: none; width: 100%; background: transparent; color: var(--c-ink); padding: 0; font-family: inherit; }
 .admin-fb-canvas__title::placeholder { color: rgba(0,0,0,.25); }
