@@ -1,93 +1,14 @@
-import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { getAllForms, getFormResponseCount } from '@/lib/forms'
 import type { Form } from '@/lib/forms'
 import { createFormAction } from './actions'
 import SystemFormsSetup from '@/components/admin/forms/SystemFormsSetup'
-import ShareFormButton from '@/components/admin/forms/ShareFormButton'
-import DeleteFormButton from '@/components/admin/forms/DeleteFormButton'
+import FormsGrid, { type FormWithCount } from '@/components/admin/forms/FormsGrid'
 import { SYSTEM_FORM_SEEDS } from '@/lib/forms-seed'
 
 export const dynamic = 'force-dynamic'
 
 export const metadata = { title: 'Forms — Afterthought CMS' }
-
-function formatDate(str: string) {
-  return new Date(str).toLocaleDateString('en-GB', {
-    day: 'numeric', month: 'short', year: 'numeric',
-  })
-}
-
-async function FormCard({ form }: { form: Form }) {
-  let responseCount = 0
-  try {
-    responseCount = await getFormResponseCount(form.id)
-  } catch {}
-
-  return (
-    <div className="admin-form-card">
-      <div className="admin-form-card__header">
-        <h3 className="admin-form-card__title">
-          <Link href={`/admin/forms/${form.id}/edit`} className="admin-form-card__title-link">
-            {form.title || 'Untitled form'}
-          </Link>
-        </h3>
-        <span className={`admin-status-badge admin-status-badge--${form.status}`}>
-          <span className="admin-status-badge__dot" />
-          {form.status}
-        </span>
-      </div>
-
-      {form.description && (
-        <p className="admin-form-card__desc">{form.description}</p>
-      )}
-
-      <div className="admin-form-card__meta">
-        <span className="admin-form-card__slug">/{form.slug}</span>
-        <span className="admin-form-card__sep" />
-        <span className="admin-form-card__responses">
-          {responseCount} response{responseCount !== 1 ? 's' : ''}
-        </span>
-        <span className="admin-form-card__sep" />
-        <span className="admin-form-card__date">
-          Created {formatDate(form.created_at)}
-        </span>
-      </div>
-
-      <div className="admin-form-card__actions">
-        <Link
-          href={`/admin/forms/${form.id}/edit`}
-          className="admin-btn-ghost"
-        >
-          Edit
-        </Link>
-        <Link
-          href={`/admin/inbox?form=${form.id}`}
-          className="admin-btn-ghost"
-        >
-          Responses
-        </Link>
-        <Link
-          href={`/admin/forms/${form.id}/settings`}
-          className="admin-btn-ghost"
-        >
-          Settings
-        </Link>
-        <ShareFormButton formId={form.id} slug={form.slug} status={form.status} />
-        {form.status === 'published' && (
-          <Link
-            href={`/forms/${form.slug}`}
-            target="_blank"
-            className="admin-btn-ghost"
-          >
-            View live ↗
-          </Link>
-        )}
-        <DeleteFormButton formId={form.id} title={form.title} isSystem={form.is_system} />
-      </div>
-    </div>
-  )
-}
 
 async function CreateFormButton() {
   async function handleCreate() {
@@ -115,6 +36,10 @@ export default async function FormsPage() {
     console.error('[admin/forms] getAllForms failed:', e)
     dbError = e instanceof Error ? e.message : String(e)
   }
+
+  // Response counts for every form (for the cards + sort)
+  const counts = await Promise.all(forms.map(f => getFormResponseCount(f.id).catch(() => 0)))
+  const formsWithCounts: FormWithCount[] = forms.map((f, i) => ({ ...f, responseCount: counts[i] }))
 
   const published = forms.filter(f => f.status === 'published').length
   const drafts = forms.filter(f => f.status === 'draft').length
@@ -152,11 +77,7 @@ export default async function FormsPage() {
           <CreateFormButton />
         </div>
       ) : (
-        <div className="admin-forms-grid">
-          {forms.map(form => (
-            <FormCard key={form.id} form={form} />
-          ))}
-        </div>
+        <FormsGrid forms={formsWithCounts} />
       )}
     </>
   )

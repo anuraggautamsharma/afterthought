@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import QRCode from 'qrcode'
+import Icon from '@/components/Icon'
 import { getFormUsageAction, type FormShareInfo } from '@/app/admin/forms/actions'
 import { toast } from '@/lib/toastStore'
 
@@ -83,7 +84,7 @@ export default function ShareFormButton({ formId, slug, status, variant = 'ghost
         className={variant === 'secondary' ? 'admin-btn-secondary' : 'admin-btn-ghost'}
         onClick={() => setOpen(true)}
       >
-        {label}
+        <Icon name="ios_share" size={15} /> {label}
       </button>
 
       {open && (

@@ -1,6 +1,7 @@
 'use client'
 
 import { useTransition } from 'react'
+import Icon from '@/components/Icon'
 import { deleteFormFromListAction } from '@/app/admin/forms/actions'
 import { openConfirm } from '@/lib/confirmStore'
 import { toast } from '@/lib/toastStore'
@@ -43,7 +44,7 @@ export default function DeleteFormButton({ formId, title, isSystem }: Props) {
       disabled={pending}
       aria-label={`Delete ${title || 'form'}`}
     >
-      {pending ? 'Deleting…' : 'Delete'}
+      <Icon name="delete" size={15} /> {pending ? 'Deleting…' : 'Delete'}
     </button>
   )
 }

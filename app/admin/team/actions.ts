@@ -61,3 +61,8 @@ export async function seedTeamAction(): Promise<{ error?: string; count?: number
     return { error: e instanceof Error ? e.message : 'Import failed' }
   }
 }
+
+export async function bulkDeleteTeamAction(ids: string[]) {
+  await Promise.all(ids.map(id => deleteTeamMember(id).catch(() => {})))
+  revalidatePath('/admin/team'); revalidatePath('/studio'); revalidatePath('/')
+}

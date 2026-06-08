@@ -61,3 +61,8 @@ export async function seedServicesAction(): Promise<{ error?: string; count?: nu
     return { error: e instanceof Error ? e.message : 'Import failed' }
   }
 }
+
+export async function bulkDeleteServicesAction(ids: string[]) {
+  await Promise.all(ids.map(id => deleteService(id).catch(() => {})))
+  revalidatePath('/admin/services'); revalidatePath('/services')
+}

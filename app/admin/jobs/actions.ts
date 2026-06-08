@@ -118,3 +118,13 @@ export async function seedJobsAction(): Promise<{ error?: string; count?: number
     return { error: e instanceof Error ? e.message : 'Import failed' }
   }
 }
+
+export async function bulkDeleteJobsAction(ids: string[]) {
+  await Promise.all(ids.map(id => deleteJob(id).catch(() => {})))
+  revalidatePath('/admin/jobs'); revalidatePath('/careers')
+}
+
+export async function bulkSetJobStatusAction(ids: string[], status: 'open' | 'closed') {
+  await Promise.all(ids.map(id => updateJob(id, { status }).catch(() => {})))
+  revalidatePath('/admin/jobs'); revalidatePath('/careers')
+}

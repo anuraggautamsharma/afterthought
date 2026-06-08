@@ -67,27 +67,27 @@ export default async function AdminDashboard() {
       {/* Stat tiles */}
       <div className="admin-stat-tiles">
         <Link href="/admin/inbox" className="admin-stat-tile">
-          <span className="admin-stat-tile__icon"><Icon name="inbox" size={20} /></span>
-          <span className="admin-stat-tile__num">{unread}</span>
+          <span className="admin-stat-tile__icon admin-stat-tile__icon--inbox"><Icon name="inbox" size={20} fill={unread > 0} /></span>
+          <span className={`admin-stat-tile__num ${unread > 0 ? 'admin-stat-tile__num--alert' : ''}`}>{unread}</span>
           <span className="admin-stat-tile__label">Unread messages</span>
         </Link>
         <Link href="/admin/posts" className="admin-stat-tile">
-          <span className="admin-stat-tile__icon"><Icon name="article" size={20} /></span>
+          <span className="admin-stat-tile__icon admin-stat-tile__icon--posts"><Icon name="article" size={20} /></span>
           <span className="admin-stat-tile__num">{publishedPosts.length}</span>
           <span className="admin-stat-tile__label">Published posts</span>
         </Link>
         <Link href="/admin/work" className="admin-stat-tile">
-          <span className="admin-stat-tile__icon"><Icon name="grid_view" size={20} /></span>
+          <span className="admin-stat-tile__icon admin-stat-tile__icon--work"><Icon name="grid_view" size={20} /></span>
           <span className="admin-stat-tile__num">{publishedProjects.length}</span>
           <span className="admin-stat-tile__label">Live projects</span>
         </Link>
         <Link href="/admin/jobs" className="admin-stat-tile">
-          <span className="admin-stat-tile__icon"><Icon name="work" size={20} /></span>
+          <span className="admin-stat-tile__icon admin-stat-tile__icon--jobs"><Icon name="work" size={20} /></span>
           <span className="admin-stat-tile__num">{openJobs.length}</span>
           <span className="admin-stat-tile__label">Open jobs</span>
         </Link>
         <Link href="/admin/forms" className="admin-stat-tile">
-          <span className="admin-stat-tile__icon"><Icon name="dynamic_form" size={20} /></span>
+          <span className="admin-stat-tile__icon admin-stat-tile__icon--forms"><Icon name="dynamic_form" size={20} /></span>
           <span className="admin-stat-tile__num">{formsResponsesThisWeek}</span>
           <span className="admin-stat-tile__label">Responses this week</span>
         </Link>

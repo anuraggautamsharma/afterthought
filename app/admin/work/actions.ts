@@ -56,3 +56,13 @@ export async function seedProjectsAction(): Promise<{ error?: string; count?: nu
     return { error: e instanceof Error ? e.message : 'Import failed' }
   }
 }
+
+export async function bulkDeleteProjectsAction(ids: string[]) {
+  await Promise.all(ids.map(id => deleteProject(id).catch(() => {})))
+  revalidatePath('/admin/work'); revalidatePath('/work')
+}
+
+export async function bulkSetProjectStatusAction(ids: string[], status: 'published' | 'draft') {
+  await Promise.all(ids.map(id => updateProject(id, { status }).catch(() => {})))
+  revalidatePath('/admin/work'); revalidatePath('/work')
+}

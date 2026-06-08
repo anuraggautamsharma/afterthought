@@ -8,6 +8,7 @@ import { FORM_CATEGORY_LABELS } from '@/lib/forms'
 import { getFormCsvAction } from '@/app/admin/forms/actions'
 import { toast } from '@/lib/toastStore'
 import ResponsesTable from '@/components/admin/forms/ResponsesTable'
+import { SearchField } from '@/components/admin/list/ListControls'
 
 export interface InboxGroup {
   key: string // formId | 'legacy'
@@ -58,6 +59,15 @@ export default function InboxHub({
   selectedFields,
 }: Props) {
   const [exporting, setExporting] = useState(false)
+  const [query, setQuery] = useState('')
+
+  const visibleItems = (() => {
+    const q = query.trim().toLowerCase()
+    if (!q) return items
+    return items.filter(s =>
+      `${s.name ?? ''} ${s.email ?? ''} ${s.subject ?? ''}`.toLowerCase().includes(q)
+    )
+  })()
 
   // Build hrefs that preserve archived scope
   const href = (params: Record<string, string>) => {
@@ -160,7 +170,7 @@ export default function InboxHub({
           <div>
             <h1 className="admin-page-title">{title}</h1>
             <p className="admin-page-subtitle">
-              {items.length} {showArchived ? 'archived' : 'response'}{items.length !== 1 ? 's' : ''}
+              {visibleItems.length} {showArchived ? 'archived' : 'response'}{visibleItems.length !== 1 ? 's' : ''}
             </p>
           </div>
 
@@ -202,6 +212,12 @@ export default function InboxHub({
           )}
         </div>
 
+        {items.length > 0 && (
+          <div className="admin-inbox-main__search">
+            <SearchField value={query} onChange={setQuery} placeholder="Search these responses…" />
+          </div>
+        )}
+
         {items.length === 0 ? (
           <div className="admin-posts-table">
             <div className="admin-empty">
@@ -215,11 +231,17 @@ export default function InboxHub({
               </p>
             </div>
           </div>
+        ) : visibleItems.length === 0 ? (
+          <div className="admin-posts-table">
+            <div className="admin-empty">
+              <div className="admin-empty__title">No matches for “{query}”.</div>
+            </div>
+          </div>
         ) : viewMode === 'table' && isReal ? (
-          <ResponsesTable fields={selectedFields} responses={items} />
+          <ResponsesTable fields={selectedFields} responses={visibleItems} />
         ) : (
           <div className="admin-posts-table">
-            {items.map(s => (
+            {visibleItems.map(s => (
               <Link
                 key={s.id}
                 href={`/admin/inbox/${s.id}`}
