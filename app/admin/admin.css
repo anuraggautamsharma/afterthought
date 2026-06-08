@@ -1715,20 +1715,25 @@ details[open] > .admin-sidebar-card__summary { border-bottom: 1px solid #EDEAE3;
    SAVE BAR
 ───────────────────────────────────────────── */
 .admin-save-bar {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  height: 30px;
+  box-sizing: border-box;
+  padding: 0 12px;
+  border-radius: 8px;
   font-family: var(--font-mono);
   font-size: 11px;
-  letter-spacing: 0.4px;
-  padding: 5px 12px;
-  border-radius: 100px;
+  letter-spacing: 0.3px;
 }
 
-.admin-save-bar--dirty  { background: #FEF3C7; color: #92400E; }
-.admin-save-bar--saving { background: #F0EDE6; color: rgba(0,0,0,0.6); }
-.admin-save-bar--saved  { background: #E6F6EE; color: #1A7A46; }
-.admin-save-bar--error  { background: #FEF0EF; color: #C0392B; }
+.admin-save-bar--dirty  { background: #FBF1D6; color: #8A5A12; }
+.admin-save-bar--saving { background: #F0EDE6; color: rgba(0,0,0,0.55); }
+.admin-save-bar--saved  { background: #E9F5EE; color: #1A7A46; }
+.admin-save-bar--error  { background: #FCEBEA; color: #C0392B; max-width: 340px; }
+.admin-save-bar--error > span { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
 
 .admin-save-bar__spinner {
   width: 12px;
