@@ -1964,7 +1964,7 @@ details[open] > .admin-sidebar-card__summary { border-bottom: 1px solid #EDEAE3;
 }
 
 /* ═══ FORM BUILDER ═══ */
-.admin-form-builder { display: grid; grid-template-columns: 240px 1fr 320px; height: calc(100vh - 56px); overflow: hidden; }
+/* (Outer layout defined once below, in the layout-fix section.) */
 
 /* Palette */
 .admin-fb-palette { border-right: 1px solid var(--c-border); overflow-y: auto; background: var(--c-surface); }
@@ -2171,11 +2171,16 @@ details[open] > .admin-sidebar-card__summary { border-bottom: 1px solid #EDEAE3;
 }
 
 /* ── Form builder layout fix ─────────────────────── */
+/* Viewport-anchored height (100vh minus the 56px CMS topbar) so the builder
+   fills exactly the visible area regardless of how parent heights resolve.
+   The inner 52px row is the builder's own topbar; the 1fr row holds the
+   three scroll panels. */
 .admin-form-builder {
   display: grid;
   grid-template-rows: 52px 1fr;
   grid-template-columns: 1fr;
-  height: 100%;
+  height: calc(100vh - 56px);
+  min-height: 0;
   overflow: hidden;
 }
 
