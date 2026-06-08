@@ -502,6 +502,7 @@ export default function FormBuilder({ initial }: Props) {
           <div className="admin-fb-settings">
             {selectedField ? (
               <FieldSettingsPanel
+                key={selectedField.id}
                 field={selectedField}
                 allFields={fields}
                 onUpdate={patch => handleUpdateField(selectedField.id, patch)}
