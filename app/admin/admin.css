@@ -3384,3 +3384,21 @@ details[open] > .admin-sidebar-card__summary { border-bottom: 1px solid #EDEAE3;
 .admin-fb-settings-panel .admin-field > textarea:focus {
   border-color: #1A1916; background: #fff; box-shadow: 0 0 0 3px rgba(26,25,22,.07);
 }
+
+/* ═══════════════════════════════════════════════════
+   USERS / ACCESS
+═══════════════════════════════════════════════════ */
+.admin-user-row { display: flex; align-items: center; gap: 14px; padding: 14px 24px; border-bottom: 1px solid #F0EDE6; }
+.admin-user-row:last-child { border-bottom: none; }
+.admin-user-row__avatar { width: 36px; height: 36px; border-radius: 50%; background: #1A1916; color: #fff; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-variation-settings: 'wght' 600; font-weight: 600; flex-shrink: 0; }
+.admin-user-row__avatar--owner { background: #8A5A12; }
+.admin-user-row__id { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
+.admin-user-row__name { font-size: 14px; font-variation-settings: 'wght' 500; font-weight: 500; color: #1A1916; }
+.admin-user-row__email { font-size: 12px; color: rgba(0,0,0,.45); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.admin-user-row__actions { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+.admin-user-row__hint { font-size: 11px; color: rgba(0,0,0,.32); font-family: var(--font-mono); }
+
+.admin-tag-chip--admin  { background: #E7EAF7; color: #3A3F8F; }
+.admin-tag-chip--editor { background: #EAF1E6; color: #2F5E32; }
+
+.admin-sidebar__link[data-section="users"].is-active { border-left-color: #14B8A6; }

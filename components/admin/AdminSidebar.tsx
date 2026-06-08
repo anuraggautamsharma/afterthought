@@ -15,6 +15,7 @@ function getActiveSection(pathname: string): string {
   if (pathname.startsWith('/admin/services')) return 'services'
   if (pathname.startsWith('/admin/jobs')) return 'jobs'
   if (pathname.startsWith('/admin/team')) return 'team'
+  if (pathname.startsWith('/admin/users')) return 'users'
   if (pathname.startsWith('/admin/settings')) return 'settings'
   return ''
 }
@@ -155,6 +156,17 @@ export default function AdminSidebar({ unread = 0 }: { unread?: number }) {
             <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
           </svg>
           Team
+        </Link>
+        <Link
+          href="/admin/users"
+          data-section="users"
+          className={`admin-sidebar__link ${pathname.startsWith('/admin/users') ? 'is-active' : ''}`}
+        >
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            <path d="M9 12l2 2 4-4"/>
+          </svg>
+          Users
         </Link>
         <Link
           href="/admin/settings"

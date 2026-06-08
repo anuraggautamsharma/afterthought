@@ -25,6 +25,7 @@ const NAV: Item[] = [
   { key: 'nav-services', icon: 'design_services', label: 'Services', href: '/admin/services', group: 'Go to' },
   { key: 'nav-jobs', icon: 'work', label: 'Jobs', href: '/admin/jobs', group: 'Go to' },
   { key: 'nav-team', icon: 'group', label: 'Team', href: '/admin/team', group: 'Go to' },
+  { key: 'nav-users', icon: 'manage_accounts', label: 'Users', href: '/admin/users', group: 'Go to' },
   { key: 'nav-settings', icon: 'settings', label: 'Settings', href: '/admin/settings', group: 'Go to' },
 ]
 
