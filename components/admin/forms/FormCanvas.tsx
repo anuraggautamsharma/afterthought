@@ -20,6 +20,7 @@ interface Props {
   onMoveSection: (sectionId: string, direction: 'up' | 'down') => void
   onFormTitleChange: (title: string) => void
   onFormDescChange: (description: string) => void
+  onAddSection: () => void
 }
 
 export default function FormCanvas({
@@ -36,6 +37,7 @@ export default function FormCanvas({
   onMoveSection,
   onFormTitleChange,
   onFormDescChange,
+  onAddSection,
 }: Props) {
   const { setNodeRef: setDropRef, isOver } = useDroppable({ id: 'canvas' })
   const titleRef = useRef<HTMLHeadingElement>(null)
@@ -130,6 +132,12 @@ export default function FormCanvas({
           </div>
         )}
       </div>
+
+      {/* Section-level action lives in the canvas flow, below the form sheet */}
+      <button type="button" className="admin-fb-add-section" onClick={onAddSection}>
+        <span className="admin-fb-add-section__plus">+</span>
+        Add section
+      </button>
     </div>
   )
 }

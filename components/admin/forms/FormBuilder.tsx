@@ -488,13 +488,6 @@ export default function FormBuilder({ initial }: Props) {
               {form.status === 'published' ? 'Unpublish' : 'Publish'}
             </button>
             <ShareFormButton formId={form.id} slug={form.slug} status={form.status} />
-            <button
-              type="button"
-              className="admin-btn-secondary"
-              onClick={handleAddSection}
-            >
-              + Add section
-            </button>
           </div>
         </div>
 
@@ -519,6 +512,7 @@ export default function FormBuilder({ initial }: Props) {
             onMoveSection={handleMoveSection}
             onFormTitleChange={handleFormTitleChange}
             onFormDescChange={handleFormDescChange}
+            onAddSection={handleAddSection}
           />
 
           {/* Right: Settings */}
