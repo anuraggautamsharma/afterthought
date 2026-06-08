@@ -48,11 +48,12 @@ export default function FormBuilder({ initial }: Props) {
   const [sections, setSections] = useState<FormSection[]>(initial.sections)
   const [fields, setFields] = useState<FormField[]>(initial.fields)
   const [selectedFieldId, setSelectedFieldId] = useState<string | null>(null)
-  const [saveState, setSaveState] = useState<SaveState>('idle')
+  const [saveState, setSaveState] = useState<SaveState>('saved')
   const [savedAt, setSavedAt] = useState<Date | null>(null)
   const [errorMsg, setErrorMsg] = useState('')
   const [isDirty, setIsDirty] = useState(false)
   const [activeDragType, setActiveDragType] = useState<FieldType | null>(null)
+  const [activeFieldId, setActiveFieldId] = useState<string | null>(null)
 
   const formRef = useRef(form)
   const sectionsRef = useRef(sections)
@@ -69,6 +70,11 @@ export default function FormBuilder({ initial }: Props) {
     setIsDirty(true)
     setSaveState('dirty')
   }, [])
+
+  // Save-status helpers for immediate (field/section) persistence
+  const markSaving = useCallback(() => setSaveState('saving'), [])
+  const markSaved = useCallback(() => { setSaveState('saved'); setSavedAt(new Date()) }, [])
+  const markError = useCallback((msg: string) => { setSaveState('error'); setErrorMsg(msg) }, [])
 
   // ── Auto-save: 2s debounce ────────────────────────────────────────────────
   const save = useCallback(async () => {
@@ -163,12 +169,15 @@ export default function FormBuilder({ initial }: Props) {
 
   const handleUpdateSection = useCallback(async (sectionId: string, patch: Partial<FormSection>) => {
     setSections(prev => prev.map(s => s.id === sectionId ? { ...s, ...patch } : s))
+    markSaving()
     try {
       await updateSectionAction(sectionId, form.id, patch)
+      markSaved()
     } catch {
+      markError('Failed to save section')
       toast.error('Failed to update section')
     }
-  }, [form.id])
+  }, [form.id, markSaving, markSaved, markError])
 
   const handleDeleteSection = useCallback(async (sectionId: string) => {
     const sectionFields = fieldsRef.current.filter(f => f.section_id === sectionId)
@@ -255,6 +264,7 @@ export default function FormBuilder({ initial }: Props) {
 
     setFields(prev => [...prev, optimistic])
     setSelectedFieldId(tempId)
+    markSaving()
 
     try {
       const created = await createFieldAction({
@@ -266,12 +276,14 @@ export default function FormBuilder({ initial }: Props) {
       })
       setFields(prev => prev.map(f => f.id === tempId ? created : f))
       setSelectedFieldId(created.id)
+      markSaved()
     } catch {
       setFields(prev => prev.filter(f => f.id !== tempId))
       setSelectedFieldId(null)
+      markError('Failed to add field')
       toast.error('Failed to add field')
     }
-  }, [form.id])
+  }, [form.id, markSaving, markSaved, markError])
 
   const handlePaletteAdd = useCallback((type: FieldType) => {
     const sectionId = getActiveSectionId()
@@ -281,12 +293,15 @@ export default function FormBuilder({ initial }: Props) {
 
   const handleUpdateField = useCallback(async (fieldId: string, patch: Partial<FormField>) => {
     setFields(prev => prev.map(f => f.id === fieldId ? { ...f, ...patch } : f))
+    markSaving()
     try {
       await updateFieldAction(fieldId, form.id, patch)
+      markSaved()
     } catch {
+      markError('Failed to save field')
       toast.error('Failed to update field')
     }
-  }, [form.id])
+  }, [form.id, markSaving, markSaved, markError])
 
   const handleDeleteField = useCallback(async (fieldId: string) => {
     const confirmed = await openConfirm({
@@ -299,13 +314,16 @@ export default function FormBuilder({ initial }: Props) {
 
     setFields(prev => prev.filter(f => f.id !== fieldId))
     if (selectedFieldId === fieldId) setSelectedFieldId(null)
+    markSaving()
 
     try {
       await deleteFieldAction(fieldId, form.id)
+      markSaved()
     } catch {
+      markError('Failed to delete field')
       toast.error('Failed to delete field')
     }
-  }, [form.id, selectedFieldId])
+  }, [form.id, selectedFieldId, markSaving, markSaved, markError])
 
   const handleFieldLabelChange = useCallback((fieldId: string, label: string) => {
     handleUpdateField(fieldId, { label })
@@ -316,11 +334,14 @@ export default function FormBuilder({ initial }: Props) {
     const data = event.active.data.current
     if (data?.fieldType) {
       setActiveDragType(data.fieldType as FieldType)
+    } else {
+      setActiveFieldId(String(event.active.id))
     }
   }, [])
 
   const handleDragEnd = useCallback((event: DragEndEvent) => {
     setActiveDragType(null)
+    setActiveFieldId(null)
     const { active, over } = event
 
     // Palette drag -> canvas drop
@@ -373,12 +394,14 @@ export default function FormBuilder({ initial }: Props) {
     const movedIdx = sectionFields.findIndex(f => f.id === movedField.id)
     const targetIdx = sectionFields.findIndex(f => f.id === targetField.id)
     const reordered = arrayMove(sectionFields, movedIdx, targetIdx)
+    markSaving()
     reorderFieldsAction(
       reordered.map((f, i) => ({ id: f.id, sort_order: i, section_id: sectionId }))
-    ).catch(() => toast.error('Failed to reorder fields'))
-  }, [fields, getActiveSectionId, handleAddField])
+    ).then(markSaved).catch(() => { markError('Failed to reorder'); toast.error('Failed to reorder fields') })
+  }, [fields, getActiveSectionId, handleAddField, markSaving, markSaved, markError])
 
   const selectedField = fields.find(f => f.id === selectedFieldId) ?? null
+  const dragField = activeFieldId ? (fields.find(f => f.id === activeFieldId) ?? null) : null
 
   const sortedSections = [...sections].sort((a, b) => a.sort_order - b.sort_order)
 
@@ -480,13 +503,24 @@ export default function FormBuilder({ initial }: Props) {
       </div>
 
       {/* Drag overlay */}
-      <DragOverlay>
-        {activeDragType && (
+      <DragOverlay dropAnimation={{ duration: 180, easing: 'cubic-bezier(0.18,0.67,0.6,1.22)' }}>
+        {activeDragType ? (
           <div className="admin-palette-item admin-palette-item--overlay">
             <span className="admin-palette-item__icon">{FIELD_TYPE_ICONS[activeDragType]}</span>
             <span className="admin-palette-item__label">{FIELD_TYPE_LABELS[activeDragType]}</span>
           </div>
-        )}
+        ) : dragField ? (
+          <div className="admin-field-card admin-field-card--overlay">
+            <span className="admin-field-card__drag-handle">⠿</span>
+            <span className="admin-field-card__icon" aria-hidden="true">{FIELD_TYPE_ICONS[dragField.type]}</span>
+            <div className="admin-field-card__content">
+              <span className="admin-field-card__label">{dragField.label || 'Untitled field'}</span>
+              <div className="admin-field-card__meta">
+                <span className="admin-field-card__type-badge">{FIELD_TYPE_LABELS[dragField.type]}</span>
+              </div>
+            </div>
+          </div>
+        ) : null}
       </DragOverlay>
     </DndContext>
   )

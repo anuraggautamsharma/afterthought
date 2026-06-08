@@ -2226,22 +2226,26 @@ details[open] > .admin-sidebar-card__summary { border-bottom: 1px solid #EDEAE3;
 
 /* ── Field card — alias missing class names ──────── */
 .admin-field-card__drag-handle {
-  color: rgba(0,0,0,.25);
+  color: rgba(0,0,0,.28);
   cursor: grab;
-  font-size: 14px;
+  font-size: 15px;
   flex-shrink: 0;
   background: none;
   border: none;
   padding: 0;
-  width: 18px;
-  height: 18px;
+  width: 26px;
+  height: 28px;
   display: flex;
   align-items: center;
   justify-content: center;
   line-height: 1;
-  margin-top: 2px;
+  border-radius: 6px;
+  transition: background .12s, color .12s;
+  touch-action: none;
 }
-.admin-field-card__drag-handle:active { cursor: grabbing; }
+.admin-field-card__drag-handle:hover { background: #F0EDE6; color: rgba(0,0,0,.6); }
+.admin-field-card__drag-handle:active { cursor: grabbing; background: #E8E4DC; }
+.admin-field-card:hover .admin-field-card__drag-handle { color: rgba(0,0,0,.5); }
 
 .admin-field-card__content { flex: 1; min-width: 0; }
 
@@ -2292,7 +2296,29 @@ details[open] > .admin-sidebar-card__summary { border-bottom: 1px solid #EDEAE3;
 }
 .admin-field-card__delete:hover { background: #FEE2E2; color: #DC2626; }
 
-.admin-field-card--dragging { opacity: .35; }
+/* Original card while its copy is lifted — show a clean drop slot */
+.admin-field-card--dragging {
+  opacity: .5;
+  background: #F4F2EE;
+  border: 1.5px dashed #C8C4BC !important;
+  box-shadow: none !important;
+}
+.admin-field-card--dragging * { visibility: hidden; }
+
+/* Lifted copy following the cursor */
+.admin-field-card--overlay {
+  background: #fff;
+  border: 1.5px solid #1A1916;
+  border-radius: 8px;
+  box-shadow: 0 12px 28px rgba(0,0,0,.18);
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 12px;
+  cursor: grabbing;
+  width: 100%;
+}
+.admin-field-card--overlay .admin-field-card__drag-handle { color: rgba(0,0,0,.5); }
 
 /* ── Section block — fix overrides + add missing ─── */
 .admin-section-block__header {
