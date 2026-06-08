@@ -175,6 +175,11 @@
 .admin-sidebar { transition: width 0.2s ease; }
 
 @media (min-width: 769px) {
+  /* On desktop, View site / Sign out already live in the header account
+     menu — so the sidebar only keeps the Collapse control here. (They stay
+     in the mobile drawer, which has no header menu.) */
+  .admin-sidebar__footer-link { display: none; }
+
   .admin-sidebar--collapsed { width: 68px; }
   .admin-sidebar--collapsed .admin-sidebar__brand {
     justify-content: center;
