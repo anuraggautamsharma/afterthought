@@ -7,6 +7,7 @@ import {
   createSection, updateSection, deleteSection,
   createField, updateField, deleteField, reorderFields,
   createFullForm, getFormBySiteRole, getFormById, duplicateForm,
+  formatAnswerForDisplay,
   type FormInput, type FieldInput, type SectionInput, type FormField,
   defaultFieldProps,
 } from '@/lib/forms'
@@ -209,17 +210,17 @@ export async function getFormCsvAction(formId: string): Promise<string> {
 
   if (!fields || !submissions) return ''
 
-  const headers = ['Submitted at', 'Name', 'Email', ...fields.map((f: { label: string }) => f.label)]
+  const headers = ['Submitted at', 'Name', 'Email', ...fields.map((f: FormField) => f.label)]
   const rows = submissions.map((s: { created_at: string; name: string; email: string; responses: Record<string, unknown> }) => {
     const responses = s.responses ?? {}
     return [
       new Date(s.created_at).toISOString(),
       s.name ?? '',
       s.email ?? '',
-      ...fields.map((f: { id: string }) => {
-        const val = responses[f.id]
-        if (Array.isArray(val)) return val.join(', ')
-        return String(val ?? '')
+      // Map choice values → labels and files → names for readable export.
+      ...fields.map((f: FormField) => {
+        const display = formatAnswerForDisplay(f, responses[f.id])
+        return display === '—' ? '' : display
       }),
     ]
   })

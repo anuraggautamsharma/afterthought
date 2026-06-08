@@ -3,7 +3,7 @@
 import { useEffect, useTransition } from 'react'
 import Link from 'next/link'
 import type { Submission } from '@/lib/submissions'
-import { type Form, type FormField, type FormCategory, FORM_CATEGORY_LABELS, FIELD_TYPE_ICON_NAMES } from '@/lib/forms'
+import { type Form, type FormField, type FormCategory, FORM_CATEGORY_LABELS, FIELD_TYPE_ICON_NAMES, formatAnswerForDisplay, asStoredFiles } from '@/lib/forms'
 import Icon from '@/components/Icon'
 import { markReadAction, archiveAction, deleteSubmissionAction } from '@/app/admin/inbox/actions'
 
@@ -110,9 +110,24 @@ export default function InboxDetail({
                   {f.label}
                 </span>
                 <span className="admin-inbox-detail__field-value">
-                  {isLink(answers[f.id])
-                    ? <a href={String(answers[f.id])} target="_blank" rel="noopener noreferrer">{String(answers[f.id])} ↗</a>
-                    : fmtValue(answers[f.id])}
+                  {f.type === 'file_upload' ? (
+                    (() => {
+                      const files = asStoredFiles(answers[f.id])
+                      if (files.length === 0) return '—'
+                      return files.map((file, i) => (
+                        <span key={i}>
+                          {i > 0 && ', '}
+                          {file.url
+                            ? <a href={file.url} target="_blank" rel="noopener noreferrer">{file.name} ↗</a>
+                            : <span title="File was attached on the form but not stored — file uploads aren’t saved yet">{file.name} <span style={{ opacity: 0.5 }}>(not stored)</span></span>}
+                        </span>
+                      ))
+                    })()
+                  ) : isLink(answers[f.id]) ? (
+                    <a href={String(answers[f.id])} target="_blank" rel="noopener noreferrer">{String(answers[f.id])} ↗</a>
+                  ) : (
+                    formatAnswerForDisplay(f, answers[f.id])
+                  )}
                 </span>
               </div>
             ))}

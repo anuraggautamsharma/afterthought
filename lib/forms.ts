@@ -229,6 +229,42 @@ export type FieldInput = Partial<Omit<FormField, 'id' | 'created_at' | 'updated_
   & { type: FieldType; label: string; form_id: string }
 export type SectionInput = Partial<Omit<FormSection, 'id' | 'created_at'>> & { form_id: string }
 
+// ── Display helpers: turn stored answers into human-readable text ─────────────
+
+/** Maps a stored option value (e.g. "option_1") back to its label ("Morning"). */
+export function labelForOptionValue(field: FormField, value: string): string {
+  const opt = (field.options ?? []).find(o => o.value === value)
+  return opt ? opt.label : value
+}
+
+const CHOICE_TYPES: FieldType[] = ['radio', 'dropdown', 'checkboxes', 'image_choice', 'ranking']
+
+/** A file the file_upload field stored. `url` exists only once uploads are
+ *  persisted to storage. */
+export interface StoredFile { name: string; size?: number; type?: string; url?: string }
+
+export function asStoredFiles(raw: unknown): StoredFile[] {
+  const arr = Array.isArray(raw) ? raw : raw ? [raw] : []
+  return arr.filter(f => f && typeof f === 'object') as StoredFile[]
+}
+
+/** Renders a raw stored answer as display text: choice values become their
+ *  labels, file entries become their filenames, everything else stringifies. */
+export function formatAnswerForDisplay(field: FormField, raw: unknown): string {
+  if (raw === null || raw === undefined || raw === '') return '—'
+  if (CHOICE_TYPES.includes(field.type)) {
+    if (Array.isArray(raw)) return raw.map(v => labelForOptionValue(field, String(v))).join(', ') || '—'
+    return labelForOptionValue(field, String(raw))
+  }
+  if (field.type === 'file_upload') {
+    const files = asStoredFiles(raw)
+    return files.map(f => f.name).filter(Boolean).join(', ') || '—'
+  }
+  if (Array.isArray(raw)) return raw.join(', ') || '—'
+  if (typeof raw === 'object') return JSON.stringify(raw)
+  return String(raw)
+}
+
 // ── Default field values by type ─────────────────────────────────────────────
 
 export function defaultFieldProps(type: FieldType): Partial<FormField> {
