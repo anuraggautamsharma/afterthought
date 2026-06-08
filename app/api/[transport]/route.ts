@@ -4,11 +4,18 @@ import { jwtVerify, createRemoteJWKSet, decodeProtectedHeader, decodeJwt } from 
 import { z } from 'zod'
 import { revalidatePath } from 'next/cache'
 import { COLLECTIONS, getCollection } from '@/lib/mcp/registry'
-import { getSubmissions, getSubmissionById, type Submission } from '@/lib/submissions'
 import {
-  getAllForms, getFields, formatAnswerForDisplay, asStoredFiles,
-  FORM_CATEGORY_LABELS, type FormCategory, type Form, createFullForm,
+  getSubmissions, getSubmissionById, setSubmissionRead, setSubmissionArchived,
+  deleteSubmission, type Submission,
+} from '@/lib/submissions'
+import {
+  getAllForms, getFields, getSections, createSection, createField, updateField,
+  deleteField, defaultFieldProps, formatAnswerForDisplay, asStoredFiles,
+  collectStoredFilePaths, createFullForm, duplicateForm,
+  FORM_CATEGORY_LABELS, type FormCategory, type Form, type FieldType,
+  type FieldOption, type SeedFieldSpec,
 } from '@/lib/forms'
+import { deleteFormFiles } from '@/lib/storage'
 import { getAllJobs, getJobById, createJob, updateJob } from '@/lib/jobs'
 import { applicationFormSpec } from '@/lib/forms-seed'
 import { slugify } from '@/lib/slugify'
@@ -240,14 +247,225 @@ const handler = createMcpHandler(
 
     server.tool(
       'update_record',
-      'Update fields on a record in a collection. e.g. publish a post with data {"status":"published"}.',
+      'Update fields on a record in a collection. e.g. publish a post with data {"status":"published"}, or a form with {"status":"published"}.',
       { collection: z.string(), id: z.string(), data: z.record(z.any()) },
       async ({ collection, id, data }) => {
         const c = getCollection(collection)
         if (!c?.update) return text({ error: `Collection "${collection}" can't be updated via MCP.` })
         const rec = await c.update(id, data as Record<string, unknown>)
-        touch('/', '/careers', '/thinking')
+        touch('/', '/careers', '/thinking', '/services', '/work')
         return text({ ok: true, record: rec })
+      },
+    )
+
+    server.tool(
+      'delete_record',
+      'Permanently delete a record from a collection (posts, jobs, forms, work, services, team). This cannot be undone.',
+      { collection: z.string(), id: z.string() },
+      async ({ collection, id }) => {
+        const c = getCollection(collection)
+        if (!c?.remove) return text({ error: `Collection "${collection}" can't be deleted via MCP.` })
+        await c.remove(id)
+        touch('/', '/careers', '/thinking', '/services', '/work')
+        return text({ ok: true, deleted: id })
+      },
+    )
+
+    // ── Posts (rich content from plain text) ─────────────────────────────────
+    server.tool(
+      'create_post',
+      'Create a blog post. `body` is plain text — separate paragraphs with blank lines. status "published" makes it live; default "draft".',
+      {
+        title: z.string(),
+        body: z.string().describe('Plain-text body; blank lines separate paragraphs'),
+        excerpt: z.string().optional(),
+        category: z.string().optional(),
+        status: z.enum(['draft', 'published']).optional(),
+      },
+      async (a) => {
+        const c = getCollection('posts')!
+        const paras = a.body.split(/\n\n+/).map(p => p.trim()).filter(Boolean)
+        const content = { type: 'doc', content: paras.map(p => ({ type: 'paragraph', content: [{ type: 'text', text: p }] })) }
+        const post = await c.create!({
+          title: a.title, slug: slugify(a.title), excerpt: a.excerpt ?? '',
+          content, category: a.category ?? 'General', status: a.status ?? 'draft',
+          published_at: a.status === 'published' ? new Date().toISOString() : null,
+        }) as { id: string; slug: string }
+        touch('/thinking', '/admin/posts')
+        return text({ ok: true, id: post.id, slug: post.slug, public_url: `${SITE}/thinking/${post.slug}`, admin_url: `${SITE}/admin/posts/${post.id}` })
+      },
+    )
+
+    // ── Form building ────────────────────────────────────────────────────────
+    const toOptions = (opts?: string[]): FieldOption[] => (opts ?? []).map(label => ({ label, value: label }))
+    async function firstSectionId(formId: string): Promise<string> {
+      const secs = await getSections(formId)
+      if (secs.length) return [...secs].sort((a, b) => a.sort_order - b.sort_order)[0].id
+      const s = await createSection({ form_id: formId, title: '', description: '', sort_order: 0, skip_logic: [] })
+      return s.id
+    }
+
+    server.tool(
+      'create_form',
+      'Create a builder form with fields in one call. Each field: { type, label, required?, options? }. Field types: short_text, paragraph, number, email, phone, url, radio, checkboxes, dropdown, linear_scale, star_rating, date, time, datetime, date_range, file_upload. `options` (array of strings) is for choice types. status "published" makes it live.',
+      {
+        title: z.string(),
+        description: z.string().optional(),
+        category: z.enum(['contact', 'application', 'freelance', 'newsletter', 'survey', 'event', 'general']).optional(),
+        status: z.enum(['draft', 'published']).optional(),
+        fields: z.array(z.object({
+          type: z.string(),
+          label: z.string(),
+          required: z.boolean().optional(),
+          options: z.array(z.string()).optional(),
+        })),
+      },
+      async (a) => {
+        const spec: SeedFieldSpec[] = a.fields.map(f => ({
+          type: f.type as FieldType,
+          label: f.label,
+          required: f.required ?? false,
+          options: toOptions(f.options),
+        }))
+        const form = await createFullForm({
+          title: a.title,
+          description: a.description ?? '',
+          category: (a.category ?? 'general') as FormCategory,
+          status: a.status ?? 'draft',
+          fields: spec,
+        })
+        touch('/admin/forms')
+        return text({ ok: true, id: form.id, slug: form.slug, status: form.status, edit_url: `${SITE}/admin/forms/${form.id}/edit`, public_url: `${SITE}/forms/${form.slug}` })
+      },
+    )
+
+    server.tool(
+      'add_field',
+      'Add a field to an existing form. `options` (strings) for choice types.',
+      {
+        form_id: z.string(),
+        type: z.string(),
+        label: z.string(),
+        required: z.boolean().optional(),
+        placeholder: z.string().optional(),
+        description: z.string().optional(),
+        options: z.array(z.string()).optional(),
+      },
+      async (a) => {
+        const sectionId = await firstSectionId(a.form_id)
+        const existing = await getFields(a.form_id)
+        const defaults = defaultFieldProps(a.type as FieldType)
+        const field = await createField({
+          ...defaults,
+          form_id: a.form_id,
+          section_id: sectionId,
+          type: a.type as FieldType,
+          label: a.label,
+          required: a.required ?? false,
+          placeholder: a.placeholder ?? defaults.placeholder ?? '',
+          description: a.description ?? '',
+          options: toOptions(a.options).length ? toOptions(a.options) : (defaults.options ?? []),
+          sort_order: existing.length,
+        })
+        touch(`/admin/forms/${a.form_id}/edit`)
+        return text({ ok: true, field_id: field.id })
+      },
+    )
+
+    server.tool(
+      'update_field',
+      'Edit a form field (label, required, options, placeholder, description).',
+      {
+        id: z.string(),
+        form_id: z.string(),
+        label: z.string().optional(),
+        required: z.boolean().optional(),
+        placeholder: z.string().optional(),
+        description: z.string().optional(),
+        options: z.array(z.string()).optional(),
+      },
+      async ({ id, form_id, options, ...rest }) => {
+        const patch: Record<string, unknown> = Object.fromEntries(Object.entries(rest).filter(([, v]) => v !== undefined))
+        if (options) patch.options = toOptions(options)
+        await updateField(id, patch)
+        touch(`/admin/forms/${form_id}/edit`)
+        return text({ ok: true })
+      },
+    )
+
+    server.tool(
+      'delete_field',
+      'Delete a field from a form.',
+      { id: z.string(), form_id: z.string() },
+      async ({ id, form_id }) => {
+        await deleteField(id)
+        touch(`/admin/forms/${form_id}/edit`)
+        return text({ ok: true })
+      },
+    )
+
+    server.tool(
+      'duplicate_form',
+      'Duplicate a form (deep copy of its fields) as a new draft.',
+      { form_id: z.string() },
+      async ({ form_id }) => {
+        const copy = await duplicateForm(form_id)
+        touch('/admin/forms')
+        return text({ ok: true, id: copy.id, slug: copy.slug, edit_url: `${SITE}/admin/forms/${copy.id}/edit` })
+      },
+    )
+
+    // ── Responses / submissions actions ──────────────────────────────────────
+    server.tool(
+      'mark_response_read',
+      'Mark a form response as read or unread.',
+      { id: z.string(), read: z.boolean().optional() },
+      async ({ id, read }) => { await setSubmissionRead(id, read ?? true); touch('/admin/inbox'); return text({ ok: true }) },
+    )
+
+    server.tool(
+      'archive_response',
+      'Archive (or restore) a form response.',
+      { id: z.string(), archived: z.boolean().optional() },
+      async ({ id, archived }) => { await setSubmissionArchived(id, archived ?? true); touch('/admin/inbox'); return text({ ok: true }) },
+    )
+
+    server.tool(
+      'delete_response',
+      'Permanently delete a form response and its uploaded files. Cannot be undone.',
+      { id: z.string() },
+      async ({ id }) => {
+        const sub = await getSubmissionById(id).catch(() => null)
+        if (sub) {
+          const paths = collectStoredFilePaths(sub.responses as Record<string, unknown>)
+          if (paths.length) await deleteFormFiles(paths).catch(() => {})
+        }
+        await deleteSubmission(id)
+        touch('/admin/inbox')
+        return text({ ok: true, deleted: id })
+      },
+    )
+
+    server.tool(
+      'export_responses_csv',
+      'Return all responses for a form as CSV text (choice values resolved to labels, files as names).',
+      { form_id: z.string() },
+      async ({ form_id }) => {
+        const [fields, subs] = await Promise.all([
+          getFields(form_id).catch(() => []),
+          getSubmissions({}).then(all => all.filter(s => s.form_id === form_id)),
+        ])
+        const esc = (v: string) => `"${String(v).replace(/"/g, '""')}"`
+        const headers = ['Submitted at', 'Name', 'Email', ...fields.map(f => f.label)]
+        const rows = subs.map(s => {
+          const r = (s.responses ?? {}) as Record<string, unknown>
+          return [
+            new Date(s.created_at).toISOString(), s.name ?? '', s.email ?? '',
+            ...fields.map(f => { const v = formatAnswerForDisplay(f, r[f.id]); return v === '—' ? '' : v }),
+          ]
+        })
+        const csv = [headers, ...rows].map(row => row.map(esc).join(',')).join('\n')
+        return text(csv)
       },
     )
   },
