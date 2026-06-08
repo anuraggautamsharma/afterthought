@@ -1,5 +1,6 @@
 import { createMcpHandler, withMcpAuth } from 'mcp-handler'
 import type { AuthInfo } from '@modelcontextprotocol/sdk/server/auth/types.js'
+import { jwtVerify, createRemoteJWKSet } from 'jose'
 import { z } from 'zod'
 import { COLLECTIONS, getCollection } from '@/lib/mcp/registry'
 import { getSubmissions, getSubmissionById, type Submission } from '@/lib/submissions'
@@ -145,11 +146,55 @@ const handler = createMcpHandler(
   },
 )
 
-// ── Auth: bearer token (fail-closed if MCP_BEARER_TOKEN is unset) ─────────────
+// ── Auth ──────────────────────────────────────────────────────────────────────
+// Two ways to authenticate:
+//  1. WorkOS AuthKit login (OAuth) — used by claude.ai web/mobile connectors.
+//  2. A static bearer token (MCP_BEARER_TOKEN) — handy for tools like the MCP
+//     Inspector. Optional; if unset, only the WorkOS path works.
+
+// Discover AuthKit's JWKS once (cached) so we can verify login tokens.
+let _jwks: ReturnType<typeof createRemoteJWKSet> | null = null
+async function getJwks(): Promise<ReturnType<typeof createRemoteJWKSet>> {
+  if (_jwks) return _jwks
+  const domain = (process.env.WORKOS_AUTHKIT_DOMAIN || '').replace(/\/+$/, '')
+  let jwksUri = `${domain}/oauth2/jwks`
+  try {
+    for (const p of ['/.well-known/oauth-authorization-server', '/.well-known/openid-configuration']) {
+      const r = await fetch(domain + p)
+      if (r.ok) {
+        const m = await r.json()
+        if (m?.jwks_uri) { jwksUri = m.jwks_uri; break }
+      }
+    }
+  } catch {
+    // fall back to the conventional jwks path
+  }
+  _jwks = createRemoteJWKSet(new URL(jwksUri))
+  return _jwks
+}
+
 const verifyToken = async (_req: Request, bearer?: string): Promise<AuthInfo | undefined> => {
+  if (!bearer) return undefined
+
+  // Dev/testing bearer token.
   const secret = process.env.MCP_BEARER_TOKEN
-  if (!secret || !bearer || bearer !== secret) return undefined
-  return { token: bearer, clientId: 'afterthought-owner', scopes: ['cms:read'] }
+  if (secret && bearer === secret) {
+    return { token: bearer, clientId: 'afterthought-owner', scopes: ['cms:read'] }
+  }
+
+  // WorkOS AuthKit access token (JWT) — verify signature + expiry.
+  try {
+    const jwks = await getJwks()
+    const { payload } = await jwtVerify(bearer, jwks)
+    return {
+      token: bearer,
+      clientId: String(payload.azp ?? payload.client_id ?? payload.sub ?? 'workos'),
+      scopes: ['cms:read'],
+      extra: { sub: String(payload.sub ?? '') },
+    }
+  } catch {
+    return undefined
+  }
 }
 
 const authed = withMcpAuth(handler, verifyToken, { required: true })
