@@ -3100,3 +3100,42 @@ details[open] > .admin-sidebar-card__summary { border-bottom: 1px solid #EDEAE3;
 .admin-cmdk__item.is-active .admin-cmdk__item-enter { opacity: .7; }
 .admin-cmdk__footer { display: flex; gap: 16px; padding: 10px 16px; border-top: 1px solid #EDEAE3; font-size: 11px; color: rgba(0,0,0,.4); }
 .admin-cmdk__footer kbd { font-family: var(--font-mono); font-size: 10px; padding: 2px 5px; background: #F5F4F0; border: 1px solid #E5E3DC; border-radius: 4px; margin-right: 3px; color: rgba(0,0,0,.5); }
+
+/* ═══════════════════════════════════════════════════
+   LIST TOOLBAR · SEARCH · SORT · BULK · CHECKBOX
+═══════════════════════════════════════════════════ */
+.admin-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 16px; flex-wrap: wrap; }
+.admin-toolbar__right { display: flex; align-items: center; gap: 10px; }
+
+.admin-search-field { position: relative; display: flex; align-items: center; }
+.admin-search-field__icon { position: absolute; left: 10px; color: rgba(0,0,0,.35); pointer-events: none; }
+.admin-search-field__input { width: 240px; max-width: 48vw; padding: 8px 30px 8px 34px; border: 1px solid #E5E3DC; border-radius: 8px; font-size: 13px; font-family: inherit; color: #1A1916; background: #fff; }
+.admin-search-field__input:focus { outline: none; border-color: #1A1916; }
+.admin-search-field__clear { position: absolute; right: 6px; background: none; border: none; cursor: pointer; color: rgba(0,0,0,.35); display: flex; padding: 3px; border-radius: 5px; }
+.admin-search-field__clear:hover { background: #F0EDE6; color: #1A1916; }
+
+.admin-sort { display: inline-flex; align-items: center; gap: 6px; }
+.admin-sort__label { font-size: 11px; color: rgba(0,0,0,.4); font-family: var(--font-mono); text-transform: uppercase; letter-spacing: .04em; }
+.admin-sort__select { padding: 8px 10px; border: 1px solid #E5E3DC; border-radius: 8px; font-size: 13px; font-family: inherit; color: #1A1916; background: #fff; cursor: pointer; }
+.admin-sort__select:focus { outline: none; border-color: #1A1916; }
+
+.admin-bulkbar { display: flex; align-items: center; gap: 16px; padding: 10px 16px; margin-bottom: 12px; background: #1A1916; color: #fff; border-radius: 10px; }
+.admin-bulkbar__count { font-size: 13px; font-variation-settings: 'wght' 600; font-weight: 600; }
+.admin-bulkbar__actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.admin-bulkbar .admin-btn-ghost { color: #fff; border-color: rgba(255,255,255,.25); }
+.admin-bulkbar .admin-btn-ghost:hover { background: rgba(255,255,255,.12); border-color: rgba(255,255,255,.4); }
+.admin-bulkbar .admin-btn-ghost--danger:hover { background: #C0392B; border-color: #C0392B; color: #fff; }
+.admin-bulkbar__clear { margin-left: auto; background: none; border: none; color: rgba(255,255,255,.6); font-size: 11px; cursor: pointer; font-family: var(--font-mono); text-transform: uppercase; letter-spacing: .04em; }
+.admin-bulkbar__clear:hover { color: #fff; }
+
+.admin-table-head { display: flex; align-items: center; gap: 14px; padding: 10px 24px; border-bottom: 1px solid #E5E3DC; background: #FAFAF8; }
+.admin-table-head__label { font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: rgba(0,0,0,.4); font-family: var(--font-mono); }
+
+.admin-checkbox { position: relative; display: inline-flex; align-items: center; cursor: pointer; flex-shrink: 0; margin-top: 2px; }
+.admin-checkbox input { position: absolute; opacity: 0; width: 0; height: 0; }
+.admin-checkbox__box { width: 18px; height: 18px; border: 1.5px solid #C8C4BC; border-radius: 5px; background: #fff; display: flex; align-items: center; justify-content: center; transition: all .12s; }
+.admin-checkbox input:checked + .admin-checkbox__box { background: #1A1916; border-color: #1A1916; }
+.admin-checkbox input:checked + .admin-checkbox__box::after { content: ''; width: 5px; height: 9px; border: solid #fff; border-width: 0 2px 2px 0; transform: rotate(45deg) translateY(-1px); }
+.admin-checkbox input:focus-visible + .admin-checkbox__box { box-shadow: 0 0 0 3px rgba(0,0,0,.12); }
+
+.admin-posts-table__row.is-selected { background: #F4F2EE; }

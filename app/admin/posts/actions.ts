@@ -44,3 +44,20 @@ export async function deletePostAction(id: string) {
   }
   redirect('/admin/posts')
 }
+
+export async function bulkDeletePostsAction(ids: string[]) {
+  await Promise.all(ids.map(id => deletePost(id).catch(() => {})))
+  revalidatePath('/admin/posts')
+  revalidatePath('/thinking')
+}
+
+export async function bulkSetPostStatusAction(ids: string[], status: 'published' | 'draft') {
+  await Promise.all(ids.map(id =>
+    updatePost(id, {
+      status,
+      ...(status === 'published' ? { published_at: new Date().toISOString() } : {}),
+    }).catch(() => {})
+  ))
+  revalidatePath('/admin/posts')
+  revalidatePath('/thinking')
+}
