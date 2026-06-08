@@ -3239,3 +3239,88 @@ details[open] > .admin-sidebar-card__summary { border-bottom: 1px solid #EDEAE3;
 /* Compact icon-only action buttons (list rows with many actions) */
 .admin-btn-ghost--icon { width: 30px; padding: 0; }
 .admin-row-actions--icons { gap: 4px; flex-wrap: nowrap; }
+
+/* ═══════════════════════════════════════════════════
+   LIST TOOLBAR — UNIFIED REDESIGN
+   One calm visual language, 34px controls, segmented
+   controls that match. Applies to every list in the CMS.
+═══════════════════════════════════════════════════ */
+.admin-toolbar {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 14px; margin-bottom: 18px; flex-wrap: wrap;
+}
+.admin-toolbar__left,
+.admin-toolbar__right { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+
+/* ── Segmented filter tabs ──────────────────────── */
+.admin-filter-tabs {
+  display: inline-flex; align-items: center; gap: 3px;
+  height: 34px; padding: 3px; margin: 0;
+  background: #ECEAE4; border-radius: 10px; width: fit-content;
+}
+.admin-filter-tab {
+  height: 28px; display: inline-flex; align-items: center; gap: 7px;
+  padding: 0 12px; border: none; background: transparent; border-radius: 7px;
+  cursor: pointer; font-family: var(--font-mono); font-size: 11px;
+  letter-spacing: 0.4px; text-transform: uppercase; color: rgba(0,0,0,.5);
+  transition: color .14s, background .14s, box-shadow .14s;
+}
+.admin-filter-tab:hover { color: rgba(0,0,0,.8); }
+.admin-filter-tab.is-active {
+  background: #FFFFFF; color: #1A1916; box-shadow: 0 1px 2px rgba(0,0,0,.08);
+}
+.admin-filter-tab__count {
+  min-width: 17px; height: 17px; padding: 0 5px;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-family: var(--font-sans); font-size: 10px; font-variation-settings: 'wght' 600; font-weight: 600;
+  border-radius: 99px; background: rgba(0,0,0,.08); color: rgba(0,0,0,.5);
+}
+.admin-filter-tab.is-active .admin-filter-tab__count { background: #1A1916; color: #fff; }
+
+/* ── Search field ───────────────────────────────── */
+.admin-search-field { position: relative; display: inline-flex; align-items: center; height: 34px; }
+.admin-search-field__icon { position: absolute; left: 11px; color: rgba(0,0,0,.38); pointer-events: none; }
+.admin-search-field__input {
+  height: 34px; box-sizing: border-box; width: 250px; max-width: 48vw;
+  padding: 0 32px 0 36px; border: 1px solid #E4E1DA; border-radius: 9px;
+  font-size: 13px; font-family: inherit; color: #1A1916; background: #fff;
+  transition: border-color .14s, box-shadow .14s;
+}
+.admin-search-field__input::placeholder { color: rgba(0,0,0,.38); }
+.admin-search-field__input:focus { outline: none; border-color: #1A1916; box-shadow: 0 0 0 3px rgba(26,25,22,.07); }
+.admin-search-field__clear {
+  position: absolute; right: 6px; width: 22px; height: 22px;
+  display: inline-flex; align-items: center; justify-content: center;
+  background: none; border: none; cursor: pointer; color: rgba(0,0,0,.35); border-radius: 6px;
+}
+.admin-search-field__clear:hover { background: #F0EDE6; color: #1A1916; }
+
+/* ── Sort select ────────────────────────────────── */
+.admin-sort { display: inline-flex; align-items: center; gap: 8px; height: 34px; }
+.admin-sort__label { font-size: 10px; color: rgba(0,0,0,.4); font-family: var(--font-mono); text-transform: uppercase; letter-spacing: .06em; }
+.admin-sort__select {
+  height: 34px; box-sizing: border-box; padding: 0 32px 0 12px;
+  border: 1px solid #E4E1DA; border-radius: 9px; font-size: 13px; font-family: inherit;
+  color: #1A1916; background-color: #fff; cursor: pointer; appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6' fill='none'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23888' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 11px center;
+  transition: border-color .14s, box-shadow .14s;
+}
+.admin-sort__select:focus { outline: none; border-color: #1A1916; box-shadow: 0 0 0 3px rgba(26,25,22,.07); }
+
+/* ── Segmented view toggle (matches filter tabs) ── */
+.admin-viewtoggle {
+  display: inline-flex; align-items: center; gap: 3px;
+  height: 34px; padding: 3px; box-sizing: border-box;
+  background: #ECEAE4; border-radius: 10px;
+}
+.admin-viewtoggle__btn {
+  height: 28px; min-width: 30px; padding: 0 10px;
+  display: inline-flex; align-items: center; justify-content: center;
+  border: none; background: transparent; border-radius: 7px;
+  font-size: 12px; font-variation-settings: 'wght' 520; color: rgba(0,0,0,.5);
+  text-decoration: none; cursor: pointer; transition: color .14s, background .14s, box-shadow .14s;
+}
+.admin-viewtoggle__btn:hover { color: rgba(0,0,0,.8); }
+.admin-viewtoggle__btn.is-active { background: #fff; color: #1A1916; box-shadow: 0 1px 2px rgba(0,0,0,.08); }
+.admin-viewtoggle__btn .material-symbols-outlined { font-size: 18px !important; }
