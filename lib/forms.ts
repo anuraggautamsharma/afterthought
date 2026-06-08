@@ -248,6 +248,18 @@ export function asStoredFiles(raw: unknown): StoredFile[] {
   return arr.filter(f => f && typeof f === 'object') as StoredFile[]
 }
 
+/** Pulls every stored-file path out of a submission's responses (for cleanup). */
+export function collectStoredFilePaths(responses: Record<string, unknown> | null | undefined): string[] {
+  if (!responses) return []
+  const paths: string[] = []
+  for (const val of Object.values(responses)) {
+    for (const f of asStoredFiles(val)) {
+      if (f.path) paths.push(f.path)
+    }
+  }
+  return paths
+}
+
 /** Renders a raw stored answer as display text: choice values become their
  *  labels, file entries become their filenames, everything else stringifies. */
 export function formatAnswerForDisplay(field: FormField, raw: unknown): string {

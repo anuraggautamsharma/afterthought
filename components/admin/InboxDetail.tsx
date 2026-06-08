@@ -5,6 +5,7 @@ import Link from 'next/link'
 import type { Submission } from '@/lib/submissions'
 import { type Form, type FormField, type FormCategory, FORM_CATEGORY_LABELS, FIELD_TYPE_ICON_NAMES, formatAnswerForDisplay, asStoredFiles } from '@/lib/forms'
 import Icon from '@/components/Icon'
+import FilePreview from '@/components/admin/FilePreview'
 import { markReadAction, archiveAction, deleteSubmissionAction } from '@/app/admin/inbox/actions'
 
 function fmtValue(v: unknown): string {
@@ -111,29 +112,30 @@ export default function InboxDetail({
                   <Icon name={FIELD_TYPE_ICON_NAMES[f.type]} size={15} style={{ marginRight: 6, opacity: 0.5, verticalAlign: '-3px' }} />
                   {f.label}
                 </span>
-                <span className="admin-inbox-detail__field-value">
+                <div className="admin-inbox-detail__field-value">
                   {f.type === 'file_upload' ? (
                     (() => {
                       const files = asStoredFiles(answers[f.id])
                       if (files.length === 0) return '—'
-                      return files.map((file, i) => {
-                        const url = file.url || (file.path ? fileUrls?.[file.path] : undefined)
-                        return (
-                          <span key={i}>
-                            {i > 0 && ', '}
-                            {url
-                              ? <a href={url} target="_blank" rel="noopener noreferrer">{file.name} ↓</a>
-                              : <span title="This file was attached before uploads were stored">{file.name} <span style={{ opacity: 0.5 }}>(not stored)</span></span>}
-                          </span>
-                        )
-                      })
+                      return (
+                        <div className="admin-inbox-detail__files">
+                          {files.map((file, i) => (
+                            <FilePreview
+                              key={i}
+                              name={file.name}
+                              type={file.type}
+                              url={file.url || (file.path ? fileUrls?.[file.path] : undefined)}
+                            />
+                          ))}
+                        </div>
+                      )
                     })()
                   ) : isLink(answers[f.id]) ? (
                     <a href={String(answers[f.id])} target="_blank" rel="noopener noreferrer">{String(answers[f.id])} ↗</a>
                   ) : (
                     formatAnswerForDisplay(f, answers[f.id])
                   )}
-                </span>
+                </div>
               </div>
             ))}
           </div>

@@ -34,11 +34,18 @@ export async function uploadFormFile(formId: string, file: File): Promise<Upload
   return { name: file.name, size: file.size, type: file.type, path }
 }
 
-/** Generates a short-lived signed URL so an admin can download a stored file. */
+/** Generates a short-lived signed URL so an admin can preview/download a file. */
 export async function getSignedFileUrl(path: string, expiresInSeconds = 3600): Promise<string | null> {
   const { data, error } = await supabase.storage
     .from(FORM_UPLOADS_BUCKET)
     .createSignedUrl(path, expiresInSeconds)
   if (error) return null
   return data?.signedUrl ?? null
+}
+
+/** Removes stored files (used when a submission/response is deleted). */
+export async function deleteFormFiles(paths: string[]): Promise<void> {
+  const clean = paths.filter(Boolean)
+  if (clean.length === 0) return
+  await supabase.storage.from(FORM_UPLOADS_BUCKET).remove(clean)
 }
