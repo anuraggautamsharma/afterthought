@@ -1,6 +1,6 @@
 import { createMcpHandler, withMcpAuth } from 'mcp-handler'
 import type { AuthInfo } from '@modelcontextprotocol/sdk/server/auth/types.js'
-import { jwtVerify, createRemoteJWKSet } from 'jose'
+import { jwtVerify, createRemoteJWKSet, decodeProtectedHeader, decodeJwt } from 'jose'
 import { z } from 'zod'
 import { COLLECTIONS, getCollection } from '@/lib/mcp/registry'
 import { getSubmissions, getSubmissionById, type Submission } from '@/lib/submissions'
@@ -152,25 +152,36 @@ const handler = createMcpHandler(
 //  2. A static bearer token (MCP_BEARER_TOKEN) — handy for tools like the MCP
 //     Inspector. Optional; if unset, only the WorkOS path works.
 
-// Discover AuthKit's JWKS once (cached) so we can verify login tokens.
-let _jwks: ReturnType<typeof createRemoteJWKSet> | null = null
-async function getJwks(): Promise<ReturnType<typeof createRemoteJWKSet>> {
-  if (_jwks) return _jwks
-  const domain = (process.env.WORKOS_AUTHKIT_DOMAIN || '').replace(/\/+$/, '')
-  let jwksUri = `${domain}/oauth2/jwks`
-  try {
-    for (const p of ['/.well-known/oauth-authorization-server', '/.well-known/openid-configuration']) {
-      const r = await fetch(domain + p)
-      if (r.ok) {
-        const m = await r.json()
-        if (m?.jwks_uri) { jwksUri = m.jwks_uri; break }
-      }
-    }
-  } catch {
-    // fall back to the conventional jwks path
+// WorkOS can sign these tokens with keys from a few different JWKS endpoints
+// depending on the flow. We build a candidate list (discovered + conventional)
+// and accept the token if ANY of them verifies it.
+const WORKOS_CLIENT_ID = process.env.WORKOS_CLIENT_ID || 'client_01KTMK4B05F0Y74BP6JBJCQFJZ'
+let _jwksList: Array<ReturnType<typeof createRemoteJWKSet>> | null = null
+
+async function getJwksList(): Promise<Array<ReturnType<typeof createRemoteJWKSet>>> {
+  if (_jwksList) return _jwksList
+  const list: Array<ReturnType<typeof createRemoteJWKSet>> = []
+  const seen = new Set<string>()
+  const add = (uri: string) => {
+    if (uri && !seen.has(uri)) { seen.add(uri); try { list.push(createRemoteJWKSet(new URL(uri))) } catch {} }
   }
-  _jwks = createRemoteJWKSet(new URL(jwksUri))
-  return _jwks
+  const domain = (process.env.WORKOS_AUTHKIT_DOMAIN || '').replace(/\/+$/, '')
+
+  // 1. Whatever the AuthKit authorization-server metadata advertises.
+  if (domain) {
+    for (const p of ['/.well-known/oauth-authorization-server', '/.well-known/openid-configuration']) {
+      try {
+        const r = await fetch(domain + p)
+        if (r.ok) { const m = await r.json(); if (m?.jwks_uri) add(m.jwks_uri) }
+      } catch { /* ignore */ }
+    }
+    add(`${domain}/oauth2/jwks`)
+  }
+  // 2. WorkOS SSO / User Management JWKS for this client.
+  add(`https://api.workos.com/sso/jwks/${WORKOS_CLIENT_ID}`)
+
+  _jwksList = list
+  return list
 }
 
 const verifyToken = async (_req: Request, bearer?: string): Promise<AuthInfo | undefined> => {
@@ -182,19 +193,31 @@ const verifyToken = async (_req: Request, bearer?: string): Promise<AuthInfo | u
     return { token: bearer, clientId: 'afterthought-owner', scopes: ['cms:read'] }
   }
 
-  // WorkOS AuthKit access token (JWT) — verify signature + expiry.
-  try {
-    const jwks = await getJwks()
-    const { payload } = await jwtVerify(bearer, jwks)
-    return {
-      token: bearer,
-      clientId: String(payload.azp ?? payload.client_id ?? payload.sub ?? 'workos'),
-      scopes: ['cms:read'],
-      extra: { sub: String(payload.sub ?? '') },
-    }
-  } catch {
-    return undefined
+  // WorkOS AuthKit access token (JWT) — accept if any candidate JWKS verifies it.
+  const list = await getJwksList()
+  for (const jwks of list) {
+    try {
+      const { payload } = await jwtVerify(bearer, jwks)
+      return {
+        token: bearer,
+        clientId: String(payload.azp ?? payload.client_id ?? payload.sub ?? 'workos'),
+        scopes: ['cms:read'],
+        extra: { sub: String(payload.sub ?? '') },
+      }
+    } catch { /* try next */ }
   }
+
+  // Diagnostics for Vercel logs if nothing verified.
+  try {
+    const hdr = decodeProtectedHeader(bearer)
+    const pl = decodeJwt(bearer)
+    console.error('[MCP auth] no JWKS verified token.',
+      'alg:', hdr.alg, 'kid:', hdr.kid, '| iss:', pl.iss, 'aud:', pl.aud, 'sub:', pl.sub,
+      '| jwks tried:', list.length)
+  } catch {
+    console.error('[MCP auth] bearer is not a JWT. prefix:', bearer.slice(0, 16))
+  }
+  return undefined
 }
 
 const authed = withMcpAuth(handler, verifyToken, { required: true })
