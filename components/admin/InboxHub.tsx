@@ -170,6 +170,12 @@ export default function InboxHub({
       : selected === 'legacy' ? 'Other / legacy'
         : selectedForm?.title || 'Form'
 
+  const formTitleById = useMemo(
+    () => Object.fromEntries(groups.map(g => [g.key, g.label])),
+    [groups]
+  )
+  const showJob = visibleItems.some(s => s.job_id)
+
   // ── Export (respects current filters + any selection) ──────────────────────
   function handleExport() {
     const rows = picked.size > 0 ? visibleItems.filter(s => picked.has(s.id)) : visibleItems
@@ -266,12 +272,12 @@ export default function InboxHub({
             </p>
           </div>
           <div className="admin-inbox-main__actions">
+            <div className="admin-viewtoggle">
+              <Link href={href({ form: selected, view: 'table' })} className={`admin-viewtoggle__btn ${viewMode !== 'list' ? 'is-active' : ''}`}>Table</Link>
+              <Link href={href({ form: selected, view: 'list' })} className={`admin-viewtoggle__btn ${viewMode === 'list' ? 'is-active' : ''}`}>List</Link>
+            </div>
             {isReal && selectedForm && (
               <>
-                <div className="admin-viewtoggle">
-                  <Link href={href({ form: selected, view: 'list' })} className={`admin-viewtoggle__btn ${viewMode === 'list' ? 'is-active' : ''}`}>List</Link>
-                  <Link href={href({ form: selected, view: 'table' })} className={`admin-viewtoggle__btn ${viewMode === 'table' ? 'is-active' : ''}`}>Table</Link>
-                </div>
                 {selectedForm.status === 'published' && (
                   <a href={`/forms/${selectedForm.slug}`} target="_blank" rel="noopener noreferrer" className="admin-btn-ghost">Open form ↗</a>
                 )}
@@ -346,8 +352,18 @@ export default function InboxHub({
           <div className="admin-posts-table">
             <div className="admin-empty"><div className="admin-empty__title">No responses match these filters.</div></div>
           </div>
-        ) : viewMode === 'table' && isReal ? (
-          <ResponsesTable fields={selectedFields} responses={visibleItems} />
+        ) : viewMode !== 'list' ? (
+          <ResponsesTable
+            responses={visibleItems}
+            fields={isReal ? selectedFields : []}
+            picked={picked}
+            allPicked={allPicked}
+            onToggle={toggle}
+            onToggleAll={toggleAll}
+            jobsById={jobsById}
+            formTitleById={formTitleById}
+            showJob={showJob}
+          />
         ) : (
           <div className="admin-posts-table">
             <div className="admin-table-head">

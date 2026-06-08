@@ -1,128 +1,106 @@
 'use client'
 
-import { useState } from 'react'
-import { type FormField, FIELD_TYPE_ICON_NAMES, formatAnswerForDisplay } from '@/lib/forms'
+import { useRouter } from 'next/navigation'
+import type { Submission } from '@/lib/submissions'
+import {
+  type FormField,
+  type FormCategory,
+  FIELD_TYPE_ICON_NAMES,
+  FORM_CATEGORY_LABELS,
+  formatAnswerForDisplay,
+} from '@/lib/forms'
 import Icon from '@/components/Icon'
-
-interface ResponseRow {
-  id: string
-  created_at: string
-  name?: string | null
-  email?: string | null
-  responses?: Record<string, unknown>
-}
+import { Checkbox } from '@/components/admin/list/ListControls'
 
 interface Props {
+  responses: Submission[]
+  /** A specific form's fields → one column per field. Empty = generic mode. */
   fields: FormField[]
-  responses: ResponseRow[]
+  picked: Set<string>
+  allPicked: boolean
+  onToggle: (id: string) => void
+  onToggleAll: () => void
+  jobsById: Record<string, string>
+  formTitleById: Record<string, string>
+  showJob: boolean
 }
 
-function formatValue(value: unknown): string {
-  if (value === null || value === undefined || value === '') return '—'
-  if (Array.isArray(value)) return value.join(', ')
-  if (typeof value === 'object') return JSON.stringify(value)
-  return String(value)
+function fmtDate(iso: string) {
+  return new Date(iso).toLocaleString(undefined, {
+    month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit',
+  })
 }
 
-function timeAgo(iso: string) {
-  const d = new Date(iso)
-  const diff = Date.now() - d.getTime()
-  const mins = Math.floor(diff / 60000)
-  if (mins < 1) return 'just now'
-  if (mins < 60) return `${mins}m ago`
-  const hrs = Math.floor(mins / 60)
-  if (hrs < 24) return `${hrs}h ago`
-  const days = Math.floor(hrs / 24)
-  if (days < 30) return `${days}d ago`
-  return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })
+function catLabel(c: string) {
+  return FORM_CATEGORY_LABELS[c as FormCategory] ?? c
 }
 
-export default function ResponsesTable({ fields, responses }: Props) {
-  const [expandedId, setExpandedId] = useState<string | null>(null)
-  const previewFields = fields.slice(0, 4)
+export default function ResponsesTable({
+  responses, fields, picked, allPicked, onToggle, onToggleAll, jobsById, formTitleById, showJob,
+}: Props) {
+  const router = useRouter()
+  const generic = fields.length === 0
 
   return (
-    <div style={{ overflowX: 'auto' }}>
-      <table className="admin-responses-table">
+    <div className="admin-resp-table-wrap">
+      <table className="admin-resp-table">
         <thead>
           <tr>
-            <th>Submitted</th>
-            <th>Name / Email</th>
-            {previewFields.map(f => (
-              <th key={f.id}>
-                <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}>
-                  <Icon name={FIELD_TYPE_ICON_NAMES[f.type]} size={15} style={{ opacity: 0.5 }} />
+            <th className="admin-resp-table__check" onClick={e => e.stopPropagation()}>
+              <Checkbox checked={allPicked} onChange={onToggleAll} label="Select all" />
+            </th>
+            <th className="admin-resp-table__datecol">Submitted</th>
+            {showJob && <th>Job</th>}
+            {generic ? (
+              <>
+                <th>Type</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Form</th>
+                <th>Subject</th>
+              </>
+            ) : (
+              fields.map(f => (
+                <th key={f.id}>
+                  <Icon name={FIELD_TYPE_ICON_NAMES[f.type]} size={13} style={{ verticalAlign: '-2px', marginRight: 5, opacity: 0.5 }} />
                   {f.label}
-                </span>
-              </th>
-            ))}
-            <th style={{ width: 32 }}></th>
+                </th>
+              ))
+            )}
           </tr>
         </thead>
         <tbody>
-          {responses.map(response => {
-            const isExpanded = expandedId === response.id
-            const answers = (response.responses as Record<string, unknown>) ?? {}
+          {responses.map(s => {
+            const r = (s.responses ?? {}) as Record<string, unknown>
             return (
-              <>
-                <tr
-                  key={response.id}
-                  className={`admin-response-row${isExpanded ? ' admin-response-row--expanded' : ''}`}
-                  onClick={() => setExpandedId(prev => (prev === response.id ? null : response.id))}
-                >
-                  <td>
-                    <span title={new Date(response.created_at).toLocaleString()} style={{ fontSize: 13 }}>
-                      {timeAgo(response.created_at)}
-                    </span>
-                  </td>
-                  <td>
-                    <div style={{ fontSize: 13, fontWeight: 500 }}>
-                      {response.name || response.email || <span style={{ opacity: 0.4 }}>Anonymous</span>}
-                    </div>
-                    {response.name && response.email && (
-                      <div style={{ fontSize: 11, color: 'var(--c-ink-muted)', marginTop: 1 }}>
-                        {response.email}
-                      </div>
-                    )}
-                  </td>
-                  {previewFields.map(f => (
-                    <td key={f.id}>
-                      <span style={{ fontSize: 13, color: 'var(--c-ink)' }}>{formatAnswerForDisplay(f, answers[f.id])}</span>
-                    </td>
-                  ))}
-                  <td style={{ textAlign: 'center', color: 'var(--c-ink-muted)', fontSize: 12 }}>
-                    {isExpanded ? '▲' : '▾'}
-                  </td>
-                </tr>
-
-                {isExpanded && (
-                  <tr key={`${response.id}-detail`}>
-                    <td colSpan={previewFields.length + 3} style={{ padding: 0 }}>
-                      <div className="admin-response-detail">
-                        <div
-                          style={{
-                            fontSize: 11, fontWeight: 600, textTransform: 'uppercase',
-                            letterSpacing: '.07em', color: 'var(--c-ink-muted)', marginBottom: 12,
-                          }}
-                        >
-                          All answers · Submitted {new Date(response.created_at).toLocaleString()}
-                        </div>
-                        <div className="admin-response-detail__grid">
-                          {fields.map(f => (
-                            <div key={f.id} className="admin-response-field">
-                              <div className="admin-response-field__label">
-                                <Icon name={FIELD_TYPE_ICON_NAMES[f.type]} size={14} style={{ marginRight: 5, verticalAlign: '-2px', opacity: 0.55 }} />
-                                {f.label}
-                              </div>
-                              <div className="admin-response-field__value">{formatAnswerForDisplay(f, answers[f.id])}</div>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
+              <tr
+                key={s.id}
+                className={`${!s.is_read ? 'is-unread' : ''} ${picked.has(s.id) ? 'is-selected' : ''}`}
+                onClick={() => router.push(`/admin/inbox/${s.id}`)}
+              >
+                <td className="admin-resp-table__check" onClick={e => e.stopPropagation()}>
+                  <Checkbox checked={picked.has(s.id)} onChange={() => onToggle(s.id)} label={`Select ${s.name || s.email}`} />
+                </td>
+                <td className="admin-resp-table__datecol">
+                  {!s.is_read && <span className="admin-resp-table__unread" aria-label="Unread" />}
+                  {fmtDate(s.created_at)}
+                </td>
+                {showJob && <td>{s.job_id ? (jobsById[s.job_id] ?? '—') : '—'}</td>}
+                {generic ? (
+                  <>
+                    <td>{catLabel(s.type)}</td>
+                    <td>{s.name || '—'}</td>
+                    <td>{s.email || '—'}</td>
+                    <td>{s.form_id ? (formTitleById[s.form_id] ?? '—') : '—'}</td>
+                    <td title={s.subject ?? ''}>{s.subject || '—'}</td>
+                  </>
+                ) : (
+                  fields.map(f => {
+                    const val = formatAnswerForDisplay(f, r[f.id])
+                    return <td key={f.id} title={val === '—' ? '' : val}>{val}</td>
+                  })
                 )}
-              </>
+              </tr>
             )
           })}
         </tbody>

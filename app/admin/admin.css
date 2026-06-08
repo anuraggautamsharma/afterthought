@@ -3224,6 +3224,45 @@ details[open] > .admin-sidebar-card__summary { border-bottom: 1px solid #EDEAE3;
 .admin-resp-daterange input:focus { outline: none; border-color: #1A1916; }
 .admin-resp-daterange__sep { color: rgba(0,0,0,.35); font-size: 12px; }
 
+/* ── Responses spreadsheet table ──────────────────────────────── */
+.admin-resp-table-wrap {
+  overflow: auto;
+  max-height: calc(100vh - 290px);
+  border: 1px solid #E5E3DC;
+  border-radius: 12px;
+  background: #fff;
+}
+.admin-resp-table { border-collapse: separate; border-spacing: 0; width: max-content; min-width: 100%; font-size: 13px; }
+.admin-resp-table thead th {
+  position: sticky; top: 0; z-index: 2;
+  background: #F4F2EC; text-align: left;
+  padding: 10px 14px; font-family: var(--font-mono);
+  font-size: 10px; letter-spacing: .05em; text-transform: uppercase; color: rgba(0,0,0,.5);
+  border-bottom: 1px solid #E0DDD6; white-space: nowrap;
+}
+.admin-resp-table tbody td {
+  padding: 11px 14px; border-bottom: 1px solid #F0EDE6; vertical-align: middle;
+  white-space: nowrap; max-width: 320px; overflow: hidden; text-overflow: ellipsis; color: #2C2925;
+  background: #fff;
+}
+.admin-resp-table tbody tr { cursor: pointer; }
+.admin-resp-table tbody tr:hover td { background: #FAF8F4; }
+.admin-resp-table tbody tr.is-selected td { background: #F4F2EE; }
+.admin-resp-table tbody tr.is-unread td:nth-child(2) { font-variation-settings: 'wght' 600; font-weight: 600; }
+
+/* Sticky left columns: checkbox + Submitted */
+.admin-resp-table__check { width: 44px; text-align: center; }
+.admin-resp-table th.admin-resp-table__check { position: sticky; left: 0; z-index: 3; background: #F4F2EC; }
+.admin-resp-table td.admin-resp-table__check { position: sticky; left: 0; z-index: 1; }
+.admin-resp-table__datecol { min-width: 168px; }
+.admin-resp-table th.admin-resp-table__datecol { left: 44px; position: sticky; z-index: 3; }
+.admin-resp-table td.admin-resp-table__datecol { position: sticky; left: 44px; z-index: 1; box-shadow: 1px 0 0 #EDEAE3; }
+.admin-resp-table tr:hover td.admin-resp-table__check,
+.admin-resp-table tr:hover td.admin-resp-table__datecol { background: #FAF8F4; }
+.admin-resp-table tr.is-selected td.admin-resp-table__check,
+.admin-resp-table tr.is-selected td.admin-resp-table__datecol { background: #F4F2EE; }
+.admin-resp-table__unread { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: #C0392B; margin-right: 7px; vertical-align: 1px; }
+
 .admin-viewtoggle { display: inline-flex; background: #EDEAE3; border-radius: 7px; padding: 2px; gap: 2px; }
 .admin-viewtoggle__btn { font-size: 11px; padding: 5px 12px; border-radius: 5px; text-decoration: none; color: #78736C; font-variation-settings: 'wght' 520; }
 .admin-viewtoggle__btn.is-active { background: #fff; color: #1A1916; }

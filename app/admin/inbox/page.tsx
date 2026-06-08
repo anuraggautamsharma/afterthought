@@ -15,7 +15,7 @@ export default async function InboxPage({
   const showArchived = archived === '1'
   const selected = formParam ?? 'all'
   const selectedJob = jobParam ?? 'all'
-  const viewMode: 'list' | 'table' = view === 'table' ? 'table' : 'list'
+  const viewMode: 'list' | 'table' = view === 'list' ? 'list' : 'table'
 
   let submissions: Submission[] = []
   let forms: Form[] = []
