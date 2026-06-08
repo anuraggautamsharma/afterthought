@@ -254,7 +254,7 @@ export default function JobForm({ job }: { job: Job | null }) {
         <p className="admin-settings-card__hint">
           Choose which form candidates fill in on the public job page. You can reuse one
           form across several roles, or give this role its own. Responses are tagged to
-          this job in your Inbox.
+          this job in Responses.
         </p>
 
         {!job?.id ? (

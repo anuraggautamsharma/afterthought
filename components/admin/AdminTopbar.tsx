@@ -8,7 +8,7 @@ import { logoutAction } from '@/app/admin/login/actions'
 import { commandPalette } from '@/lib/commandStore'
 
 const SECTION_LABELS: Record<string, string> = {
-  inbox: 'Inbox', posts: 'Posts', forms: 'Forms', work: 'Work', media: 'Media',
+  inbox: 'Responses', posts: 'Posts', forms: 'Forms', work: 'Work', media: 'Media',
   services: 'Services', jobs: 'Jobs', team: 'Team', users: 'Users', settings: 'Settings',
 }
 

@@ -66,7 +66,7 @@ export default function InboxDetail({
   return (
     <div className="admin-jobform">
       <div className="admin-editor-topbar">
-        <Link href={backHref} className="admin-editor-back">← Inbox</Link>
+        <Link href={backHref} className="admin-editor-back">← Responses</Link>
         <div className="admin-settings__save" style={{ gap: '8px' }}>
           <button className="admin-btn-ghost" disabled={pending}
             onClick={() => startTransition(() => { markReadAction(s.id, !s.is_read) })}>

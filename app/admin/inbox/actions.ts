@@ -41,3 +41,31 @@ export async function deleteSubmissionAction(id: string) {
   }
   redirect('/admin/inbox')
 }
+
+// ── Bulk actions (stay on the page) ────────────────────────────────────────────
+
+export async function bulkMarkReadAction(ids: string[], read: boolean) {
+  await Promise.all(ids.map(id => setSubmissionRead(id, read).catch(() => {})))
+  revalidatePath('/admin/inbox')
+}
+
+export async function bulkArchiveAction(ids: string[], archived: boolean) {
+  await Promise.all(ids.map(id => setSubmissionArchived(id, archived).catch(() => {})))
+  revalidatePath('/admin/inbox')
+}
+
+export async function bulkDeleteSubmissionsAction(ids: string[]) {
+  await Promise.all(ids.map(async id => {
+    try {
+      const sub = await getSubmissionById(id).catch(() => null)
+      if (sub) {
+        const paths = collectStoredFilePaths(sub.responses as Record<string, unknown>)
+        if (paths.length > 0) await deleteFormFiles(paths).catch(() => {})
+      }
+      await deleteSubmission(id)
+    } catch {
+      // continue
+    }
+  }))
+  revalidatePath('/admin/inbox')
+}

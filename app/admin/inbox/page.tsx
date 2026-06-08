@@ -4,7 +4,7 @@ import { getAllJobs, type Job } from '@/lib/jobs'
 import InboxHub, { type InboxGroup, type JobChip } from '@/components/admin/InboxHub'
 
 export const dynamic = 'force-dynamic'
-export const metadata = { title: 'Inbox — Afterthought CMS' }
+export const metadata = { title: 'Responses — Afterthought CMS' }
 
 export default async function InboxPage({
   searchParams,
@@ -99,12 +99,12 @@ export default async function InboxPage({
         ? formItems.filter(s => !s.job_id)
         : formItems.filter(s => s.job_id === selectedJob)
 
-  // ── Table view needs the selected form's fields ───────────────────────
+  // ── A selected form's fields power both the table view and CSV export ──
   let selectedForm: Form | null = null
   let selectedFields: FormField[] = []
   if (selected !== 'all' && selected !== 'legacy') {
     selectedForm = forms.find(f => f.id === selected) ?? (await getFormById(selected).catch(() => null))
-    if (viewMode === 'table' && selectedForm) {
+    if (selectedForm) {
       selectedFields = await getFields(selected).catch(() => [] as FormField[])
     }
   }

@@ -17,7 +17,7 @@ interface Item {
 
 const NAV: Item[] = [
   { key: 'nav-dash', icon: 'dashboard', label: 'Dashboard', href: '/admin', group: 'Go to' },
-  { key: 'nav-inbox', icon: 'inbox', label: 'Inbox', href: '/admin/inbox', group: 'Go to' },
+  { key: 'nav-inbox', icon: 'inbox', label: 'Responses', href: '/admin/inbox', group: 'Go to' },
   { key: 'nav-posts', icon: 'article', label: 'Posts', href: '/admin/posts', group: 'Go to' },
   { key: 'nav-forms', icon: 'dynamic_form', label: 'Forms', href: '/admin/forms', group: 'Go to' },
   { key: 'nav-work', icon: 'grid_view', label: 'Work', href: '/admin/work', group: 'Go to' },

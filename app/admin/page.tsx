@@ -69,7 +69,7 @@ export default async function AdminDashboard() {
         <Link href="/admin/inbox" className="admin-stat-tile">
           <span className="admin-stat-tile__icon admin-stat-tile__icon--inbox"><Icon name="inbox" size={20} fill={unread > 0} /></span>
           <span className={`admin-stat-tile__num ${unread > 0 ? 'admin-stat-tile__num--alert' : ''}`}>{unread}</span>
-          <span className="admin-stat-tile__label">Unread messages</span>
+          <span className="admin-stat-tile__label">Unread responses</span>
         </Link>
         <Link href="/admin/posts" className="admin-stat-tile">
           <span className="admin-stat-tile__icon admin-stat-tile__icon--posts"><Icon name="article" size={20} /></span>
@@ -94,9 +94,9 @@ export default async function AdminDashboard() {
       </div>
 
       <div className="admin-dashboard__grid">
-        {/* Inbox card */}
+        {/* Responses card */}
         <div className="admin-dash-card">
-          <div className="admin-dash-card__title">Inbox</div>
+          <div className="admin-dash-card__title">Responses</div>
 
           <div className="admin-dash-stat">
             <span className={`admin-dash-stat__num ${unread > 0 ? 'admin-dash-stat__num--alert' : ''}`}>
@@ -113,7 +113,7 @@ export default async function AdminDashboard() {
 
           {unread === 0 && submissions.length === 0 ? (
             <div className="admin-dash-empty">
-              <span>✓</span> Inbox clear
+              <span>✓</span> All clear
             </div>
           ) : (
             <>
