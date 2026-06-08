@@ -1,4 +1,12 @@
 import type { Metadata } from 'next'
+import Icon from '@/components/Icon'
+
+const sampleIcons = [
+  'search', 'home', 'arrow_forward', 'arrow_back', 'add', 'close',
+  'check', 'delete', 'edit', 'settings', 'mail', 'person',
+  'calendar_today', 'star', 'favorite', 'download', 'share', 'visibility',
+  'menu', 'more_horiz', 'attach_file', 'link', 'chevron_right', 'open_in_new',
+]
 
 export const metadata: Metadata = {
   title: 'Design System — Afterthought',
@@ -282,9 +290,47 @@ export default function DesignSystem() {
           </div>
         </section>
 
-        {/* ── 08 COLOUR BLOCKS ── */}
+        {/* ── 08 ICONS ── */}
         <section className="ds-section">
-          <div className="ds-section-head"><span className="eyebrow">08 · Colour blocks</span></div>
+          <div className="ds-section-head"><span className="eyebrow">08 · Icons</span></div>
+          <p className="body-sm" style={{ opacity: 0.6, marginBottom: 24, maxWidth: 620 }}>
+            Google Material Symbols. Use the <code className="ds-code">&lt;Icon /&gt;</code> component
+            anywhere — browse names at{' '}
+            <a href="https://fonts.google.com/icons" target="_blank" rel="noopener noreferrer"
+              style={{ color: 'inherit', borderBottom: '1px solid currentColor' }}>fonts.google.com/icons</a>.
+          </p>
+
+          {/* Specimen grid */}
+          <div className="ds-icon-grid">
+            {sampleIcons.map(n => (
+              <div key={n} className="ds-icon-cell">
+                <Icon name={n} size={28} />
+                <span className="ds-mono ds-icon-name">{n}</span>
+              </div>
+            ))}
+          </div>
+
+          {/* Axes / variations */}
+          <div className="ds-mono ds-group-label" style={{ marginTop: 32 }}>Weight &amp; fill axes</div>
+          <div className="ds-icon-axes">
+            <div className="ds-icon-axis"><Icon name="favorite" size={32} weight={200} /><span className="ds-mono">wght 200</span></div>
+            <div className="ds-icon-axis"><Icon name="favorite" size={32} weight={400} /><span className="ds-mono">wght 400</span></div>
+            <div className="ds-icon-axis"><Icon name="favorite" size={32} weight={700} /><span className="ds-mono">wght 700</span></div>
+            <div className="ds-icon-axis"><Icon name="favorite" size={32} fill /><span className="ds-mono">fill</span></div>
+            <div className="ds-icon-axis"><Icon name="favorite" size={32} fill color="var(--c-accent-magenta)" /><span className="ds-mono">coloured</span></div>
+          </div>
+
+          {/* Usage */}
+          <pre className="ds-code-block" style={{ marginTop: 28 }}>{`import Icon from '@/components/Icon'
+
+<Icon name="search" />
+<Icon name="favorite" fill size={20} />
+<Icon name="arrow_forward" weight={600} color="var(--c-accent-magenta)" />`}</pre>
+        </section>
+
+        {/* ── 09 COLOUR BLOCKS ── */}
+        <section className="ds-section">
+          <div className="ds-section-head"><span className="eyebrow">09 · Colour blocks</span></div>
           <div className="ds-blocks-grid">
             {colorBlocks.map(b => (
               <div
@@ -305,9 +351,9 @@ export default function DesignSystem() {
           </p>
         </section>
 
-        {/* ── 09 DO'S & DON'TS ── */}
+        {/* ── 10 DO'S & DON'TS ── */}
         <section className="ds-section">
-          <div className="ds-section-head"><span className="eyebrow">09 · Do&apos;s &amp; don&apos;ts</span></div>
+          <div className="ds-section-head"><span className="eyebrow">10 · Do&apos;s &amp; don&apos;ts</span></div>
           <div className="ds-rules-grid">
             <div className="ds-rules-col">
               <div className="ds-mono ds-group-label" style={{ color: 'var(--c-semantic-success)' }}>Do</div>
