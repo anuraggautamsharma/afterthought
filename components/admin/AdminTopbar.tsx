@@ -9,7 +9,7 @@ import { commandPalette } from '@/lib/commandStore'
 
 const SECTION_LABELS: Record<string, string> = {
   inbox: 'Inbox', posts: 'Posts', forms: 'Forms', work: 'Work', media: 'Media',
-  services: 'Services', jobs: 'Jobs', team: 'Team', settings: 'Settings',
+  services: 'Services', jobs: 'Jobs', team: 'Team', users: 'Users', settings: 'Settings',
 }
 
 function buildCrumbs(pathname: string): { label: string; href: string }[] {

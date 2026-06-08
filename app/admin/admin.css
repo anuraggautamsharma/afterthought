@@ -3402,3 +3402,22 @@ details[open] > .admin-sidebar-card__summary { border-bottom: 1px solid #EDEAE3;
 .admin-tag-chip--editor { background: #EAF1E6; color: #2F5E32; }
 
 .admin-sidebar__link[data-section="users"].is-active { border-left-color: #14B8A6; }
+
+/* ── Form modals (Add/Edit user, etc.) ──────────────────────── */
+.admin-share .admin-field { gap: 7px; }
+.admin-share .admin-field > input,
+.admin-share .admin-field > textarea,
+.admin-share .admin-sort__select {
+  height: 38px; box-sizing: border-box;
+  background: #fff; border: 1px solid #E4E1DA; border-radius: 9px;
+  padding: 0 12px; font-size: 14px; color: #1A1916; font-family: inherit;
+  transition: border-color .14s, box-shadow .14s;
+}
+.admin-share .admin-field > input:focus,
+.admin-share .admin-field > textarea:focus,
+.admin-share .admin-sort__select:focus {
+  outline: none; border-color: #1A1916; box-shadow: 0 0 0 3px rgba(26,25,22,.07);
+}
+.admin-share .admin-field > input:disabled { background: #F5F4F0; color: rgba(0,0,0,.45); cursor: not-allowed; }
+.admin-share .admin-field__hint { margin-top: 1px; }
+.admin-modal__footer { display: flex; justify-content: flex-end; gap: 8px; margin-top: 24px; }

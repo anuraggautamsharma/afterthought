@@ -192,9 +192,11 @@ function UserModal({ state, onClose }: { state: NonNullable<ModalState>; onClose
           <span className="admin-field__hint">Shown as plain text so you can copy it to share with them.</span>
         </div>
 
-        <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8 }}>
-          <button className="admin-btn-ghost" onClick={onClose}>Cancel</button>
-          <button className="admin-btn-primary" style={{ width: 'auto', padding: '9px 18px' }} disabled={pending} onClick={submit}>
+        <div className="admin-modal__footer">
+          <button className="admin-btn-secondary" style={{ width: 'auto', padding: '9px 18px', fontSize: 14 }} onClick={onClose}>
+            Cancel
+          </button>
+          <button className="admin-btn-primary" style={{ width: 'auto', padding: '9px 20px' }} disabled={pending} onClick={submit}>
             {pending ? 'Saving…' : isEdit ? 'Save changes' : 'Add user'}
           </button>
         </div>
