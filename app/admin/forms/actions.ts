@@ -38,6 +38,13 @@ export async function deleteFormAction(id: string) {
   redirect('/admin/forms')
 }
 
+/** Delete used from the forms list (already on the page) — refresh, no redirect. */
+export async function deleteFormFromListAction(id: string) {
+  await deleteForm(id)
+  revalidatePath('/admin/forms')
+  revalidatePath('/admin/inbox')
+}
+
 export async function publishFormAction(id: string) {
   await updateForm(id, { status: 'published' })
   revalidatePath('/admin/forms')

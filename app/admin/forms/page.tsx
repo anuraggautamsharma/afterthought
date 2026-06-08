@@ -5,6 +5,7 @@ import type { Form } from '@/lib/forms'
 import { createFormAction } from './actions'
 import SystemFormsSetup from '@/components/admin/forms/SystemFormsSetup'
 import ShareFormButton from '@/components/admin/forms/ShareFormButton'
+import DeleteFormButton from '@/components/admin/forms/DeleteFormButton'
 import { SYSTEM_FORM_SEEDS } from '@/lib/forms-seed'
 
 export const dynamic = 'force-dynamic'
@@ -82,6 +83,7 @@ async function FormCard({ form }: { form: Form }) {
             View live ↗
           </Link>
         )}
+        <DeleteFormButton formId={form.id} title={form.title} isSystem={form.is_system} />
       </div>
     </div>
   )
