@@ -113,7 +113,11 @@ export default function FormsGrid({ forms: initialForms }: { forms: FormWithCoun
       <>
         <button
           type="button"
-          className={form.status === 'published' ? `admin-btn-ghost${c}` : `admin-btn-primary admin-btn-primary--icon`}
+          className={
+            compact
+              ? `admin-btn-ghost admin-btn-ghost--icon`
+              : (form.status === 'published' ? 'admin-btn-ghost' : 'admin-btn-primary admin-btn-primary--icon')
+          }
           style={!compact ? { width: 'auto', padding: '5px 12px', fontSize: 12 } : undefined}
           title={form.status === 'published' ? 'Unpublish' : 'Publish'}
           onClick={() => handlePublishToggle(form)}
