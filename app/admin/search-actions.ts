@@ -13,15 +13,6 @@ export interface SearchResult {
   href: string
 }
 
-const TYPE_LABEL: Record<SearchResult['type'], string> = {
-  post: 'Post',
-  form: 'Form',
-  job: 'Job',
-  submission: 'Inbox',
-}
-
-export { TYPE_LABEL }
-
 /** Global admin search across posts, forms, jobs and submissions. */
 export async function searchAdminAction(query: string): Promise<SearchResult[]> {
   const q = query.trim().toLowerCase()

@@ -7,7 +7,10 @@ import '../admin.css'
 export const metadata = { title: 'Sign in — Afterthought CMS' }
 
 export default async function LoginPage() {
-  const session = await getSession()
+  let session = null
+  try {
+    session = await getSession()
+  } catch {}
   if (session) redirect('/admin/posts')
 
   return (
