@@ -10,9 +10,10 @@ interface Props {
   formId: string
   title: string
   isSystem?: boolean
+  iconOnly?: boolean
 }
 
-export default function DeleteFormButton({ formId, title, isSystem }: Props) {
+export default function DeleteFormButton({ formId, title, isSystem, iconOnly = false }: Props) {
   const [pending, startTransition] = useTransition()
 
   // Built-in forms back live site pages — don't allow casual deletion.
@@ -39,12 +40,13 @@ export default function DeleteFormButton({ formId, title, isSystem }: Props) {
   return (
     <button
       type="button"
-      className="admin-btn-ghost admin-btn-ghost--danger"
+      className={`admin-btn-ghost admin-btn-ghost--danger${iconOnly ? ' admin-btn-ghost--icon' : ''}`}
       onClick={handleDelete}
       disabled={pending}
       aria-label={`Delete ${title || 'form'}`}
+      title={iconOnly ? 'Delete' : undefined}
     >
-      <Icon name="delete" size={15} /> {pending ? 'Deleting…' : 'Delete'}
+      {iconOnly ? <Icon name="delete" size={16} /> : <><Icon name="delete" size={15} /> {pending ? 'Deleting…' : 'Delete'}</>}
     </button>
   )
 }

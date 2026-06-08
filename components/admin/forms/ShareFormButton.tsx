@@ -13,9 +13,11 @@ interface Props {
   /** Visual style of the trigger button. */
   variant?: 'ghost' | 'secondary'
   label?: string
+  /** Render as a compact icon-only button (for list rows). */
+  iconOnly?: boolean
 }
 
-export default function ShareFormButton({ formId, slug, status, variant = 'ghost', label = 'Share' }: Props) {
+export default function ShareFormButton({ formId, slug, status, variant = 'ghost', label = 'Share', iconOnly = false }: Props) {
   const [open, setOpen] = useState(false)
   const [info, setInfo] = useState<FormShareInfo | null>(null)
   const [qr, setQr] = useState<string>('')
@@ -81,10 +83,12 @@ export default function ShareFormButton({ formId, slug, status, variant = 'ghost
     <>
       <button
         type="button"
-        className={variant === 'secondary' ? 'admin-btn-secondary' : 'admin-btn-ghost'}
+        className={`${variant === 'secondary' ? 'admin-btn-secondary' : 'admin-btn-ghost'}${iconOnly ? ' admin-btn-ghost--icon' : ''}`}
         onClick={() => setOpen(true)}
+        title={iconOnly ? label : undefined}
+        aria-label={iconOnly ? label : undefined}
       >
-        <Icon name="ios_share" size={15} /> {label}
+        {iconOnly ? <Icon name="ios_share" size={16} /> : <><Icon name="ios_share" size={15} /> {label}</>}
       </button>
 
       {open && (

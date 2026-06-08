@@ -3209,3 +3209,7 @@ details[open] > .admin-sidebar-card__summary { border-bottom: 1px solid #EDEAE3;
 .admin-btn-primary--icon .material-symbols-outlined { font-size: 18px !important; }
 
 .admin-bulkbar .admin-btn-ghost { min-height: 30px; }
+
+/* Compact icon-only action buttons (list rows with many actions) */
+.admin-btn-ghost--icon { width: 30px; padding: 0; }
+.admin-row-actions--icons { gap: 4px; flex-wrap: nowrap; }

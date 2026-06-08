@@ -78,18 +78,29 @@ export default function FormsGrid({ forms }: { forms: FormWithCount[] }) {
     if (confirmed) runBulk(() => bulkDeleteFormsAction(ids()), 'Forms deleted')
   }
 
-  const RowActions = ({ form }: { form: FormWithCount }) => (
-    <>
-      <Link href={`/admin/forms/${form.id}/edit`} className="admin-btn-ghost"><Icon name="edit" size={15} /> Edit</Link>
-      <Link href={`/admin/inbox?form=${form.id}`} className="admin-btn-ghost"><Icon name="inbox" size={15} /> Responses</Link>
-      <Link href={`/admin/forms/${form.id}/settings`} className="admin-btn-ghost"><Icon name="settings" size={15} /> Settings</Link>
-      <ShareFormButton formId={form.id} slug={form.slug} status={form.status} />
-      {form.status === 'published' && (
-        <Link href={`/forms/${form.slug}`} target="_blank" className="admin-btn-ghost"><Icon name="open_in_new" size={15} /> View</Link>
-      )}
-      <DeleteFormButton formId={form.id} title={form.title} isSystem={form.is_system} />
-    </>
-  )
+  const RowActions = ({ form, compact = false }: { form: FormWithCount; compact?: boolean }) => {
+    const c = compact ? ' admin-btn-ghost--icon' : ''
+    return (
+      <>
+        <Link href={`/admin/forms/${form.id}/edit`} className={`admin-btn-ghost${c}`} title="Edit">
+          <Icon name="edit" size={compact ? 16 : 15} />{!compact && <> Edit</>}
+        </Link>
+        <Link href={`/admin/inbox?form=${form.id}`} className={`admin-btn-ghost${c}`} title="Responses">
+          <Icon name="inbox" size={compact ? 16 : 15} />{!compact && <> Responses</>}
+        </Link>
+        <Link href={`/admin/forms/${form.id}/settings`} className={`admin-btn-ghost${c}`} title="Settings">
+          <Icon name="settings" size={compact ? 16 : 15} />{!compact && <> Settings</>}
+        </Link>
+        <ShareFormButton formId={form.id} slug={form.slug} status={form.status} iconOnly={compact} />
+        {form.status === 'published' && (
+          <Link href={`/forms/${form.slug}`} target="_blank" className={`admin-btn-ghost${c}`} title="View live">
+            <Icon name="open_in_new" size={compact ? 16 : 15} />{!compact && <> View</>}
+          </Link>
+        )}
+        <DeleteFormButton formId={form.id} title={form.title} isSystem={form.is_system} iconOnly={compact} />
+      </>
+    )
+  }
 
   return (
     <>
@@ -170,7 +181,7 @@ export default function FormsGrid({ forms }: { forms: FormWithCount[] }) {
                   <span className="admin-date">Created {formatDate(form.created_at)}</span>
                 </div>
               </div>
-              <div className="admin-row-actions"><RowActions form={form} /></div>
+              <div className="admin-row-actions admin-row-actions--icons"><RowActions form={form} compact /></div>
             </div>
           ))}
         </div>
