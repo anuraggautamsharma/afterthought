@@ -10,4 +10,6 @@ const handler = protectedResourceHandler({
   resourceUrl: 'https://afterthought.design/api/mcp',
 })
 
-export { handler as GET, metadataCorsOptionsRequestHandler as OPTIONS }
+const optionsHandler = metadataCorsOptionsRequestHandler()
+
+export { handler as GET, optionsHandler as OPTIONS }
