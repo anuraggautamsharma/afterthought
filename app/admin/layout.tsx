@@ -1,6 +1,8 @@
 import './admin.css'
 import { getSession } from '@/lib/auth'
 import AdminSidebar from '@/components/admin/AdminSidebar'
+import AdminTopbar from '@/components/admin/AdminTopbar'
+import CommandPalette from '@/components/admin/CommandPalette'
 import { countUnread } from '@/lib/submissions'
 import ToastContainer from '@/components/admin/ToastContainer'
 import ConfirmModal from '@/components/admin/ConfirmModal'
@@ -30,10 +32,12 @@ export default async function AdminLayout({ children }: { children: React.ReactN
     <div className="admin-shell">
       <AdminSidebar unread={unread} />
       <div className="admin-main">
+        <AdminTopbar email={session.email} />
         <div className="admin-content">{children}</div>
       </div>
       <ToastContainer />
       <ConfirmModal />
+      <CommandPalette />
     </div>
   )
 }
