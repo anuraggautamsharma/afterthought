@@ -2013,12 +2013,13 @@ details[open] > .admin-sidebar-card__summary { border-bottom: 1px solid #EDEAE3;
 .admin-add-section-btn:hover { color: var(--c-ink); border-color: var(--c-ink); background: rgba(0,0,0,.02); }
 
 /* Field card */
-.admin-field-card { display: flex; align-items: flex-start; gap: 10px; padding: 10px 12px; border-radius: 8px; background: #fff; border: 1.5px solid transparent; cursor: pointer; transition: border-color .12s, box-shadow .12s; position: relative; }
-.admin-field-card:hover { border-color: rgba(0,0,0,.12); box-shadow: 0 1px 4px rgba(0,0,0,.06); }
-.admin-field-card--selected { border-color: #111 !important; box-shadow: 0 0 0 3px rgba(0,0,0,.05) !important; }
+.admin-field-card { display: flex; align-items: center; gap: 11px; padding: 11px 14px; border-radius: 9px; background: #FBFAF8; border: 1px solid #EBE8E1; cursor: pointer; transition: border-color .14s, box-shadow .14s, background .14s, transform .12s; position: relative; }
+.admin-field-card:hover { background: #fff; border-color: #D4CFC5; box-shadow: 0 2px 10px rgba(0,0,0,.06); transform: translateY(-1px); }
+.admin-field-card--selected { border-color: #1A1916 !important; background: #fff !important; box-shadow: 0 0 0 3px rgba(26,25,22,.09) !important; transform: none; }
 .admin-field-card__handle { color: rgba(0,0,0,.25); cursor: grab; font-size: 13px; padding-top: 2px; flex-shrink: 0; }
 .admin-field-card__handle:active { cursor: grabbing; }
-.admin-field-card__icon { width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; background: #f5f4f0; border-radius: 4px; font-size: 11px; color: var(--c-ink-muted); flex-shrink: 0; }
+.admin-field-card__icon { width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; background: #F0EDE6; border: 1px solid #E5E1D8; border-radius: 7px; font-size: 13px; color: #6B665E; flex-shrink: 0; }
+.admin-field-card--selected .admin-field-card__icon { background: #1A1916; border-color: #1A1916; color: #fff; }
 .admin-field-card__body { flex: 1; min-width: 0; }
 .admin-field-card__label-input { border: none; outline: none; width: 100%; background: transparent; font-size: 14px; font-weight: 500; color: var(--c-ink); padding: 0; font-family: inherit; line-height: 1.4; }
 .admin-field-card__label-input::placeholder { font-weight: 400; color: rgba(0,0,0,.3); }
@@ -2231,15 +2232,15 @@ details[open] > .admin-sidebar-card__summary { border-bottom: 1px solid #EDEAE3;
 
 /* ── Field card — alias missing class names ──────── */
 .admin-field-card__drag-handle {
-  color: rgba(0,0,0,.28);
+  color: rgba(0,0,0,.22);
   cursor: grab;
   font-size: 15px;
   flex-shrink: 0;
   background: none;
   border: none;
   padding: 0;
-  width: 26px;
-  height: 28px;
+  width: 22px;
+  height: 30px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -2248,25 +2249,26 @@ details[open] > .admin-sidebar-card__summary { border-bottom: 1px solid #EDEAE3;
   transition: background .12s, color .12s;
   touch-action: none;
 }
-.admin-field-card__drag-handle:hover { background: #F0EDE6; color: rgba(0,0,0,.6); }
+.admin-field-card__drag-handle:hover { background: #F0EDE6; color: rgba(0,0,0,.65); }
 .admin-field-card__drag-handle:active { cursor: grabbing; background: #E8E4DC; }
 .admin-field-card:hover .admin-field-card__drag-handle { color: rgba(0,0,0,.5); }
 
-.admin-field-card__content { flex: 1; min-width: 0; }
+.admin-field-card__content { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
 
 .admin-field-card__label {
   display: block;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 540;
+  font-variation-settings: 'wght' 540;
   color: var(--c-ink);
-  line-height: 1.4;
+  line-height: 1.35;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 .admin-field-card__label--empty { font-style: italic; opacity: .3; font-weight: 400; }
 
-.admin-field-card__type-badge { font-size: 11px; color: rgba(0,0,0,.38); }
+.admin-field-card__type-badge { font-size: 11.5px; color: rgba(0,0,0,.4); letter-spacing: .01em; }
 
 .admin-field-card__conditional-badge {
   font-size: 10px;
@@ -2314,14 +2316,15 @@ details[open] > .admin-sidebar-card__summary { border-bottom: 1px solid #EDEAE3;
 .admin-field-card--overlay {
   background: #fff;
   border: 1.5px solid #1A1916;
-  border-radius: 8px;
-  box-shadow: 0 12px 28px rgba(0,0,0,.18);
+  border-radius: 9px;
+  box-shadow: 0 16px 36px rgba(0,0,0,.2);
   display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  padding: 10px 12px;
+  align-items: center;
+  gap: 11px;
+  padding: 11px 14px;
   cursor: grabbing;
   width: 100%;
+  transform: scale(1.01);
 }
 .admin-field-card--overlay .admin-field-card__drag-handle { color: rgba(0,0,0,.5); }
 
@@ -2460,7 +2463,7 @@ details[open] > .admin-sidebar-card__summary { border-bottom: 1px solid #EDEAE3;
 .admin-section-block__fields {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 7px;
   min-height: 44px;
   padding: 6px 0 4px;
 }
@@ -2469,41 +2472,45 @@ details[open] > .admin-sidebar-card__summary { border-bottom: 1px solid #EDEAE3;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 16px;
-  font-size: 12px;
-  color: rgba(0,0,0,.28);
-  border: 1.5px dashed rgba(0,0,0,.1);
-  border-radius: 6px;
+  padding: 22px;
+  font-size: 13px;
+  color: rgba(0,0,0,.34);
+  border: 1.5px dashed rgba(0,0,0,.13);
+  border-radius: 9px;
   text-align: center;
   width: 100%;
 }
 
 .admin-section-block__footer {
-  padding: 6px 0 20px;
+  padding: 10px 0 24px;
   display: flex;
-  justify-content: center;
+  justify-content: stretch;
 }
 
-.admin-section-block__add-field-wrap { position: relative; }
+.admin-section-block__add-field-wrap { position: relative; width: 100%; }
 
 .admin-section-block__add-field-btn {
   display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 6px 14px;
-  border: 1px dashed rgba(0,0,0,.18);
-  border-radius: 6px;
-  background: transparent;
+  justify-content: center;
+  gap: 7px;
+  width: 100%;
+  padding: 11px 14px;
+  border: 1.5px dashed #D4CFC5;
+  border-radius: 9px;
+  background: #FBFAF8;
   cursor: pointer;
   font-size: 13px;
-  color: rgba(0,0,0,.4);
-  transition: all .15s;
+  font-weight: 540;
+  font-variation-settings: 'wght' 540;
+  color: rgba(0,0,0,.5);
+  transition: border-color .14s, color .14s, background .14s;
   font-family: inherit;
 }
 .admin-section-block__add-field-btn:hover {
   border-color: var(--c-ink);
   color: var(--c-ink);
-  background: #F0EDE6;
+  background: #F4F2EC;
 }
 
 /* ── Field type picker ───────────────────────────── */
