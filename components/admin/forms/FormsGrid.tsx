@@ -7,7 +7,7 @@ import type { Form, FormCategory } from '@/lib/forms'
 import { FORM_CATEGORY_LABELS } from '@/lib/forms'
 import ShareFormButton from './ShareFormButton'
 import DeleteFormButton from './DeleteFormButton'
-import { bulkDeleteFormsAction, bulkSetFormStatusAction } from '@/app/admin/forms/actions'
+import { bulkDeleteFormsAction, bulkSetFormStatusAction, publishFormAction, updateFormAction } from '@/app/admin/forms/actions'
 import { openConfirm } from '@/lib/confirmStore'
 import { toast } from '@/lib/toastStore'
 import { ListToolbar, SearchField, SortSelect, BulkBar, Checkbox, TableHead } from '@/components/admin/list/ListControls'
@@ -32,13 +32,30 @@ function categoryLabel(cat: string) {
   return FORM_CATEGORY_LABELS[cat as FormCategory] ?? cat
 }
 
-export default function FormsGrid({ forms }: { forms: FormWithCount[] }) {
+export default function FormsGrid({ forms: initialForms }: { forms: FormWithCount[] }) {
+  const [forms, setForms] = useState(initialForms)
   const [filter, setFilter] = useState<Filter>('all')
   const [query, setQuery] = useState('')
   const [sort, setSort] = useState<Sort>('recent')
   const [view, setView] = useState<View>('list')
   const [selected, setSelected] = useState<Set<string>>(new Set())
   const [pending, startTransition] = useTransition()
+
+  const handlePublishToggle = async (form: FormWithCount) => {
+    try {
+      if (form.status === 'published') {
+        await updateFormAction(form.id, { status: 'draft' })
+        setForms(prev => prev.map(f => f.id === form.id ? { ...f, status: 'draft' } : f))
+        toast.success('Set to draft')
+      } else {
+        await publishFormAction(form.id)
+        setForms(prev => prev.map(f => f.id === form.id ? { ...f, status: 'published' } : f))
+        toast.success('Published!')
+      }
+    } catch {
+      toast.error('Failed to update status')
+    }
+  }
 
   const published = forms.filter(f => f.status === 'published').length
   const drafts = forms.filter(f => f.status === 'draft').length
@@ -82,6 +99,16 @@ export default function FormsGrid({ forms }: { forms: FormWithCount[] }) {
     const c = compact ? ' admin-btn-ghost--icon' : ''
     return (
       <>
+        <button
+          type="button"
+          className={form.status === 'published' ? `admin-btn-ghost${c}` : `admin-btn-primary admin-btn-primary--icon`}
+          style={!compact ? { width: 'auto', padding: '5px 12px', fontSize: 12 } : undefined}
+          title={form.status === 'published' ? 'Unpublish' : 'Publish'}
+          onClick={() => handlePublishToggle(form)}
+        >
+          <Icon name={form.status === 'published' ? 'visibility_off' : 'visibility'} size={compact ? 16 : 14} />
+          {!compact && <> {form.status === 'published' ? 'Unpublish' : 'Publish'}</>}
+        </button>
         <Link href={`/admin/forms/${form.id}/edit`} className={`admin-btn-ghost${c}`} title="Edit">
           <Icon name="edit" size={compact ? 16 : 15} />{!compact && <> Edit</>}
         </Link>

@@ -17,6 +17,7 @@ import type { Form, FormSection, FormField, FieldType, FormWithContent } from '@
 import { FIELD_TYPE_LABELS, FIELD_TYPE_ICONS } from '@/lib/forms'
 import {
   updateFormAction,
+  publishFormAction,
   createSectionAction,
   updateSectionAction,
   deleteSectionAction,
@@ -464,6 +465,28 @@ export default function FormBuilder({ initial }: Props) {
                 View live ↗
               </Link>
             )}
+            <button
+              type="button"
+              className={form.status === 'published' ? 'admin-btn-secondary' : 'admin-btn-primary'}
+              style={{ width: 'auto', padding: '7px 16px', fontSize: 13 }}
+              onClick={async () => {
+                try {
+                  if (form.status === 'published') {
+                    await updateFormAction(form.id, { status: 'draft' })
+                    setForm(prev => ({ ...prev, status: 'draft' }))
+                    toast.success('Set to draft')
+                  } else {
+                    await publishFormAction(form.id)
+                    setForm(prev => ({ ...prev, status: 'published' }))
+                    toast.success('Form published!')
+                  }
+                } catch {
+                  toast.error('Failed to update status')
+                }
+              }}
+            >
+              {form.status === 'published' ? 'Unpublish' : 'Publish'}
+            </button>
             <ShareFormButton formId={form.id} slug={form.slug} status={form.status} />
             <button
               type="button"
