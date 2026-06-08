@@ -45,6 +45,18 @@ export async function deleteFormFromListAction(id: string) {
   revalidatePath('/admin/inbox')
 }
 
+export async function bulkDeleteFormsAction(ids: string[]) {
+  await Promise.all(ids.map(id => deleteForm(id).catch(() => {})))
+  revalidatePath('/admin/forms')
+  revalidatePath('/admin/inbox')
+}
+
+export async function bulkSetFormStatusAction(ids: string[], status: 'published' | 'draft' | 'closed') {
+  await Promise.all(ids.map(id => updateForm(id, { status }).catch(() => {})))
+  revalidatePath('/admin/forms')
+  revalidatePath('/admin/inbox')
+}
+
 export async function publishFormAction(id: string) {
   await updateForm(id, { status: 'published' })
   revalidatePath('/admin/forms')
