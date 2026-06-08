@@ -7,7 +7,7 @@ import { protectedResourceHandler, metadataCorsOptionsRequestHandler } from 'mcp
  */
 const handler = protectedResourceHandler({
   authServerUrls: [process.env.WORKOS_AUTHKIT_DOMAIN || ''],
-  resourceUrl: 'https://afterthought.design/api/mcp',
+  resourceUrl: 'https://www.afterthought.design/api/mcp',
 })
 
 const optionsHandler = metadataCorsOptionsRequestHandler()
