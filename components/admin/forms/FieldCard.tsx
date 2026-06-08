@@ -29,12 +29,14 @@ export default function FieldCard({ field, isSelected, onSelect, onLabelChange, 
   }
 
   const handleLabelClick = useCallback((e: React.MouseEvent) => {
+    // If the field isn't selected yet, let the click bubble up so the card
+    // selects (and the settings panel opens). Only when it's already selected
+    // does clicking the label switch to inline-rename mode.
+    if (!isSelected) return
     e.stopPropagation()
-    if (isSelected) {
-      setIsEditing(true)
-      setLabelDraft(field.label)
-      setTimeout(() => inputRef.current?.select(), 0)
-    }
+    setIsEditing(true)
+    setLabelDraft(field.label)
+    setTimeout(() => inputRef.current?.select(), 0)
   }, [isSelected, field.label])
 
   const handleLabelBlur = useCallback(() => {
