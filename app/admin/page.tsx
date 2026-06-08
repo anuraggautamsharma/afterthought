@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Icon from '@/components/Icon'
 import { getSubmissions, countUnread } from '@/lib/submissions'
 import { getAllPosts, getPublishedPosts } from '@/lib/posts'
 import { getAllProjects, getPublishedProjects } from '@/lib/projects'
@@ -61,7 +62,36 @@ export default async function AdminDashboard() {
 
   return (
     <div className="admin-dashboard">
-      <h1 className="admin-page-title" style={{ marginBottom: '28px' }}>Dashboard</h1>
+      <h1 className="admin-page-title" style={{ marginBottom: '24px' }}>Dashboard</h1>
+
+      {/* Stat tiles */}
+      <div className="admin-stat-tiles">
+        <Link href="/admin/inbox" className="admin-stat-tile">
+          <span className="admin-stat-tile__icon"><Icon name="inbox" size={20} /></span>
+          <span className="admin-stat-tile__num">{unread}</span>
+          <span className="admin-stat-tile__label">Unread messages</span>
+        </Link>
+        <Link href="/admin/posts" className="admin-stat-tile">
+          <span className="admin-stat-tile__icon"><Icon name="article" size={20} /></span>
+          <span className="admin-stat-tile__num">{publishedPosts.length}</span>
+          <span className="admin-stat-tile__label">Published posts</span>
+        </Link>
+        <Link href="/admin/work" className="admin-stat-tile">
+          <span className="admin-stat-tile__icon"><Icon name="grid_view" size={20} /></span>
+          <span className="admin-stat-tile__num">{publishedProjects.length}</span>
+          <span className="admin-stat-tile__label">Live projects</span>
+        </Link>
+        <Link href="/admin/jobs" className="admin-stat-tile">
+          <span className="admin-stat-tile__icon"><Icon name="work" size={20} /></span>
+          <span className="admin-stat-tile__num">{openJobs.length}</span>
+          <span className="admin-stat-tile__label">Open jobs</span>
+        </Link>
+        <Link href="/admin/forms" className="admin-stat-tile">
+          <span className="admin-stat-tile__icon"><Icon name="dynamic_form" size={20} /></span>
+          <span className="admin-stat-tile__num">{formsResponsesThisWeek}</span>
+          <span className="admin-stat-tile__label">Responses this week</span>
+        </Link>
+      </div>
 
       <div className="admin-dashboard__grid">
         {/* Inbox card */}
@@ -168,7 +198,7 @@ export default async function AdminDashboard() {
           </p>
 
           <div className="admin-dash-quick-actions">
-            <Link href="/admin/forms/new" className="admin-btn-secondary"
+            <Link href="/admin/forms" className="admin-btn-secondary"
               style={{ width: 'auto', fontSize: '13px', padding: '9px 16px', textDecoration: 'none' }}>
               + New form
             </Link>

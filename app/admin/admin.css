@@ -3139,3 +3139,22 @@ details[open] > .admin-sidebar-card__summary { border-bottom: 1px solid #EDEAE3;
 .admin-checkbox input:focus-visible + .admin-checkbox__box { box-shadow: 0 0 0 3px rgba(0,0,0,.12); }
 
 .admin-posts-table__row.is-selected { background: #F4F2EE; }
+
+/* ═══════════════════════════════════════════════════
+   DASHBOARD STAT TILES (HubSpot-style)
+═══════════════════════════════════════════════════ */
+.admin-stat-tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; margin-bottom: 28px; }
+.admin-stat-tile { display: flex; flex-direction: column; gap: 6px; padding: 18px 20px; background: #fff; border: 1px solid #E5E3DC; border-radius: 12px; text-decoration: none; color: #1A1916; transition: box-shadow .15s, transform .12s, border-color .15s; }
+.admin-stat-tile:hover { box-shadow: 0 6px 20px rgba(0,0,0,.07); transform: translateY(-1px); border-color: #D8D4CC; }
+.admin-stat-tile__icon { width: 36px; height: 36px; border-radius: 9px; background: #F4F2EE; display: flex; align-items: center; justify-content: center; color: #57534E; margin-bottom: 4px; }
+.admin-stat-tile__num { font-size: 30px; line-height: 1; font-variation-settings: 'wght' 600; font-weight: 600; letter-spacing: -0.5px; }
+.admin-stat-tile__label { font-size: 12px; color: rgba(0,0,0,.5); }
+
+/* ═══════════════════════════════════════════════════
+   GLOBAL POLISH (focus, motion, elevation)
+═══════════════════════════════════════════════════ */
+.admin-shell button, .admin-shell a, .admin-shell input, .admin-shell select, .admin-shell textarea { transition: background .14s, border-color .14s, color .14s, box-shadow .14s, opacity .14s; }
+.admin-shell input:focus-visible, .admin-shell select:focus-visible, .admin-shell textarea:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(26,25,22,.12); }
+.admin-shell button:focus-visible, .admin-shell a:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(26,25,22,.14); border-radius: 6px; }
+.admin-dash-card { transition: box-shadow .15s, border-color .15s; }
+.admin-dash-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,.05); }
