@@ -6,7 +6,7 @@ import {
   createForm, updateForm, deleteForm,
   createSection, updateSection, deleteSection,
   createField, updateField, deleteField, reorderFields,
-  createFullForm, getFormBySiteRole, getFormById,
+  createFullForm, getFormBySiteRole, getFormById, duplicateForm,
   type FormInput, type FieldInput, type SectionInput, type FormField,
   defaultFieldProps,
 } from '@/lib/forms'
@@ -55,6 +55,16 @@ export async function bulkSetFormStatusAction(ids: string[], status: 'published'
   await Promise.all(ids.map(id => updateForm(id, { status }).catch(() => {})))
   revalidatePath('/admin/forms')
   revalidatePath('/admin/inbox')
+}
+
+export async function duplicateFormAction(id: string): Promise<{ id?: string; error?: string }> {
+  try {
+    const copy = await duplicateForm(id)
+    revalidatePath('/admin/forms')
+    return { id: copy.id }
+  } catch (e) {
+    return { error: e instanceof Error ? e.message : 'Failed to duplicate form' }
+  }
 }
 
 export async function publishFormAction(id: string) {

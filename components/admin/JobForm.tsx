@@ -4,7 +4,14 @@ import { useState, useCallback, useTransition, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import type { Job } from '@/lib/jobs'
-import { saveJobAction, createApplicationFormAction } from '@/app/admin/jobs/actions'
+import {
+  saveJobAction,
+  createNewApplicationFormAction,
+  listFormsForPickerAction,
+  setJobApplicationFormAction,
+  duplicateFormForJobAction,
+  type FormPickerOption,
+} from '@/app/admin/jobs/actions'
 import { slugify } from '@/lib/slugify'
 import { toast } from '@/lib/toastStore'
 import SaveBar from './SaveBar'
@@ -34,19 +41,57 @@ export default function JobForm({ job }: { job: Job | null }) {
   const [errorMsg,   setErrorMsg]   = useState('')
   const [isDirty,    setIsDirty]    = useState(false)
   const [appFormId,  setAppFormId]  = useState<string | null>(job?.application_form_id ?? null)
-  const [creatingForm, setCreatingForm] = useState(false)
+  const [formOptions, setFormOptions] = useState<FormPickerOption[]>([])
+  const [formBusy, setFormBusy] = useState(false)
 
-  const handleCreateAppForm = () => {
+  // Load the form list for the picker once the job exists.
+  useEffect(() => {
     if (!job?.id) return
-    setCreatingForm(true)
+    listFormsForPickerAction().then(setFormOptions).catch(() => {})
+  }, [job?.id])
+
+  const handleSelectForm = (formId: string | null) => {
+    if (!job?.id) return
+    setAppFormId(formId)
+    setFormBusy(true)
     startTransition(async () => {
-      const res = await createApplicationFormAction(job.id)
-      setCreatingForm(false)
+      const res = await setJobApplicationFormAction(job.id, formId)
+      setFormBusy(false)
+      if (res.error) toast.error(res.error)
+      else toast.success(formId ? 'Form attached to this job' : 'Form detached')
+    })
+  }
+
+  const handleCreateNewForm = () => {
+    if (!job?.id) return
+    setFormBusy(true)
+    startTransition(async () => {
+      const res = await createNewApplicationFormAction(job.id)
+      setFormBusy(false)
       if (res.formId) {
         setAppFormId(res.formId)
-        toast.success('Application form created')
+        const fresh = await listFormsForPickerAction().catch(() => [])
+        setFormOptions(fresh)
+        toast.success('New application form created')
       } else {
         toast.error(res.error ?? 'Failed to create form')
+      }
+    })
+  }
+
+  const handleDuplicateForm = () => {
+    if (!job?.id || !appFormId) return
+    setFormBusy(true)
+    startTransition(async () => {
+      const res = await duplicateFormForJobAction(job.id, appFormId)
+      setFormBusy(false)
+      if (res.formId) {
+        setAppFormId(res.formId)
+        const fresh = await listFormsForPickerAction().catch(() => [])
+        setFormOptions(fresh)
+        toast.success('Duplicated — now editing the job’s own copy')
+      } else {
+        toast.error(res.error ?? 'Failed to duplicate form')
       }
     })
   }
@@ -207,29 +252,64 @@ export default function JobForm({ job }: { job: Job | null }) {
       <section className="admin-settings-card">
         <h2 className="admin-settings-card__title">Application form</h2>
         <p className="admin-settings-card__hint">
-          This job has its own application form. Candidates fill it in on the public job
-          page, and responses land in your Inbox under this job.
+          Choose which form candidates fill in on the public job page. You can reuse one
+          form across several roles, or give this role its own. Responses are tagged to
+          this job in your Inbox.
         </p>
+
         {!job?.id ? (
           <p className="admin-settings-card__hint" style={{ marginTop: 8 }}>
-            Save the job first — its application form is created automatically.
+            Save the job first — then you can attach or create its application form.
           </p>
-        ) : appFormId ? (
-          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginTop: 4 }}>
-            <Link href={`/admin/forms/${appFormId}/edit`} className="admin-btn-primary"
-              style={{ width: 'auto', padding: '10px 18px', textDecoration: 'none' }}>
-              Edit application form →
-            </Link>
-            <Link href={`/admin/inbox?form=${appFormId}`} className="admin-btn-ghost">
-              View responses
-            </Link>
-          </div>
         ) : (
-          <button type="button" className="admin-btn-primary"
-            style={{ width: 'auto', padding: '10px 18px', marginTop: 4 }}
-            disabled={pending} onClick={handleCreateAppForm}>
-            {creatingForm ? 'Creating…' : 'Create application form'}
-          </button>
+          <>
+            <div className="admin-field admin-field--wide" style={{ marginTop: 4, maxWidth: 420 }}>
+              <label>Use form</label>
+              <select
+                value={appFormId ?? ''}
+                disabled={formBusy}
+                onChange={e => handleSelectForm(e.target.value || null)}
+              >
+                <option value="">— No form attached —</option>
+                {formOptions.map(f => (
+                  <option key={f.id} value={f.id}>
+                    {f.title}{f.status !== 'published' ? ` (${f.status})` : ''}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginTop: 12 }}>
+              {appFormId && (
+                <Link href={`/admin/forms/${appFormId}/edit`} className="admin-btn-primary"
+                  style={{ width: 'auto', padding: '10px 18px', textDecoration: 'none' }}>
+                  Edit this form →
+                </Link>
+              )}
+              {appFormId && (
+                <Link href={`/admin/inbox?form=${appFormId}&job=${job.id}`} className="admin-btn-ghost">
+                  View responses
+                </Link>
+              )}
+              <button type="button" className="admin-btn-ghost"
+                disabled={formBusy} onClick={handleCreateNewForm}>
+                + Create new form
+              </button>
+              {appFormId && (
+                <button type="button" className="admin-btn-ghost"
+                  disabled={formBusy} onClick={handleDuplicateForm}
+                  title="Make a separate copy just for this role, so edits don’t affect other jobs">
+                  Duplicate &amp; customise
+                </button>
+              )}
+            </div>
+
+            {appFormId && formOptions.filter(f => f.id === appFormId).length === 0 && (
+              <p className="admin-settings-card__hint" style={{ marginTop: 10 }}>
+                Loading form details…
+              </p>
+            )}
+          </>
         )}
       </section>
     </div>

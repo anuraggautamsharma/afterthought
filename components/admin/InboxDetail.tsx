@@ -25,10 +25,14 @@ export default function InboxDetail({
   submission: s,
   form,
   fields,
+  jobTitle,
+  jobSlug,
 }: {
   submission: Submission
   form?: Form | null
   fields?: FormField[]
+  jobTitle?: string | null
+  jobSlug?: string | null
 }) {
   const [pending, startTransition] = useTransition()
 
@@ -79,6 +83,14 @@ export default function InboxDetail({
         <div className="admin-inbox-detail__head">
           <span className={`admin-inbox-badge admin-inbox-badge--${s.type}`}>{badgeLabel}</span>
           {form && <span className="admin-inbox-detail__form">from {form.title}</span>}
+          {jobTitle && (
+            <span className="admin-inbox-detail__job">
+              applied to{' '}
+              {jobSlug
+                ? <a href={`/careers/${jobSlug}`} target="_blank" rel="noopener noreferrer">{jobTitle} ↗</a>
+                : jobTitle}
+            </span>
+          )}
           <span className="admin-inbox-detail__time">{created}</span>
         </div>
 

@@ -7,7 +7,8 @@ import type { Form, FormCategory } from '@/lib/forms'
 import { FORM_CATEGORY_LABELS } from '@/lib/forms'
 import ShareFormButton from './ShareFormButton'
 import DeleteFormButton from './DeleteFormButton'
-import { bulkDeleteFormsAction, bulkSetFormStatusAction, publishFormAction, updateFormAction } from '@/app/admin/forms/actions'
+import { bulkDeleteFormsAction, bulkSetFormStatusAction, publishFormAction, updateFormAction, duplicateFormAction } from '@/app/admin/forms/actions'
+import { useRouter } from 'next/navigation'
 import { openConfirm } from '@/lib/confirmStore'
 import { toast } from '@/lib/toastStore'
 import { ListToolbar, SearchField, SortSelect, BulkBar, Checkbox, TableHead } from '@/components/admin/list/ListControls'
@@ -33,6 +34,7 @@ function categoryLabel(cat: string) {
 }
 
 export default function FormsGrid({ forms: initialForms }: { forms: FormWithCount[] }) {
+  const router = useRouter()
   const [forms, setForms] = useState(initialForms)
   const [filter, setFilter] = useState<Filter>('all')
   const [query, setQuery] = useState('')
@@ -40,6 +42,16 @@ export default function FormsGrid({ forms: initialForms }: { forms: FormWithCoun
   const [view, setView] = useState<View>('list')
   const [selected, setSelected] = useState<Set<string>>(new Set())
   const [pending, startTransition] = useTransition()
+
+  const handleDuplicate = async (form: FormWithCount) => {
+    const res = await duplicateFormAction(form.id)
+    if (res.id) {
+      toast.success('Form duplicated — opening the copy')
+      router.push(`/admin/forms/${res.id}/edit`)
+    } else {
+      toast.error(res.error ?? 'Failed to duplicate')
+    }
+  }
 
   const handlePublishToggle = async (form: FormWithCount) => {
     try {
@@ -118,6 +130,9 @@ export default function FormsGrid({ forms: initialForms }: { forms: FormWithCoun
         <Link href={`/admin/forms/${form.id}/settings`} className={`admin-btn-ghost${c}`} title="Settings">
           <Icon name="settings" size={compact ? 16 : 15} />{!compact && <> Settings</>}
         </Link>
+        <button type="button" className={`admin-btn-ghost${c}`} title="Duplicate" onClick={() => handleDuplicate(form)}>
+          <Icon name="content_copy" size={compact ? 16 : 15} />{!compact && <> Duplicate</>}
+        </button>
         <ShareFormButton formId={form.id} slug={form.slug} status={form.status} iconOnly={compact} />
         {form.status === 'published' && (
           <Link href={`/forms/${form.slug}`} target="_blank" className={`admin-btn-ghost${c}`} title="View live">

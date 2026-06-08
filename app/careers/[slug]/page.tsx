@@ -111,7 +111,7 @@ export default async function RolePage({ params }: { params: Promise<{ slug: str
           </div>
           {role.application_form_id ? (
             <div style={{ maxWidth: '640px' }}>
-              <EmbeddedForm formId={role.application_form_id} hideHeader />
+              <EmbeddedForm formId={role.application_form_id} hideHeader jobId={role.id} />
             </div>
           ) : (
             <RoleApplyForm id={role.slug} />

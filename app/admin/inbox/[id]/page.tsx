@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation'
 import { getSubmissionById } from '@/lib/submissions'
 import { getFormById, getFields, type FormField, type Form } from '@/lib/forms'
+import { getJobById } from '@/lib/jobs'
 import InboxDetail from '@/components/admin/InboxDetail'
 
 export const dynamic = 'force-dynamic'
@@ -21,5 +22,13 @@ export default async function SubmissionPage({ params }: { params: Promise<{ id:
     ])
   }
 
-  return <InboxDetail submission={submission} form={form} fields={fields} />
+  // If it came in through a job's application form, resolve the job title.
+  let jobTitle: string | null = null
+  let jobSlug: string | null = null
+  if (submission.job_id) {
+    const job = await getJobById(submission.job_id).catch(() => null)
+    if (job) { jobTitle = job.title; jobSlug = job.slug }
+  }
+
+  return <InboxDetail submission={submission} form={form} fields={fields} jobTitle={jobTitle} jobSlug={jobSlug} />
 }

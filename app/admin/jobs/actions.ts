@@ -1,7 +1,7 @@
 'use server'
 
 import { createJob, updateJob, deleteJob, countJobs, getAllJobs, getJobById, type JobInput } from '@/lib/jobs'
-import { createFullForm } from '@/lib/forms'
+import { createFullForm, getAllForms, duplicateForm } from '@/lib/forms'
 import { applicationFormSpec } from '@/lib/forms-seed'
 import { roles } from '@/lib/roles'
 import { slugify } from '@/lib/slugify'
@@ -29,6 +29,75 @@ export async function createApplicationFormAction(
     return { formId }
   } catch (e) {
     return { error: e instanceof Error ? e.message : 'Failed to create form' }
+  }
+}
+
+/** Always creates a brand-new dedicated form and links it (picker "Create new"). */
+export async function createNewApplicationFormAction(
+  jobId: string
+): Promise<{ formId?: string; error?: string }> {
+  try {
+    const job = await getJobById(jobId)
+    if (!job) return { error: 'Job not found' }
+    const formId = await ensureJobApplicationForm(jobId, job.title)
+    revalidatePath(`/admin/jobs/${jobId}`)
+    revalidatePath('/admin/forms')
+    return { formId }
+  } catch (e) {
+    return { error: e instanceof Error ? e.message : 'Failed to create form' }
+  }
+}
+
+/** Minimal form list for the job's "Application form" picker. */
+export interface FormPickerOption {
+  id: string
+  title: string
+  category: string
+  status: 'draft' | 'published' | 'closed'
+}
+
+export async function listFormsForPickerAction(): Promise<FormPickerOption[]> {
+  try {
+    const forms = await getAllForms()
+    return forms.map(f => ({
+      id: f.id,
+      title: f.title || 'Untitled form',
+      category: f.category,
+      status: f.status,
+    }))
+  } catch {
+    return []
+  }
+}
+
+/** Attaches (or clears, with null) an existing form as the job's application form. */
+export async function setJobApplicationFormAction(
+  jobId: string,
+  formId: string | null
+): Promise<{ ok: boolean; error?: string }> {
+  try {
+    await updateJob(jobId, { application_form_id: formId })
+    revalidatePath(`/admin/jobs/${jobId}`)
+    revalidatePath('/admin/forms')
+    return { ok: true }
+  } catch (e) {
+    return { ok: false, error: e instanceof Error ? e.message : 'Failed to update job' }
+  }
+}
+
+/** Duplicates an existing form and links the copy to this job (specialise flow). */
+export async function duplicateFormForJobAction(
+  jobId: string,
+  sourceFormId: string
+): Promise<{ formId?: string; error?: string }> {
+  try {
+    const copy = await duplicateForm(sourceFormId)
+    await updateJob(jobId, { application_form_id: copy.id })
+    revalidatePath(`/admin/jobs/${jobId}`)
+    revalidatePath('/admin/forms')
+    return { formId: copy.id }
+  } catch (e) {
+    return { error: e instanceof Error ? e.message : 'Failed to duplicate form' }
   }
 }
 

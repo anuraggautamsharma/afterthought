@@ -11,7 +11,8 @@ export interface SubmitResult {
 export async function submitFormAction(
   formId: string,
   slug: string,
-  responses: Record<string, unknown>
+  responses: Record<string, unknown>,
+  jobId?: string | null
 ): Promise<SubmitResult> {
   try {
     const [form, fields] = await Promise.all([
@@ -77,6 +78,7 @@ export async function submitFormAction(
       email,
       subject: form.title,
       form_id: formId,
+      job_id: jobId ?? null,
       responses,
     })
 

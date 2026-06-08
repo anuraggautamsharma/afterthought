@@ -18,6 +18,12 @@ export interface InboxGroup {
   unread: number
 }
 
+export interface JobChip {
+  id: string
+  label: string
+  total: number
+}
+
 interface Props {
   groups: InboxGroup[]
   allCount: number
@@ -28,6 +34,9 @@ interface Props {
   viewMode: 'list' | 'table'
   selectedForm: Form | null
   selectedFields: FormField[]
+  jobsById: Record<string, string>
+  jobChips: JobChip[]
+  selectedJob: string // 'all' | 'none' | jobId
 }
 
 function timeAgo(iso: string) {
@@ -57,6 +66,9 @@ export default function InboxHub({
   viewMode,
   selectedForm,
   selectedFields,
+  jobsById,
+  jobChips,
+  selectedJob,
 }: Props) {
   const [exporting, setExporting] = useState(false)
   const [query, setQuery] = useState('')
@@ -212,6 +224,28 @@ export default function InboxHub({
           )}
         </div>
 
+        {jobChips.length > 0 && (
+          <div className="admin-inbox-jobfilter">
+            <span className="admin-inbox-jobfilter__label">Job</span>
+            <Link
+              href={href({ form: selected, view: viewMode === 'table' ? 'table' : '' })}
+              className={`admin-inbox-jobchip ${selectedJob === 'all' ? 'is-active' : ''}`}
+            >
+              All
+            </Link>
+            {jobChips.map(j => (
+              <Link
+                key={j.id}
+                href={href({ form: selected, job: j.id, view: viewMode === 'table' ? 'table' : '' })}
+                className={`admin-inbox-jobchip ${selectedJob === j.id ? 'is-active' : ''}`}
+              >
+                {j.label}
+                <span className="admin-inbox-jobchip__count">{j.total}</span>
+              </Link>
+            ))}
+          </div>
+        )}
+
         {items.length > 0 && (
           <div className="admin-inbox-main__search">
             <SearchField value={query} onChange={setQuery} placeholder="Search these responses…" />
@@ -253,6 +287,9 @@ export default function InboxHub({
                 </span>
                 <span className="admin-inbox-row__name">{s.name || s.email || '(no name)'}</span>
                 <span className="admin-inbox-row__subject">{s.subject || s.message || s.email}</span>
+                {s.job_id && jobsById[s.job_id] && (
+                  <span className="admin-inbox-row__job">→ {jobsById[s.job_id]}</span>
+                )}
                 <span className="admin-inbox-row__time">{timeAgo(s.created_at)}</span>
               </Link>
             ))}

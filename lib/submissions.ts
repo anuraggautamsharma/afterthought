@@ -13,6 +13,8 @@ export interface Submission {
   message: string
   data: Record<string, unknown>
   form_id: string | null
+  /** When a form is used as a job's application form, which job this came from. */
+  job_id: string | null
   responses: Record<string, unknown>
   is_read: boolean
   is_archived: boolean
@@ -27,22 +29,28 @@ export type SubmissionInput = {
   message?: string
   data?: Record<string, unknown>
   form_id?: string | null
+  job_id?: string | null
   responses?: Record<string, unknown>
 }
 
 export async function createSubmission(input: SubmissionInput): Promise<Submission> {
+  const row: Record<string, unknown> = {
+    type: input.type,
+    name: input.name ?? '',
+    email: input.email ?? '',
+    subject: input.subject ?? '',
+    message: input.message ?? '',
+    data: input.data ?? {},
+    form_id: input.form_id ?? null,
+    responses: input.responses ?? {},
+  }
+  // Only include job_id when present so the insert still works if the column
+  // hasn't been added yet (graceful pre-migration behaviour).
+  if (input.job_id) row.job_id = input.job_id
+
   const { data, error } = await supabase
     .from('submissions')
-    .insert({
-      type: input.type,
-      name: input.name ?? '',
-      email: input.email ?? '',
-      subject: input.subject ?? '',
-      message: input.message ?? '',
-      data: input.data ?? {},
-      form_id: input.form_id ?? null,
-      responses: input.responses ?? {},
-    })
+    .insert(row)
     .select()
     .single()
   if (error) throw error

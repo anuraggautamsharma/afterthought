@@ -9,6 +9,8 @@ interface Props {
   formId?: string
   /** Hide the form's own title/description when the page already provides it. */
   hideHeader?: boolean
+  /** Tag submissions with the job they came from (for shared application forms). */
+  jobId?: string | null
 }
 
 /**
@@ -17,7 +19,7 @@ interface Props {
  * id and renders the themed FormRenderer. If the form isn't available, shows a
  * gentle fallback rather than breaking the page.
  */
-export default async function EmbeddedForm({ role, formId, hideHeader }: Props) {
+export default async function EmbeddedForm({ role, formId, hideHeader, jobId }: Props) {
   const form = await (formId
     ? getFormById(formId)
     : role
@@ -49,6 +51,7 @@ export default async function EmbeddedForm({ role, formId, hideHeader }: Props) 
         fields={fields}
         onSubmit={submitFormAction}
         hideHeader={hideHeader}
+        jobId={jobId}
       />
     </div>
   )

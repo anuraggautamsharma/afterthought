@@ -438,6 +438,88 @@ export async function createFullForm(spec: SeedFormSpec): Promise<Form> {
   return form
 }
 
+// ── Duplicate a form (deep copy: form + sections + fields) ───────────────────
+
+/**
+ * Creates a full copy of a form, including its sections and fields, with all
+ * internal references (field visibility, section skip-logic) remapped to the
+ * new ids. The copy is always a standalone draft — it never inherits the
+ * original's site_role or is_system binding, so duplicating a built-in form
+ * gives you a free, editable form.
+ */
+export async function duplicateForm(formId: string): Promise<Form> {
+  const source = await getFormById(formId)
+  if (!source) throw new Error('Form not found')
+  const [sections, fields] = await Promise.all([getSections(formId), getFields(formId)])
+
+  // 1. New form — copy settings, reset identity/binding, force draft.
+  const {
+    id: _id, created_at: _c, updated_at: _u,
+    slug: _slug, site_role: _role, is_system: _sys,
+    title, ...rest
+  } = source
+  const copy = await createForm({
+    ...rest,
+    title: `${title} (copy)`,
+    site_role: null,
+    is_system: false,
+    status: 'draft',
+  })
+
+  // 2. Sections — create without skip_logic first, capture id map.
+  const sectionIdMap = new Map<string, string>()
+  for (const s of sections) {
+    const created = await createSection({
+      form_id: copy.id,
+      title: s.title,
+      description: s.description,
+      sort_order: s.sort_order,
+      skip_logic: [],
+    })
+    sectionIdMap.set(s.id, created.id)
+  }
+
+  // 3. Fields — create with remapped section_id, visibility temporarily null.
+  const fieldIdMap = new Map<string, string>()
+  for (const f of fields) {
+    const { id, created_at, updated_at, form_id, section_id, visibility, ...fieldRest } = f
+    const created = await createField({
+      ...fieldRest,
+      form_id: copy.id,
+      section_id: section_id ? sectionIdMap.get(section_id) ?? null : null,
+      visibility: null,
+    } as FieldInput)
+    fieldIdMap.set(id, created.id)
+  }
+
+  const remapFieldId = (oldId: string) => fieldIdMap.get(oldId) ?? oldId
+  const remapSectionId = (oldId: string | null) =>
+    oldId === null ? null : sectionIdMap.get(oldId) ?? oldId
+
+  // 4. Re-apply field visibility with remapped field ids.
+  for (const f of fields) {
+    if (!f.visibility) continue
+    const newVis: VisibilityRule = {
+      logic: f.visibility.logic,
+      conditions: f.visibility.conditions.map(c => ({ ...c, field_id: remapFieldId(c.field_id) })),
+    }
+    await updateField(remapFieldId(f.id), { visibility: newVis })
+  }
+
+  // 5. Re-apply section skip-logic with remapped field + section ids.
+  for (const s of sections) {
+    if (!s.skip_logic || s.skip_logic.length === 0) continue
+    const newSkip: SkipLogicRule[] = s.skip_logic.map(rule => ({
+      target_section_id: remapSectionId(rule.target_section_id),
+      conditions: rule.conditions.map(c => ({ ...c, field_id: remapFieldId(c.field_id) })),
+    }))
+    const newSectionId = sectionIdMap.get(s.id)
+    if (newSectionId) await updateSection(newSectionId, { skip_logic: newSkip })
+  }
+
+  return copy
+}
+
 // ── Full form fetch ──────────────────────────────────────────────────────────
 
 export interface FormWithContent {

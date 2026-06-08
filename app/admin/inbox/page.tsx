@@ -1,6 +1,7 @@
 import { getSubmissions, type Submission } from '@/lib/submissions'
 import { getAllForms, getFields, getFormById, type FormField, type Form } from '@/lib/forms'
-import InboxHub, { type InboxGroup } from '@/components/admin/InboxHub'
+import { getAllJobs, type Job } from '@/lib/jobs'
+import InboxHub, { type InboxGroup, type JobChip } from '@/components/admin/InboxHub'
 
 export const dynamic = 'force-dynamic'
 export const metadata = { title: 'Inbox — Afterthought CMS' }
@@ -8,24 +9,29 @@ export const metadata = { title: 'Inbox — Afterthought CMS' }
 export default async function InboxPage({
   searchParams,
 }: {
-  searchParams: Promise<{ archived?: string; form?: string; view?: string }>
+  searchParams: Promise<{ archived?: string; form?: string; view?: string; job?: string }>
 }) {
-  const { archived, form: formParam, view } = await searchParams
+  const { archived, form: formParam, view, job: jobParam } = await searchParams
   const showArchived = archived === '1'
   const selected = formParam ?? 'all'
+  const selectedJob = jobParam ?? 'all'
   const viewMode: 'list' | 'table' = view === 'table' ? 'table' : 'list'
 
   let submissions: Submission[] = []
   let forms: Form[] = []
+  let jobs: Job[] = []
   let dbError: string | null = null
   try {
-    ;[submissions, forms] = await Promise.all([
+    ;[submissions, forms, jobs] = await Promise.all([
       getSubmissions({ archived: showArchived }),
       getAllForms().catch(() => [] as Form[]),
+      getAllJobs().catch(() => [] as Job[]),
     ])
   } catch (e) {
     dbError = e instanceof Error ? e.message : String(e)
   }
+
+  const jobsById: Record<string, string> = Object.fromEntries(jobs.map(j => [j.id, j.title]))
 
   // ── Build sidebar groups ──────────────────────────────────────────────
   const countsByForm = new Map<string, { total: number; unread: number }>()
@@ -67,12 +73,31 @@ export default async function InboxPage({
   const totalUnread = submissions.filter(s => !s.is_read).length
 
   // ── Filter the visible list by selected group ─────────────────────────
-  const items =
+  const formItems =
     selected === 'all'
       ? submissions
       : selected === 'legacy'
         ? submissions.filter(s => !s.form_id)
         : submissions.filter(s => s.form_id === selected)
+
+  // When a single form powers multiple jobs, offer a per-job sub-filter.
+  const jobChips: JobChip[] = (() => {
+    const counts = new Map<string, number>()
+    for (const s of formItems) {
+      if (s.job_id) counts.set(s.job_id, (counts.get(s.job_id) ?? 0) + 1)
+    }
+    if (counts.size < 2) return [] // only worth showing when truly shared
+    return [...counts.entries()]
+      .map(([id, total]) => ({ id, label: jobsById[id] ?? 'Unknown job', total }))
+      .sort((a, b) => b.total - a.total || a.label.localeCompare(b.label))
+  })()
+
+  const items =
+    selectedJob === 'all'
+      ? formItems
+      : selectedJob === 'none'
+        ? formItems.filter(s => !s.job_id)
+        : formItems.filter(s => s.job_id === selectedJob)
 
   // ── Table view needs the selected form's fields ───────────────────────
   let selectedForm: Form | null = null
@@ -101,6 +126,9 @@ export default async function InboxPage({
         viewMode={viewMode}
         selectedForm={selectedForm}
         selectedFields={selectedFields}
+        jobsById={jobsById}
+        jobChips={jobChips}
+        selectedJob={selectedJob}
       />
     </>
   )

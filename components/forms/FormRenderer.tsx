@@ -34,6 +34,8 @@ interface FormRendererProps {
   onSubmit: typeof submitFormAction
   /** Hide the form's own title/description (host page provides context). */
   hideHeader?: boolean
+  /** When embedded on a job page, the job this submission should be tagged to. */
+  jobId?: string | null
 }
 
 // ── Condition evaluation ─────────────────────────────────────────────────────
@@ -116,7 +118,7 @@ function shuffleArray<T>(arr: T[]): T[] {
 
 // ── Main component ─────────────────────────────────────────────────────────────
 
-export default function FormRenderer({ form, sections, fields, onSubmit, hideHeader }: FormRendererProps) {
+export default function FormRenderer({ form, sections, fields, onSubmit, hideHeader, jobId }: FormRendererProps) {
   const router = useRouter()
 
   // ── Shuffled fields/options (stable on mount) ──────────────────────────────
@@ -307,7 +309,7 @@ export default function FormRenderer({ form, sections, fields, onSubmit, hideHea
   async function handleSubmit() {
     setIsSubmitting(true)
     try {
-      const result: SubmitResult = await onSubmit(form.id, form.slug, answers)
+      const result: SubmitResult = await onSubmit(form.id, form.slug, answers, jobId)
       if (result.ok) {
         setSubmitted(true)
         if (form.confirmation_type === 'redirect' && form.redirect_url) {
