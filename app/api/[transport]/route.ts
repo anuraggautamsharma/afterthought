@@ -2,13 +2,16 @@ import { createMcpHandler, withMcpAuth } from 'mcp-handler'
 import type { AuthInfo } from '@modelcontextprotocol/sdk/server/auth/types.js'
 import { jwtVerify, createRemoteJWKSet, decodeProtectedHeader, decodeJwt } from 'jose'
 import { z } from 'zod'
+import { revalidatePath } from 'next/cache'
 import { COLLECTIONS, getCollection } from '@/lib/mcp/registry'
 import { getSubmissions, getSubmissionById, type Submission } from '@/lib/submissions'
 import {
   getAllForms, getFields, formatAnswerForDisplay, asStoredFiles,
-  FORM_CATEGORY_LABELS, type FormCategory, type Form,
+  FORM_CATEGORY_LABELS, type FormCategory, type Form, createFullForm,
 } from '@/lib/forms'
-import { getAllJobs } from '@/lib/jobs'
+import { getAllJobs, getJobById, createJob, updateJob } from '@/lib/jobs'
+import { applicationFormSpec } from '@/lib/forms-seed'
+import { slugify } from '@/lib/slugify'
 
 export const maxDuration = 60
 
@@ -135,6 +138,118 @@ const handler = createMcpHandler(
         return text(jobs.map(j => ({ id: j.id, title: j.title, slug: j.slug, status: j.status, applications: byJob.get(j.id) ?? 0 })))
       },
     )
+
+    // ══ WRITE TOOLS ═══════════════════════════════════════════════════════════
+    const SITE = 'https://www.afterthought.design'
+    const touch = (...paths: string[]) => { for (const p of paths) { try { revalidatePath(p) } catch {} } }
+
+    server.tool(
+      'create_job',
+      'Create a new job posting on the careers page. status "open" publishes it live; "closed" keeps it hidden. Put the full job description in `description` (separate paragraphs with blank lines).',
+      {
+        title: z.string().describe('Job title, e.g. "Senior Motion Designer"'),
+        type: z.string().optional().describe('e.g. Full-time, Contract'),
+        location: z.string().optional(),
+        summary: z.string().optional().describe('One–two line teaser shown on the careers list'),
+        description: z.string().optional().describe('Full JD; blank lines separate paragraphs'),
+        what_youll_do: z.array(z.string()).optional().describe('Bullet points'),
+        looking_for: z.array(z.string()).optional().describe('Bullet points'),
+        nice_to_have: z.string().optional(),
+        why_afterthought: z.string().optional(),
+        status: z.enum(['open', 'closed']).optional().describe('Default "open" (live)'),
+      },
+      async (a) => {
+        const job = await createJob({
+          title: a.title,
+          slug: slugify(a.title),
+          type: a.type ?? 'Full-time',
+          location: a.location ?? '',
+          summary: a.summary ?? '',
+          description: a.description ?? '',
+          what_youll_do: a.what_youll_do ?? [],
+          looking_for: a.looking_for ?? [],
+          nice_to_have: a.nice_to_have ?? '',
+          why_afterthought: a.why_afterthought ?? '',
+          status: a.status ?? 'open',
+          sort_order: 0,
+        })
+        touch('/careers', '/admin/jobs')
+        return text({
+          ok: true, id: job.id, slug: job.slug, status: job.status,
+          public_url: `${SITE}/careers/${job.slug}`,
+          admin_url: `${SITE}/admin/jobs/${job.id}`,
+          next: 'Call create_application_form_for_job with this id to add an application form.',
+        })
+      },
+    )
+
+    server.tool(
+      'update_job',
+      'Update an existing job. Change `status` to "open"/"closed" to publish/unpublish, or edit any field.',
+      {
+        id: z.string(),
+        title: z.string().optional(),
+        type: z.string().optional(),
+        location: z.string().optional(),
+        summary: z.string().optional(),
+        description: z.string().optional(),
+        what_youll_do: z.array(z.string()).optional(),
+        looking_for: z.array(z.string()).optional(),
+        nice_to_have: z.string().optional(),
+        why_afterthought: z.string().optional(),
+        status: z.enum(['open', 'closed']).optional(),
+      },
+      async ({ id, ...rest }) => {
+        const patch = Object.fromEntries(Object.entries(rest).filter(([, v]) => v !== undefined))
+        const job = await updateJob(id, patch)
+        touch('/careers', `/careers/${job.slug}`, '/admin/jobs')
+        return text({ ok: true, id: job.id, status: job.status, public_url: `${SITE}/careers/${job.slug}` })
+      },
+    )
+
+    server.tool(
+      'create_application_form_for_job',
+      'Create and attach a standard application form to a job, so candidates can apply on the job page.',
+      { job_id: z.string() },
+      async ({ job_id }) => {
+        const job = await getJobById(job_id)
+        if (!job) return text({ error: 'Job not found' })
+        if (job.application_form_id) {
+          return text({ ok: true, form_id: job.application_form_id, note: 'Job already has a form', edit_url: `${SITE}/admin/forms/${job.application_form_id}/edit` })
+        }
+        const form = await createFullForm(applicationFormSpec(job.title))
+        await updateJob(job_id, { application_form_id: form.id })
+        touch('/careers', `/careers/${job.slug}`, '/admin/forms')
+        return text({ ok: true, form_id: form.id, edit_url: `${SITE}/admin/forms/${form.id}/edit` })
+      },
+    )
+
+    // Generic writes over any registered collection that supports them.
+    server.tool(
+      'create_record',
+      'Create a record in a collection that supports it (e.g. "posts", "jobs"). Pass `data` as the fields.',
+      { collection: z.string(), data: z.record(z.any()) },
+      async ({ collection, data }) => {
+        const c = getCollection(collection)
+        if (!c?.create) return text({ error: `Collection "${collection}" can't be created via MCP.` })
+        const rec = await c.create(data as Record<string, unknown>)
+        touch('/', '/careers', '/thinking')
+        return text({ ok: true, record: rec })
+      },
+    )
+
+    server.tool(
+      'update_record',
+      'Update fields on a record in a collection. e.g. publish a post with data {"status":"published"}.',
+      { collection: z.string(), id: z.string(), data: z.record(z.any()) },
+      async ({ collection, id, data }) => {
+        const c = getCollection(collection)
+        if (!c?.update) return text({ error: `Collection "${collection}" can't be updated via MCP.` })
+        const rec = await c.update(id, data as Record<string, unknown>)
+        touch('/', '/careers', '/thinking')
+        return text({ ok: true, record: rec })
+      },
+    )
   },
   {
     serverInfo: { name: 'afterthought-cms', version: '1.0.0' },
@@ -194,14 +309,20 @@ const verifyToken = async (_req: Request, bearer?: string): Promise<AuthInfo | u
   }
 
   // WorkOS AuthKit access token (JWT) — accept if any candidate JWKS verifies it.
+  const allowed = (process.env.MCP_ALLOWED_SUBS || '').split(',').map(s => s.trim()).filter(Boolean)
   const list = await getJwksList()
   for (const jwks of list) {
     try {
       const { payload } = await jwtVerify(bearer, jwks)
+      // Lock down to specific WorkOS users when an allowlist is configured.
+      if (allowed.length > 0 && !allowed.includes(String(payload.sub))) {
+        console.error('[MCP auth] user not allowed:', payload.sub)
+        return undefined
+      }
       return {
         token: bearer,
         clientId: String(payload.azp ?? payload.client_id ?? payload.sub ?? 'workos'),
-        scopes: ['cms:read'],
+        scopes: ['cms:read', 'cms:write'],
         extra: { sub: String(payload.sub ?? '') },
       }
     } catch { /* try next */ }

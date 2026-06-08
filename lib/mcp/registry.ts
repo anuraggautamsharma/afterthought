@@ -10,8 +10,8 @@
  * (Write functions — create/update/delete — get added here in Phase 2 behind
  * the same pattern.)
  */
-import { getAllPosts, getPostById } from '@/lib/posts'
-import { getAllJobs, getJobById } from '@/lib/jobs'
+import { getAllPosts, getPostById, createPost, updatePost, type PostInput } from '@/lib/posts'
+import { getAllJobs, getJobById, createJob, updateJob, type JobInput } from '@/lib/jobs'
 import { getAllForms, getFormById } from '@/lib/forms'
 import { getAllProjects, getProjectById } from '@/lib/projects'
 import { getServices, getServiceById } from '@/lib/services'
@@ -26,11 +26,16 @@ export interface McpCollection {
   description: string
   list: () => Promise<unknown[]>
   get: (id: string) => Promise<unknown | null>
+  /** Optional writes. Present only for collections that support them. */
+  create?: (data: Record<string, unknown>) => Promise<unknown>
+  update?: (id: string, data: Record<string, unknown>) => Promise<unknown>
 }
 
 export const COLLECTIONS: McpCollection[] = [
-  { name: 'posts', label: 'Posts', description: 'Blog posts / writing', list: getAllPosts, get: getPostById },
-  { name: 'jobs', label: 'Jobs', description: 'Open roles on the careers page', list: getAllJobs, get: getJobById },
+  { name: 'posts', label: 'Posts', description: 'Blog posts / writing', list: getAllPosts, get: getPostById,
+    create: d => createPost(d as PostInput), update: (id, d) => updatePost(id, d as PostInput) },
+  { name: 'jobs', label: 'Jobs', description: 'Open roles on the careers page', list: getAllJobs, get: getJobById,
+    create: d => createJob(d as JobInput), update: (id, d) => updateJob(id, d as JobInput) },
   { name: 'forms', label: 'Forms', description: 'Builder forms (contact, application, etc.)', list: getAllForms, get: getFormById },
   { name: 'work', label: 'Work', description: 'Portfolio / case-study projects', list: getAllProjects, get: getProjectById },
   { name: 'services', label: 'Services', description: 'Studio services offered', list: getServices, get: getServiceById },
