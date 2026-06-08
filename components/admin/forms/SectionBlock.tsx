@@ -6,8 +6,9 @@ import {
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable'
 import type { FormField, FormSection, FieldType } from '@/lib/forms'
-import { FIELD_GROUPS, FIELD_TYPE_LABELS, FIELD_TYPE_ICONS } from '@/lib/forms'
+import { FIELD_GROUPS, FIELD_TYPE_LABELS, FIELD_TYPE_ICON_NAMES } from '@/lib/forms'
 import FieldCard from './FieldCard'
+import Icon from '@/components/Icon'
 
 interface Props {
   section: FormSection
@@ -211,7 +212,7 @@ export default function SectionBlock({
                           className="admin-field-picker__item"
                           onClick={() => handleAddFieldType(type)}
                         >
-                          <span className="admin-field-picker__item-icon">{FIELD_TYPE_ICONS[type]}</span>
+                          <span className="admin-field-picker__item-icon"><Icon name={FIELD_TYPE_ICON_NAMES[type]} size={16} /></span>
                           <span className="admin-field-picker__item-label">{FIELD_TYPE_LABELS[type]}</span>
                         </button>
                       ))}

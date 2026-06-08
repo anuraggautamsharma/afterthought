@@ -1,7 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import { type FormField, FIELD_TYPE_ICONS } from '@/lib/forms'
+import { type FormField, FIELD_TYPE_ICON_NAMES } from '@/lib/forms'
+import Icon from '@/components/Icon'
 
 interface ResponseRow {
   id: string
@@ -50,7 +51,7 @@ export default function ResponsesTable({ fields, responses }: Props) {
             {previewFields.map(f => (
               <th key={f.id}>
                 <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}>
-                  <span style={{ opacity: 0.5 }}>{FIELD_TYPE_ICONS[f.type]}</span>
+                  <Icon name={FIELD_TYPE_ICON_NAMES[f.type]} size={15} style={{ opacity: 0.5 }} />
                   {f.label}
                 </span>
               </th>
@@ -110,7 +111,7 @@ export default function ResponsesTable({ fields, responses }: Props) {
                           {fields.map(f => (
                             <div key={f.id} className="admin-response-field">
                               <div className="admin-response-field__label">
-                                <span style={{ marginRight: 5 }}>{FIELD_TYPE_ICONS[f.type]}</span>
+                                <Icon name={FIELD_TYPE_ICON_NAMES[f.type]} size={14} style={{ marginRight: 5, verticalAlign: '-2px', opacity: 0.55 }} />
                                 {f.label}
                               </div>
                               <div className="admin-response-field__value">{formatValue(answers[f.id])}</div>

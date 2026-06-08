@@ -64,6 +64,32 @@ export const FIELD_TYPE_ICONS: Record<FieldType, string> = {
   slider: '◁▷',
 }
 
+/** Google Material Symbol names per field type — used across the form builder
+ *  (palette, field cards, type picker) and the Inbox for visual consistency. */
+export const FIELD_TYPE_ICON_NAMES: Record<FieldType, string> = {
+  short_text: 'short_text',
+  paragraph: 'notes',
+  number: 'tag',
+  email: 'alternate_email',
+  phone: 'call',
+  url: 'link',
+  radio: 'radio_button_checked',
+  checkboxes: 'check_box',
+  dropdown: 'arrow_drop_down_circle',
+  linear_scale: 'linear_scale',
+  star_rating: 'star',
+  date: 'calendar_today',
+  time: 'schedule',
+  datetime: 'event',
+  date_range: 'date_range',
+  file_upload: 'upload_file',
+  signature: 'draw',
+  image_choice: 'image',
+  matrix: 'grid_on',
+  ranking: 'format_list_numbered',
+  slider: 'tune',
+}
+
 // ── Supporting Types ─────────────────────────────────────────────────────────
 
 export interface FieldOption {

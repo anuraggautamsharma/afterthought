@@ -2,8 +2,9 @@
 
 import { useCallback } from 'react'
 import { useDraggable } from '@dnd-kit/core'
-import { FIELD_GROUPS, FIELD_TYPE_ICONS, FIELD_TYPE_LABELS } from '@/lib/forms'
+import { FIELD_GROUPS, FIELD_TYPE_ICON_NAMES, FIELD_TYPE_LABELS } from '@/lib/forms'
 import type { FieldType } from '@/lib/forms'
+import Icon from '@/components/Icon'
 
 interface PaletteItemProps {
   type: FieldType
@@ -26,7 +27,7 @@ function PaletteItem({ type, onAdd }: PaletteItemProps) {
       title={FIELD_TYPE_LABELS[type]}
     >
       <span className="admin-palette-item__icon" aria-hidden="true">
-        {FIELD_TYPE_ICONS[type]}
+        <Icon name={FIELD_TYPE_ICON_NAMES[type]} size={18} />
       </span>
       <span className="admin-palette-item__label">{FIELD_TYPE_LABELS[type]}</span>
     </div>

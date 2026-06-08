@@ -3,7 +3,8 @@
 import { useEffect, useTransition } from 'react'
 import Link from 'next/link'
 import type { Submission } from '@/lib/submissions'
-import { type Form, type FormField, type FormCategory, FORM_CATEGORY_LABELS, FIELD_TYPE_ICONS } from '@/lib/forms'
+import { type Form, type FormField, type FormCategory, FORM_CATEGORY_LABELS, FIELD_TYPE_ICON_NAMES } from '@/lib/forms'
+import Icon from '@/components/Icon'
 import { markReadAction, archiveAction, deleteSubmissionAction } from '@/app/admin/inbox/actions'
 
 function fmtValue(v: unknown): string {
@@ -105,7 +106,7 @@ export default function InboxDetail({
             {fields!.map(f => (
               <div key={f.id} className="admin-inbox-detail__field">
                 <span className="admin-inbox-detail__field-label">
-                  <span style={{ marginRight: 6, opacity: 0.5 }}>{FIELD_TYPE_ICONS[f.type]}</span>
+                  <Icon name={FIELD_TYPE_ICON_NAMES[f.type]} size={15} style={{ marginRight: 6, opacity: 0.5, verticalAlign: '-3px' }} />
                   {f.label}
                 </span>
                 <span className="admin-inbox-detail__field-value">

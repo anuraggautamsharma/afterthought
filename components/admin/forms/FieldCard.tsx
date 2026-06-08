@@ -3,8 +3,9 @@
 import { useState, useRef, useCallback } from 'react'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
-import { FIELD_TYPE_ICONS, FIELD_TYPE_LABELS } from '@/lib/forms'
+import { FIELD_TYPE_ICON_NAMES, FIELD_TYPE_LABELS } from '@/lib/forms'
 import type { FormField } from '@/lib/forms'
+import Icon from '@/components/Icon'
 
 interface Props {
   field: FormField
@@ -89,7 +90,7 @@ export default function FieldCard({ field, isSelected, onSelect, onLabelChange, 
       </button>
 
       <span className="admin-field-card__icon" aria-hidden="true">
-        {FIELD_TYPE_ICONS[field.type]}
+        <Icon name={FIELD_TYPE_ICON_NAMES[field.type]} size={17} />
       </span>
 
       <div className="admin-field-card__content">

@@ -14,7 +14,7 @@ import {
 import { arrayMove } from '@dnd-kit/sortable'
 import Link from 'next/link'
 import type { Form, FormSection, FormField, FieldType, FormWithContent } from '@/lib/forms'
-import { FIELD_TYPE_LABELS, FIELD_TYPE_ICONS } from '@/lib/forms'
+import { FIELD_TYPE_LABELS, FIELD_TYPE_ICON_NAMES } from '@/lib/forms'
 import {
   updateFormAction,
   publishFormAction,
@@ -29,6 +29,7 @@ import {
 import { toast } from '@/lib/toastStore'
 import { openConfirm } from '@/lib/confirmStore'
 import SaveBar from '@/components/admin/SaveBar'
+import Icon from '@/components/Icon'
 import FieldPalette from './FieldPalette'
 import FormCanvas from './FormCanvas'
 import FieldSettingsPanel from './FieldSettingsPanel'
@@ -538,13 +539,13 @@ export default function FormBuilder({ initial }: Props) {
       <DragOverlay dropAnimation={{ duration: 180, easing: 'cubic-bezier(0.18,0.67,0.6,1.22)' }}>
         {activeDragType ? (
           <div className="admin-palette-item admin-palette-item--overlay">
-            <span className="admin-palette-item__icon">{FIELD_TYPE_ICONS[activeDragType]}</span>
+            <span className="admin-palette-item__icon"><Icon name={FIELD_TYPE_ICON_NAMES[activeDragType]} size={18} /></span>
             <span className="admin-palette-item__label">{FIELD_TYPE_LABELS[activeDragType]}</span>
           </div>
         ) : dragField ? (
           <div className="admin-field-card admin-field-card--overlay">
             <span className="admin-field-card__drag-handle">⠿</span>
-            <span className="admin-field-card__icon" aria-hidden="true">{FIELD_TYPE_ICONS[dragField.type]}</span>
+            <span className="admin-field-card__icon" aria-hidden="true"><Icon name={FIELD_TYPE_ICON_NAMES[dragField.type]} size={17} /></span>
             <div className="admin-field-card__content">
               <span className="admin-field-card__label">{dragField.label || 'Untitled field'}</span>
               <div className="admin-field-card__meta">
