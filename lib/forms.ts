@@ -313,7 +313,7 @@ async function uniqueFormSlug(base: string): Promise<string> {
 export async function getSections(formId: string): Promise<FormSection[]> {
   const { data, error } = await supabase
     .from('form_sections').select('*').eq('form_id', formId).order('sort_order')
-  if (error) throw error
+  if (error) { console.error('[getSections]', error.message); return [] }
   return (data ?? []) as FormSection[]
 }
 
@@ -340,7 +340,7 @@ export async function deleteSection(id: string): Promise<void> {
 export async function getFields(formId: string): Promise<FormField[]> {
   const { data, error } = await supabase
     .from('form_fields').select('*').eq('form_id', formId).order('sort_order')
-  if (error) throw error
+  if (error) { console.error('[getFields]', error.message); return [] }
   return (data ?? []) as FormField[]
 }
 
