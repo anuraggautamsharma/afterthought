@@ -3,7 +3,7 @@
 import { useState, useCallback, useRef } from 'react'
 import Link from 'next/link'
 import { type Form } from '@/lib/forms'
-import { updateFormAction, closeFormAction, deleteFormAction } from '@/app/admin/forms/actions'
+import { updateFormAction, closeFormAction, deleteFormAction, publishFormAction } from '@/app/admin/forms/actions'
 import SaveBar from '@/components/admin/SaveBar'
 import { toast } from '@/lib/toastStore'
 import { openConfirm } from '@/lib/confirmStore'
@@ -89,6 +89,22 @@ export default function FormSettingsClient({ initialForm }: { initialForm: Form 
     debouncedSave(updated)
   }
 
+  async function handlePublishToggle() {
+    try {
+      if (form.status === 'published') {
+        await updateFormAction(form.id, { status: 'draft' })
+        setForm(prev => ({ ...prev, status: 'draft' }))
+        toast.success('Form set to draft')
+      } else {
+        await publishFormAction(form.id)
+        setForm(prev => ({ ...prev, status: 'published' }))
+        toast.success('Form published')
+      }
+    } catch {
+      toast.error('Failed to update status')
+    }
+  }
+
   async function handleCloseForm() {
     const confirmed = await openConfirm({
       title: 'Close form?',
@@ -140,6 +156,14 @@ export default function FormSettingsClient({ initialForm }: { initialForm: Form 
           <span style={{ opacity: 0.3, fontSize: 13 }}>/</span>
           <span style={{ fontSize: 14, fontWeight: 500, color: 'var(--c-ink)' }}>{form.title}</span>
           <span className={`admin-status-badge admin-status-badge--${form.status}`}>{form.status}</span>
+          <button
+            type="button"
+            onClick={handlePublishToggle}
+            className={form.status === 'published' ? 'admin-btn-secondary' : 'admin-btn-primary'}
+            style={{ padding: '5px 14px', fontSize: 13, width: 'auto', marginLeft: 8 }}
+          >
+            {form.status === 'published' ? 'Unpublish' : 'Publish'}
+          </button>
           {form.status === 'published' && (
             <a
               href={`/forms/${form.slug}`}
