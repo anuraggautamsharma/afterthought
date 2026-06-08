@@ -109,7 +109,9 @@
 }
 
 .admin-sidebar__footer-link {
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 10px;
   font-family: var(--font-mono);
   font-size: 10px;
   letter-spacing: 0.6px;
@@ -119,6 +121,8 @@
   padding: 7px 12px;
   border-radius: 7px;
   transition: color 0.12s, background 0.12s;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .admin-sidebar__footer-link:hover {
@@ -132,6 +136,78 @@
   cursor: pointer;
   width: 100%;
   text-align: left;
+}
+
+/* Collapse toggle (desktop only) */
+.admin-sidebar__collapse {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.28);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 7px 12px;
+  border-radius: 7px;
+  transition: color 0.12s, background 0.12s;
+  width: 100%;
+  box-sizing: border-box;
+  margin-top: 2px;
+}
+.admin-sidebar__collapse:hover { color: rgba(255,255,255,0.6); background: rgba(255,255,255,0.05); }
+
+/* Icon wrapper inside nav + footer links — fixed box so icons align and
+   stay centered when the sidebar collapses to icons-only. */
+.admin-sidebar__link-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  flex-shrink: 0;
+}
+.admin-sidebar__link-label { min-width: 0; }
+
+/* ── Collapsible sidebar (desktop only) ─────────────────────── */
+.admin-sidebar { transition: width 0.2s ease; }
+
+@media (min-width: 769px) {
+  .admin-sidebar--collapsed { width: 68px; }
+  .admin-sidebar--collapsed .admin-sidebar__brand {
+    justify-content: center;
+    padding-left: 0;
+    padding-right: 0;
+  }
+  .admin-sidebar--collapsed .admin-sidebar__brand-text { display: none; }
+  .admin-sidebar--collapsed .admin-sidebar__link-label { display: none; }
+  .admin-sidebar--collapsed .admin-sidebar__link,
+  .admin-sidebar--collapsed .admin-sidebar__footer-link,
+  .admin-sidebar--collapsed .admin-sidebar__collapse {
+    justify-content: center;
+    gap: 0;
+    padding-left: 0;
+    padding-right: 0;
+    border-left-color: transparent;
+  }
+  /* Active item keeps its background highlight; the colour accent bar is
+     dropped in collapsed mode (no room for it next to a centered icon). */
+  .admin-sidebar--collapsed .admin-sidebar__nav { padding: 0 8px; }
+  /* Unread badge shrinks to a dot pinned to the icon. */
+  .admin-sidebar--collapsed .admin-sidebar__link { position: relative; }
+  .admin-sidebar--collapsed .admin-sidebar__badge {
+    position: absolute;
+    top: 5px;
+    right: 12px;
+    min-width: 8px;
+    width: 8px;
+    height: 8px;
+    padding: 0;
+    font-size: 0;
+    border-radius: 50%;
+  }
 }
 
 /* ─────────────────────────────────────────────
@@ -1370,6 +1446,9 @@ details[open] > .admin-sidebar-card__summary { border-bottom: 1px solid #EDEAE3;
     border-radius: 2px;
     opacity: 0.7;
   }
+
+  /* Collapse toggle is a desktop-only affordance */
+  .admin-sidebar__collapse { display: none; }
 
   /* Sidebar: fixed drawer, slides in from left */
   .admin-sidebar {
