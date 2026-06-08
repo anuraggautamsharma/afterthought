@@ -125,11 +125,6 @@ function FormPageShell({
       className="form-page-shell"
       style={customFont ? { fontFamily: customFont } : undefined}
     >
-      <header className="form-page-header">
-        <a href="/" className="form-brand-link">
-          Afterthought
-        </a>
-      </header>
       <main className="form-page-main">
         {headerImage && (
           // eslint-disable-next-line @next/next/no-img-element
