@@ -3329,3 +3329,58 @@ details[open] > .admin-sidebar-card__summary { border-bottom: 1px solid #EDEAE3;
 .admin-viewtoggle__btn:hover { color: rgba(0,0,0,.8); }
 .admin-viewtoggle__btn.is-active { background: #fff; color: #1A1916; box-shadow: 0 1px 2px rgba(0,0,0,.08); }
 .admin-viewtoggle__btn .material-symbols-outlined { font-size: 18px !important; }
+
+/* ═══════════════════════════════════════════════════
+   FIELD SETTINGS PANEL — OPTIONS EDITOR + INPUTS
+   (matches the actual component class names)
+═══════════════════════════════════════════════════ */
+.admin-options-editor { display: flex; flex-direction: column; gap: 8px; }
+
+.admin-options-editor__row { display: flex; align-items: center; gap: 8px; }
+.admin-options-editor__drag-handle {
+  flex-shrink: 0; width: 22px; height: 34px;
+  display: inline-flex; align-items: center; justify-content: center;
+  background: none; border: none; cursor: grab; color: rgba(0,0,0,.28);
+  font-size: 13px; border-radius: 6px; line-height: 1; touch-action: none;
+  transition: background .12s, color .12s;
+}
+.admin-options-editor__drag-handle:hover { background: #F0EDE6; color: rgba(0,0,0,.55); }
+.admin-options-editor__drag-handle:active { cursor: grabbing; }
+
+.admin-options-editor__inputs { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px; }
+.admin-options-editor__label-input,
+.admin-options-editor__image-input {
+  width: 100%; height: 34px; box-sizing: border-box; padding: 0 12px;
+  border: 1px solid #E4E1DA; border-radius: 8px; font-size: 13px; font-family: inherit;
+  color: #1A1916; background: #fff; transition: border-color .14s, box-shadow .14s;
+}
+.admin-options-editor__image-input { height: 30px; font-size: 12px; }
+.admin-options-editor__label-input:focus,
+.admin-options-editor__image-input:focus { outline: none; border-color: #1A1916; box-shadow: 0 0 0 3px rgba(26,25,22,.07); }
+
+.admin-options-editor__delete {
+  flex-shrink: 0; width: 30px; height: 30px;
+  display: inline-flex; align-items: center; justify-content: center;
+  background: none; border: none; cursor: pointer; color: rgba(0,0,0,.3);
+  border-radius: 7px; font-size: 13px; transition: background .12s, color .12s;
+}
+.admin-options-editor__delete:hover { background: #FEE2E2; color: #DC2626; }
+
+.admin-options-editor__add {
+  margin-top: 2px; height: 34px; width: 100%;
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  border: 1px dashed #D5D1C9; border-radius: 8px; background: none; cursor: pointer;
+  font-size: 13px; color: rgba(0,0,0,.55); font-family: inherit; transition: all .14s;
+}
+.admin-options-editor__add:hover { border-color: #1A1916; color: #1A1916; background: #FAFAF8; }
+
+/* Cleaner, lighter inputs throughout the settings panel */
+.admin-fb-settings-panel .admin-field > input,
+.admin-fb-settings-panel .admin-field > textarea {
+  background: #fff; border: 1px solid #E4E1DA; border-radius: 8px;
+  padding: 8px 12px; transition: border-color .14s, box-shadow .14s;
+}
+.admin-fb-settings-panel .admin-field > input:focus,
+.admin-fb-settings-panel .admin-field > textarea:focus {
+  border-color: #1A1916; background: #fff; box-shadow: 0 0 0 3px rgba(26,25,22,.07);
+}
