@@ -258,7 +258,8 @@ export async function getAllForms(): Promise<Form[]> {
 }
 
 export async function getFormById(id: string): Promise<Form | null> {
-  const { data } = await supabase.from('forms').select('*').eq('id', id).single()
+  const { data, error } = await supabase.from('forms').select('*').eq('id', id).maybeSingle()
+  if (error) { console.error('[getFormById]', error.message); return null }
   return data as Form | null
 }
 

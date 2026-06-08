@@ -403,14 +403,14 @@ export default function FormBuilder({ initial }: Props) {
         markSaved()
       } else {
         setFields(prevFields) // roll back so the UI matches the DB
-        markError(res.error || 'Failed to reorder')
-        toast.error(res.error ? `Reorder failed: ${res.error}` : 'Failed to reorder fields')
+        markError(res.error || 'Could not save order')
+        toast.error('Could not save the new order — please retry')
       }
     }).catch(err => {
       setFields(prevFields)
-      const msg = err instanceof Error ? err.message : 'Failed to reorder'
+      const msg = err instanceof Error ? err.message : 'Could not save order'
       markError(msg)
-      toast.error(`Reorder failed: ${msg}`)
+      toast.error('Could not save the new order — please retry')
     })
   }, [fields, getActiveSectionId, handleAddField, markSaving, markSaved, markError])
 
