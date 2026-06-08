@@ -137,6 +137,11 @@
 .form-file-item__size { font-size: 11px; color: rgba(0,0,0,.4); }
 .form-file-item__remove { background: none; border: none; cursor: pointer; color: rgba(0,0,0,.4); font-size: 16px; line-height: 1; padding: 0; }
 .form-file-item__remove:hover { color: #EF4444; }
+.form-file-zone--busy { cursor: default; opacity: .8; }
+.form-file-zone__spinner { width: 24px; height: 24px; margin: 0 auto 8px; border: 2.5px solid rgba(0,0,0,.12); border-top-color: var(--form-accent); border-radius: 50%; animation: form-file-spin .7s linear infinite; }
+@keyframes form-file-spin { to { transform: rotate(360deg); } }
+.form-file-item--uploading { opacity: .7; }
+.form-file-error { font-size: 12px; color: #EF4444; }
 
 /* ── Signature ──────────────────────────────────────────────── */
 .form-signature { display: flex; flex-direction: column; gap: 8px; }

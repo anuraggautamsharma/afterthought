@@ -2,6 +2,39 @@
 
 import { getFormBySlug, getFields } from '@/lib/forms'
 import { createSubmission } from '@/lib/submissions'
+import { uploadFormFile, FORM_UPLOAD_HARD_CAP_MB, type UploadedFileMeta } from '@/lib/storage'
+
+export interface UploadResult {
+  ok: boolean
+  file?: UploadedFileMeta
+  error?: string
+}
+
+/**
+ * Uploads a single file selected in a form's file field to private storage.
+ * Enforces the field's size limit (capped at the global hard cap). Returns the
+ * stored file's metadata (incl. path) to embed in the submission.
+ */
+export async function uploadFormFileAction(formData: FormData): Promise<UploadResult> {
+  try {
+    const file = formData.get('file')
+    if (!(file instanceof File)) return { ok: false, error: 'No file received' }
+
+    const formId = String(formData.get('formId') ?? '')
+    const requestedMb = Number(formData.get('maxMb') ?? 10) || 10
+    const limitMb = Math.min(requestedMb, FORM_UPLOAD_HARD_CAP_MB)
+
+    if (file.size > limitMb * 1024 * 1024) {
+      return { ok: false, error: `File is too large. Max ${limitMb} MB.` }
+    }
+    if (file.size === 0) return { ok: false, error: 'File is empty' }
+
+    const meta = await uploadFormFile(formId, file)
+    return { ok: true, file: meta }
+  } catch (e) {
+    return { ok: false, error: e instanceof Error ? e.message : 'Upload failed' }
+  }
+}
 
 export interface SubmitResult {
   ok: boolean

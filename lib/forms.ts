@@ -241,7 +241,7 @@ const CHOICE_TYPES: FieldType[] = ['radio', 'dropdown', 'checkboxes', 'image_cho
 
 /** A file the file_upload field stored. `url` exists only once uploads are
  *  persisted to storage. */
-export interface StoredFile { name: string; size?: number; type?: string; url?: string }
+export interface StoredFile { name: string; size?: number; type?: string; url?: string; path?: string }
 
 export function asStoredFiles(raw: unknown): StoredFile[] {
   const arr = Array.isArray(raw) ? raw : raw ? [raw] : []

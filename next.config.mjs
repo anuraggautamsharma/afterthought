@@ -7,5 +7,9 @@ const config = {
       { protocol: 'https', hostname: '**.supabase.in' },
     ],
   },
+  experimental: {
+    // Allow form file uploads through server actions (default is 1 MB).
+    serverActions: { bodySizeLimit: '25mb' },
+  },
 }
 export default config

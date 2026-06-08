@@ -28,12 +28,14 @@ export default function InboxDetail({
   fields,
   jobTitle,
   jobSlug,
+  fileUrls,
 }: {
   submission: Submission
   form?: Form | null
   fields?: FormField[]
   jobTitle?: string | null
   jobSlug?: string | null
+  fileUrls?: Record<string, string>
 }) {
   const [pending, startTransition] = useTransition()
 
@@ -114,14 +116,17 @@ export default function InboxDetail({
                     (() => {
                       const files = asStoredFiles(answers[f.id])
                       if (files.length === 0) return '—'
-                      return files.map((file, i) => (
-                        <span key={i}>
-                          {i > 0 && ', '}
-                          {file.url
-                            ? <a href={file.url} target="_blank" rel="noopener noreferrer">{file.name} ↗</a>
-                            : <span title="File was attached on the form but not stored — file uploads aren’t saved yet">{file.name} <span style={{ opacity: 0.5 }}>(not stored)</span></span>}
-                        </span>
-                      ))
+                      return files.map((file, i) => {
+                        const url = file.url || (file.path ? fileUrls?.[file.path] : undefined)
+                        return (
+                          <span key={i}>
+                            {i > 0 && ', '}
+                            {url
+                              ? <a href={url} target="_blank" rel="noopener noreferrer">{file.name} ↓</a>
+                              : <span title="This file was attached before uploads were stored">{file.name} <span style={{ opacity: 0.5 }}>(not stored)</span></span>}
+                          </span>
+                        )
+                      })
                     })()
                   ) : isLink(answers[f.id]) ? (
                     <a href={String(answers[f.id])} target="_blank" rel="noopener noreferrer">{String(answers[f.id])} ↗</a>

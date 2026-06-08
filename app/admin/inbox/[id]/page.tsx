@@ -1,7 +1,8 @@
 import { notFound } from 'next/navigation'
 import { getSubmissionById } from '@/lib/submissions'
-import { getFormById, getFields, type FormField, type Form } from '@/lib/forms'
+import { getFormById, getFields, asStoredFiles, type FormField, type Form } from '@/lib/forms'
 import { getJobById } from '@/lib/jobs'
+import { getSignedFileUrl } from '@/lib/storage'
 import InboxDetail from '@/components/admin/InboxDetail'
 
 export const dynamic = 'force-dynamic'
@@ -30,5 +31,26 @@ export default async function SubmissionPage({ params }: { params: Promise<{ id:
     if (job) { jobTitle = job.title; jobSlug = job.slug }
   }
 
-  return <InboxDetail submission={submission} form={form} fields={fields} jobTitle={jobTitle} jobSlug={jobSlug} />
+  // Generate short-lived signed download URLs for any uploaded files.
+  const fileUrls: Record<string, string> = {}
+  const responses = (submission.responses ?? {}) as Record<string, unknown>
+  for (const f of fields.filter(ff => ff.type === 'file_upload')) {
+    for (const file of asStoredFiles(responses[f.id])) {
+      if (file.path && !fileUrls[file.path]) {
+        const url = await getSignedFileUrl(file.path).catch(() => null)
+        if (url) fileUrls[file.path] = url
+      }
+    }
+  }
+
+  return (
+    <InboxDetail
+      submission={submission}
+      form={form}
+      fields={fields}
+      jobTitle={jobTitle}
+      jobSlug={jobSlug}
+      fileUrls={fileUrls}
+    />
+  )
 }
