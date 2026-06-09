@@ -1537,8 +1537,10 @@ img { max-width: 100%; display: block; }
   position: relative;
 }
 
-/* Title area — appears below the hero, inside container */
+/* Title area — appears below the hero, centered on the reading axis */
 .post-title {
+  max-width: 720px;
+  margin: 0 auto;
   padding-top: 56px;
   padding-bottom: 52px;
   border-bottom: 1px solid var(--c-hairline);
@@ -1557,7 +1559,6 @@ img { max-width: 100%; display: block; }
 .post-title__eyebrow a { color: inherit; text-decoration: none; transition: opacity 0.2s; }
 .post-title__eyebrow a:hover { opacity: 0.65; }
 .post-title__h1 {
-  max-width: 880px;
   margin-bottom: 28px;
 }
 .post-title__h1 em {
@@ -1832,26 +1833,38 @@ img { max-width: 100%; display: block; }
   font-size: inherit;
 }
 
-/* ── Post body + table-of-contents two-column layout ──────────────────────── */
+/* ── Post body + table-of-contents layout ─────────────────────────────────
+   The reading column stays centred on the page. The table of contents floats
+   in the left margin (only when there's room), so it never shifts the body. */
 .post-main--toc {
   max-width: var(--max-w);
   margin: 0 auto;
   padding: 0 var(--gutter);
 }
-@media (min-width: 1080px) {
+@media (min-width: 1240px) {
   .post-main--toc {
     display: grid;
-    grid-template-columns: 240px minmax(0, 720px);
-    column-gap: 72px;
-    justify-content: center;
+    grid-template-columns: 1fr minmax(0, 720px) 1fr;
     align-items: start;
   }
-  .post-main--toc .post-body { padding-left: 0; padding-right: 0; }
+  .post-main--toc .post-body {
+    grid-column: 2;
+    padding-left: 0;
+    padding-right: 0;
+  }
 }
 
-/* Table of contents — hidden on narrow screens, sticky on wide */
+/* Table of contents — only on wide screens; floats left of the centred column */
 .post-toc { display: none; }
-@media (min-width: 1080px) { .post-toc { display: block; } }
+@media (min-width: 1240px) {
+  .post-toc {
+    display: block;
+    grid-column: 1;
+    justify-self: end;
+    width: 220px;
+    padding-right: 40px;
+  }
+}
 .post-toc__inner {
   position: sticky;
   top: 96px;
