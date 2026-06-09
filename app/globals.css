@@ -1684,6 +1684,154 @@ img { max-width: 100%; display: block; }
   letter-spacing: -1px;
 }
 
+/* ── Rendered post content (TipTap StarterKit output) ─────────────────────
+   These selectors style the generic HTML the editor & MCP emit: h3/h4,
+   links, lists, blockquotes, dividers, images, video embeds and code. */
+.post-body h3 {
+  font-size: 20px;
+  letter-spacing: -0.3px;
+  line-height: 1.28;
+  font-variation-settings: "wght" 560;
+  font-weight: 560;
+  margin: 44px 0 14px;
+  color: var(--c-ink);
+}
+.post-body h3 em {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.6px;
+}
+.post-body h4 {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  opacity: 0.55;
+  margin: 40px 0 12px;
+}
+
+/* Links inside the reading column */
+.post-body a {
+  color: var(--c-ink);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  text-decoration-color: rgba(10, 10, 10, 0.28);
+  transition: text-decoration-color 0.18s;
+}
+.post-body a:hover { text-decoration-color: var(--c-ink); }
+
+/* Lists */
+.post-body ul,
+.post-body ol {
+  margin: 0 0 1.6em;
+  padding-left: 1.3em;
+}
+.post-body li {
+  font-size: 18px;
+  line-height: 1.74;
+  letter-spacing: -0.1px;
+  font-variation-settings: "wght" 360;
+  font-weight: 360;
+  color: var(--c-ink);
+  margin-bottom: 0.5em;
+  padding-left: 0.3em;
+}
+.post-body li::marker { color: var(--c-ink); opacity: 0.45; }
+.post-body li > ul,
+.post-body li > ol { margin: 0.5em 0 0; }
+.post-body li p { margin-bottom: 0.5em; }
+
+/* Blockquote — in-column quote */
+.post-body blockquote {
+  margin: 40px 0;
+  padding: 4px 0 4px 28px;
+  border-left: 2px solid var(--c-block-lime);
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 23px;
+  line-height: 1.4;
+  letter-spacing: -0.3px;
+  color: var(--c-ink);
+}
+.post-body blockquote p {
+  font-family: inherit;
+  font-style: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  font-variation-settings: normal;
+  font-weight: 400;
+  margin-bottom: 0.6em;
+}
+.post-body blockquote p:last-child { margin-bottom: 0; }
+
+/* Divider */
+.post-body hr {
+  border: none;
+  border-top: 1px solid var(--c-hairline);
+  margin: 56px 0;
+}
+
+/* Images */
+.post-body img {
+  width: 100%;
+  border-radius: var(--r-lg);
+  margin: 48px 0;
+}
+
+/* Video embeds — TipTap Youtube wraps the iframe in div[data-youtube-video] */
+.post-body div[data-youtube-video] {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  margin: 48px 0;
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  background: var(--c-ink);
+}
+.post-body div[data-youtube-video] iframe {
+  position: absolute;
+  inset: 0;
+  width: 100% !important;
+  height: 100% !important;
+  border: none;
+}
+/* Bare iframe fallback (older content) */
+.post-body > iframe {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  height: auto;
+  border: none;
+  border-radius: var(--r-lg);
+  margin: 48px 0;
+}
+
+/* Code — inline and block */
+.post-body code {
+  font-family: var(--font-mono);
+  font-size: 0.86em;
+  background: var(--c-surface-soft);
+  padding: 0.12em 0.4em;
+  border-radius: 5px;
+}
+.post-body pre {
+  background: var(--c-surface-soft);
+  border: 1px solid var(--c-hairline);
+  border-radius: var(--r-md);
+  padding: 20px 22px;
+  overflow-x: auto;
+  margin: 36px 0;
+  font-size: 14px;
+  line-height: 1.6;
+}
+.post-body pre code {
+  background: none;
+  padding: 0;
+  font-size: inherit;
+}
+
 /* In-article pull quote — wider than reading column */
 .post-pullquote {
   margin: 64px -64px;
