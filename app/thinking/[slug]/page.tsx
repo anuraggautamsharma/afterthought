@@ -10,6 +10,7 @@ import TableOfContents from '@/components/thinking/TableOfContents'
 import ShareButton from '@/components/thinking/ShareButton'
 import PostFaq from '@/components/thinking/PostFaq'
 import MermaidClient from '@/components/thinking/MermaidClient'
+import PostCta from '@/components/thinking/PostCta'
 import { extractHeadings } from '@/lib/toc'
 import { SITE_URL } from '@/lib/site'
 
@@ -144,6 +145,9 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
 
       {/* FAQ — only renders when the post has questions */}
       <PostFaq faqs={post.faqs ?? []} />
+
+      {/* Lead CTA — route warm readers to the studio */}
+      <PostCta />
 
       {/* Subscribe */}
       <section className="container" style={{ paddingBottom: 'var(--s-section)' }}>
