@@ -21,7 +21,7 @@ import { applicationFormSpec } from '@/lib/forms-seed'
 import { slugify } from '@/lib/slugify'
 import { estimateReadTime } from '@/lib/slugify'
 import { buildPostContent, plainTextToContent, type PostBlock } from '@/lib/mcp/postBlocks'
-import { listMedia, uploadImageFromUrl } from '@/lib/media'
+import { listMedia, uploadImageFromUrl, uploadImageFromBase64 } from '@/lib/media'
 
 export const maxDuration = 60
 
@@ -344,6 +344,26 @@ const handler = createMcpHandler(
       async (a) => {
         try {
           const r = await uploadImageFromUrl(a.url, a.name)
+          touch('/admin/media')
+          return text({ ok: true, url: r.url, name: r.name })
+        } catch (e) {
+          return text({ ok: false, error: e instanceof Error ? e.message : 'Upload failed' })
+        }
+      },
+    )
+
+    server.tool(
+      'upload_image_from_bytes',
+      'Host an image you generated yourself (e.g. a rendered SVG/PNG hero) in the media library, returning a public URL for use as a post image or cover — no pre-existing public URL needed. Pass the image as base64 in `data` (a full `data:image/...;base64,...` URI is also accepted). Use a raster format (PNG/JPG) for covers so they optimise correctly. Max 15 MB; very large images may exceed the request limit, so keep heroes reasonably sized.',
+      {
+        data: z.string().describe('Base64-encoded image bytes, or a data: URI'),
+        content_type: z.enum(['image/png', 'image/jpeg', 'image/webp', 'image/svg+xml']).optional()
+          .describe('MIME type when `data` is raw base64 (default image/png; ignored for data: URIs)'),
+        name: z.string().optional().describe('Optional base filename'),
+      },
+      async (a) => {
+        try {
+          const r = await uploadImageFromBase64(a.data, a.name, a.content_type ?? 'image/png')
           touch('/admin/media')
           return text({ ok: true, url: r.url, name: r.name })
         } catch (e) {

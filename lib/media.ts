@@ -37,6 +37,22 @@ export async function listMedia(limit = 100): Promise<MediaItem[]> {
 
 const MAX_IMAGE_BYTES = 15 * 1024 * 1024 // 15 MB
 
+function extFor(contentType: string): string {
+  return (contentType.split('/')[1] || 'png').replace('jpeg', 'jpg').replace('svg+xml', 'svg')
+}
+
+/** Stores a raw image buffer in the public media bucket and returns its URL. */
+async function storeImage(buf: Buffer, contentType: string, baseName?: string): Promise<{ url: string; name: string }> {
+  if (!contentType.startsWith('image/')) throw new Error(`Not an image (got ${contentType || 'unknown'})`)
+  if (buf.byteLength > MAX_IMAGE_BYTES) throw new Error('Image is larger than 15 MB')
+  const base = (baseName || 'image').replace(/[^a-z0-9]/gi, '-').toLowerCase().slice(0, 60) || 'image'
+  const name = `${base}-${Date.now()}.${extFor(contentType)}`
+  await ensureMediaBucket()
+  const { error } = await supabase.storage.from(MEDIA_BUCKET).upload(name, buf, { contentType, upsert: false })
+  if (error) throw new Error(error.message)
+  return { url: supabase.storage.from(MEDIA_BUCKET).getPublicUrl(name).data.publicUrl, name }
+}
+
 /**
  * Fetches an external image URL and stores it in the public media bucket,
  * returning the hosted public URL. Lets automation pull in an image and have
@@ -53,15 +69,30 @@ export async function uploadImageFromUrl(srcUrl: string, baseName?: string): Pro
   if (!contentType.startsWith('image/')) throw new Error(`URL is not an image (got ${contentType || 'unknown'})`)
 
   const buf = Buffer.from(await res.arrayBuffer())
-  if (buf.byteLength > MAX_IMAGE_BYTES) throw new Error('Image is larger than 15 MB')
+  return storeImage(buf, contentType, baseName)
+}
 
-  const ext = (contentType.split('/')[1] || 'jpg').replace('jpeg', 'jpg').replace('svg+xml', 'svg')
-  const base = (baseName || 'image').replace(/[^a-z0-9]/gi, '-').toLowerCase().slice(0, 60) || 'image'
-  const name = `${base}-${Date.now()}.${ext}`
-
-  await ensureMediaBucket()
-  const { error } = await supabase.storage.from(MEDIA_BUCKET).upload(name, buf, { contentType, upsert: false })
-  if (error) throw new Error(error.message)
-
-  return { url: supabase.storage.from(MEDIA_BUCKET).getPublicUrl(name).data.publicUrl, name }
+/**
+ * Stores an image supplied as base64 (or a `data:` URI) in the public media
+ * bucket. Lets automation upload an image it generated itself — no public URL
+ * required. `contentType` is used when the payload is raw base64; for a data
+ * URI it is read from the prefix.
+ */
+export async function uploadImageFromBase64(
+  data: string,
+  baseName?: string,
+  contentType = 'image/png',
+): Promise<{ url: string; name: string }> {
+  let payload = data.trim()
+  let type = contentType
+  const m = /^data:([^;,]+)(;base64)?,([\s\S]*)$/.exec(payload)
+  if (m) {
+    type = m[1] || contentType
+    payload = m[3]
+  }
+  payload = payload.replace(/\s/g, '')
+  if (!payload) throw new Error('No image data provided')
+  const buf = Buffer.from(payload, 'base64')
+  if (buf.byteLength === 0) throw new Error('Could not decode base64 image data')
+  return storeImage(buf, type.split(';')[0].trim(), baseName)
 }
