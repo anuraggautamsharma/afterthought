@@ -1,5 +1,8 @@
 import type { Metadata } from 'next'
 import PostRenderer from '@/components/thinking/PostRenderer'
+import TableOfContents from '@/components/thinking/TableOfContents'
+import ShareRow from '@/components/thinking/ShareRow'
+import { extractHeadings } from '@/lib/toc'
 
 // TEMPORARY preview route — exercises every content element the editor/MCP can
 // emit, so the public post styling can be reviewed on real markup. Unlisted
@@ -43,6 +46,7 @@ const sample = {
     { type: 'blockquote', content: [{ type: 'paragraph', content: [{ type: 'text', text: 'Saying no is how we stay good at what we say yes to.' }] }] },
     { type: 'paragraph', content: [{ type: 'text', text: 'An image sits full-width in the reading column, with rounded corners and breathing room above and below:' }] },
     { type: 'image', attrs: { src: 'https://picsum.photos/1200/675', alt: 'Placeholder image' } },
+    { type: 'heading', attrs: { level: 2 }, content: [{ type: 'text', text: 'Media inside a post' }] },
     { type: 'paragraph', content: [{ type: 'text', text: 'A video embed should be responsive — a clean 16:9 box, not a fixed 640×480 frame:' }] },
     { type: 'youtube', attrs: { src: 'https://www.youtube.com/watch?v=bMknfKXIFA8' } },
     { type: 'horizontalRule' },
@@ -58,6 +62,7 @@ const sample = {
 }
 
 export default function PreviewPage() {
+  const headings = extractHeadings(sample)
   return (
     <article>
       <div className="post-hero-full" style={{ background: 'var(--c-block-navy)' }}>
@@ -88,7 +93,14 @@ export default function PreviewPage() {
         </div>
       </div>
 
-      <PostRenderer content={sample} />
+      <div className="post-main post-main--toc">
+        <TableOfContents headings={headings} />
+        <PostRenderer content={sample} bare />
+      </div>
+
+      <div className="container">
+        <ShareRow url="https://www.afterthought.design/thinking/preview/" title="Every element, one page" />
+      </div>
     </article>
   )
 }

@@ -4,6 +4,9 @@ import { getPostBySlug } from '@/lib/posts'
 import PostRenderer from '@/components/thinking/PostRenderer'
 import NewsletterForm from '@/components/NewsletterForm'
 import JsonLd from '@/components/JsonLd'
+import TableOfContents from '@/components/thinking/TableOfContents'
+import ShareRow from '@/components/thinking/ShareRow'
+import { extractHeadings } from '@/lib/toc'
 import { SITE_URL } from '@/lib/site'
 
 export const dynamic = 'force-dynamic'
@@ -50,6 +53,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
   if (!post || post.status !== 'published') notFound()
 
   const url = `${SITE_URL}/thinking/${post.slug}/`
+  const headings = extractHeadings(post.content)
   const image = post.og_image || post.cover_image
   const blogPosting = {
     '@context': 'https://schema.org',
@@ -114,8 +118,20 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
         </div>
       </div>
 
-      {/* Body */}
-      <PostRenderer content={post.content} />
+      {/* Body — with table of contents on longer posts */}
+      {headings.length >= 3 ? (
+        <div className="post-main post-main--toc">
+          <TableOfContents headings={headings} />
+          <PostRenderer content={post.content} bare />
+        </div>
+      ) : (
+        <PostRenderer content={post.content} />
+      )}
+
+      {/* Share */}
+      <div className="container">
+        <ShareRow url={url} title={post.title} />
+      </div>
 
       {/* Subscribe */}
       <section className="container" style={{ paddingBottom: 'var(--s-section)' }}>
