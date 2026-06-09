@@ -22,7 +22,7 @@ import { slugify } from '@/lib/slugify'
 import { estimateReadTime } from '@/lib/slugify'
 import { buildPostContent, plainTextToContent, type PostBlock } from '@/lib/mcp/postBlocks'
 import { listMedia, uploadImageFromUrl, uploadImageFromBase64, uploadImageBuffer } from '@/lib/media'
-import { renderHero, type HeroTheme } from '@/lib/hero'
+import { renderHero, renderFigure, type HeroTheme, type HeroStyle, type FigureStyle } from '@/lib/hero'
 
 export const maxDuration = 60
 
@@ -278,23 +278,27 @@ const handler = createMcpHandler(
     // ── Posts (rich content from plain text) ─────────────────────────────────
     server.tool(
       'create_post',
-      'Create a fully-formatted blog post in ONE call. Prefer `blocks` for rich content: an ordered array of { type, ... }. Block types: paragraph {text}, heading {text, level 2|3}, image {url, alt?, ratio? natural|16-9|square}, video {url} (YouTube/Vimeo), quote {text}, bullet_list {items[]}, ordered_list {items[]}, divider {}. Text supports **bold**, *italic*, [label](url). For a COVER you have two easy options: (a) set `auto_cover: true` and the server instantly renders an on-brand hero from the title — no image work needed (recommended default); or (b) pass a hosted `cover_image` URL. Body image/video urls must be publicly hosted (use upload_image_from_url or list_media). `faqs` adds an FAQ section + FAQPage schema. status "published" makes it live; default "draft". If you only have plain text, pass `body` instead of `blocks`.',
+      'Create a fully-formatted blog post in ONE call. Prefer `blocks` for rich content: an ordered array of { type, ... }. Block types: paragraph {text}, heading {text, level 2|3}, image {url, alt?, ratio?}, video {url} (YouTube/Vimeo), quote {text}, bullet_list {items[]}, ordered_list {items[]}, divider {}, and figure {text, figure_style? quote|statement|shapes, theme?, ratio?} — a server-rendered on-brand graphic placed inline (no image work needed; great for pull-quotes and section breaks). Text supports **bold**, *italic*, [label](url). For a COVER: set `auto_cover: true` to instantly render an on-brand hero from the title (recommended; pick `cover_style` blocks|grid|gradient|editorial and `cover_theme` navy|lime|ink), or pass a hosted `cover_image` URL. Body image/video urls must be publicly hosted (use upload_image_from_url or list_media). `faqs` adds an FAQ section + FAQPage schema. status "published" makes it live; default "draft". If you only have plain text, pass `body` instead of `blocks`.',
       {
         title: z.string(),
         blocks: z.array(z.object({
-          type: z.enum(['paragraph', 'heading', 'image', 'video', 'quote', 'bullet_list', 'ordered_list', 'divider']),
+          type: z.enum(['paragraph', 'heading', 'image', 'video', 'quote', 'bullet_list', 'ordered_list', 'divider', 'figure']),
           text: z.string().optional(),
           level: z.number().optional(),
           url: z.string().optional(),
           alt: z.string().optional(),
           ratio: z.enum(['natural', '16-9', 'square']).optional(),
           items: z.array(z.string()).optional(),
+          figure_style: z.enum(['quote', 'statement', 'shapes']).optional().describe('For figure blocks: visual treatment'),
+          theme: z.enum(['navy', 'lime', 'ink']).optional().describe('For figure blocks: colour theme'),
+          attribution: z.string().optional().describe('For figure blocks of style "quote": who said it'),
         })).optional().describe('Rich content blocks, in order'),
         body: z.string().optional().describe('Plain-text fallback if blocks are not used; blank lines separate paragraphs'),
         excerpt: z.string().optional(),
         category: z.string().optional(),
         cover_image: z.string().optional().describe('Hero image URL (publicly hosted). Omit if using auto_cover.'),
         auto_cover: z.boolean().optional().describe('If true and no cover_image is given, the server renders an on-brand hero from the title — the fast, zero-effort way to get a cover.'),
+        cover_style: z.enum(['blocks', 'grid', 'gradient', 'editorial']).optional().describe('Layout for the auto-rendered cover (default blocks).'),
         cover_theme: z.enum(['navy', 'lime', 'ink']).optional().describe('Colour theme for the auto-rendered cover (default navy).'),
         cover_focal: z.enum(['top', 'center', 'bottom']).optional(),
         meta_title: z.string().optional(),
@@ -306,15 +310,37 @@ const handler = createMcpHandler(
       },
       async (a) => {
         const c = getCollection('posts')!
-        const content = a.blocks && a.blocks.length
-          ? buildPostContent(a.blocks as PostBlock[])
+
+        // Materialize any `figure` blocks into hosted images before building.
+        let blocks = a.blocks
+        if (blocks?.some(b => b.type === 'figure')) {
+          blocks = await Promise.all(blocks.map(async (b) => {
+            if (b.type !== 'figure') return b
+            try {
+              const png = await renderFigure({
+                text: b.text ?? '', attribution: b.attribution,
+                style: b.figure_style as FigureStyle | undefined,
+                theme: b.theme as HeroTheme | undefined,
+                ratio: b.ratio === 'square' ? 'square' : '16-9',
+              })
+              const up = await uploadImageBuffer(png, (slugify(b.text ?? 'figure') || 'figure').slice(0, 40))
+              return { ...b, type: 'image' as const, url: up.url, alt: b.text ?? '', ratio: b.ratio === 'square' ? 'square' as const : '16-9' as const }
+            } catch {
+              // Fall back to a plain pull-quote if rendering fails.
+              return { ...b, type: 'quote' as const }
+            }
+          }))
+        }
+
+        const content = blocks && blocks.length
+          ? buildPostContent(blocks as unknown as PostBlock[])
           : plainTextToContent(a.body ?? '')
 
         let cover = a.cover_image ?? null
         let coverNote: string | undefined
         if (!cover && a.auto_cover) {
           try {
-            const png = await renderHero({ title: a.title, eyebrow: a.category ?? 'The Journal', theme: a.cover_theme })
+            const png = await renderHero({ title: a.title, eyebrow: a.category ?? 'The Journal', theme: a.cover_theme, style: a.cover_style as HeroStyle | undefined })
             const up = await uploadImageBuffer(png, slugify(a.title) || 'hero')
             cover = up.url
           } catch (e) {
@@ -342,17 +368,40 @@ const handler = createMcpHandler(
     // ── Hero image generator (on-brand, server-side, no sandbox needed) ───────
     server.tool(
       'generate_hero_image',
-      'Render an on-brand Afterthought hero image (1600x900 PNG) from a few words and host it — returns a public URL for use as a post cover. Fast: the server composes it with the real brand fonts and colours, so you never render or upload an image yourself. Use this when you want a cover but want to preview/control it; otherwise just pass auto_cover:true to create_post.',
+      'Render an on-brand Afterthought hero image (1600x900 PNG) from a few words and host it — returns a public URL for use as a post cover. Fast: the server composes it with the real brand fonts and colours, so you never render or upload an image yourself. `style`: blocks (depth shapes, default), grid (dot texture), gradient (wash), editorial (minimal). `theme`: navy/lime/ink. Use this to preview/control a cover; otherwise just pass auto_cover:true to create_post.',
       {
         title: z.string().describe('Headline shown large on the hero'),
         eyebrow: z.string().optional().describe('Small label top-left, e.g. the category (default "The Journal")'),
         caption: z.string().optional().describe('Small caption bottom-left (default "afterthought.design")'),
+        style: z.enum(['blocks', 'grid', 'gradient', 'editorial']).optional().describe('Layout (default blocks)'),
         theme: z.enum(['navy', 'lime', 'ink']).optional().describe('Colour theme (default navy)'),
       },
       async (a) => {
         try {
-          const png = await renderHero({ title: a.title, eyebrow: a.eyebrow, caption: a.caption, theme: a.theme as HeroTheme | undefined })
+          const png = await renderHero({ title: a.title, eyebrow: a.eyebrow, caption: a.caption, theme: a.theme as HeroTheme | undefined, style: a.style as HeroStyle | undefined })
           const up = await uploadImageBuffer(png, slugify(a.title) || 'hero')
+          touch('/admin/media')
+          return text({ ok: true, url: up.url, name: up.name })
+        } catch (e) {
+          return text({ ok: false, error: e instanceof Error ? e.message : 'Render failed' })
+        }
+      },
+    )
+
+    server.tool(
+      'generate_figure',
+      'Render an on-brand in-article graphic (for placing mid-post) and host it — returns a public URL to use as an image block. `style`: quote (oversized pull-quote card), statement (centered statement), shapes (bold abstract with a small label). `theme`: navy/lime/ink. `ratio`: "16-9" (default) or "square". Tip: you can also add a figure inline via a create_post block of type "figure" without calling this separately.',
+      {
+        text: z.string().describe('The quote/statement/label to render'),
+        style: z.enum(['quote', 'statement', 'shapes']).optional().describe('Visual treatment (default statement)'),
+        attribution: z.string().optional().describe('Attribution shown under a quote'),
+        theme: z.enum(['navy', 'lime', 'ink']).optional(),
+        ratio: z.enum(['16-9', 'square']).optional(),
+      },
+      async (a) => {
+        try {
+          const png = await renderFigure({ text: a.text, attribution: a.attribution, style: a.style as FigureStyle | undefined, theme: a.theme as HeroTheme | undefined, ratio: a.ratio })
+          const up = await uploadImageBuffer(png, (slugify(a.text) || 'figure').slice(0, 40))
           touch('/admin/media')
           return text({ ok: true, url: up.url, name: up.name })
         } catch (e) {
