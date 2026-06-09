@@ -274,13 +274,15 @@ const handler = createMcpHandler(
     // ── Posts (rich content from plain text) ─────────────────────────────────
     server.tool(
       'create_post',
-      'Create a blog post. `body` is plain text — separate paragraphs with blank lines. status "published" makes it live; default "draft".',
+      'Create a blog post. `body` is plain text — separate paragraphs with blank lines. `faqs` (optional) adds an FAQ section at the end of the post and emits FAQPage structured data for Google & AI search. status "published" makes it live; default "draft".',
       {
         title: z.string(),
         body: z.string().describe('Plain-text body; blank lines separate paragraphs'),
         excerpt: z.string().optional(),
         category: z.string().optional(),
         status: z.enum(['draft', 'published']).optional(),
+        faqs: z.array(z.object({ question: z.string(), answer: z.string() })).optional()
+          .describe('Optional Q&A pairs shown at the end of the post'),
       },
       async (a) => {
         const c = getCollection('posts')!
@@ -289,6 +291,7 @@ const handler = createMcpHandler(
         const post = await c.create!({
           title: a.title, slug: slugify(a.title), excerpt: a.excerpt ?? '',
           content, category: a.category ?? 'General', status: a.status ?? 'draft',
+          faqs: (a.faqs ?? []).map(f => ({ q: f.question, a: f.answer })),
           published_at: a.status === 'published' ? new Date().toISOString() : null,
         }) as { id: string; slug: string }
         touch('/thinking', '/admin/posts')

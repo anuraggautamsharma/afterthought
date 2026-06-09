@@ -3638,3 +3638,77 @@ details[open] > .admin-sidebar-card__summary { border-bottom: 1px solid #EDEAE3;
 .admin-share .admin-field > input:disabled { background: #F5F4F0; color: rgba(0,0,0,.45); cursor: not-allowed; }
 .admin-share .admin-field__hint { margin-top: 1px; }
 .admin-modal__footer { display: flex; justify-content: flex-end; gap: 8px; margin-top: 24px; }
+
+/* ── Post FAQ editor ────────────────────────────────────────────────────── */
+.admin-faq {
+  margin-top: 40px;
+  padding-top: 28px;
+  border-top: 1px solid #E6E4DF;
+}
+.admin-faq__head { margin-bottom: 18px; }
+.admin-faq__title {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  color: #1A1916;
+  display: block;
+}
+.admin-faq__hint {
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.5);
+  margin-top: 4px;
+  display: block;
+}
+.admin-faq__row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+.admin-faq__num {
+  flex: none;
+  width: 24px;
+  height: 24px;
+  margin-top: 8px;
+  border-radius: 50%;
+  background: #F5F4F0;
+  color: rgba(0, 0, 0, 0.55);
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.admin-faq__fields { flex: 1; display: flex; flex-direction: column; gap: 8px; }
+.admin-faq__q,
+.admin-faq__a {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #E6E4DF;
+  border-radius: 8px;
+  font: inherit;
+  font-size: 14px;
+  background: #fff;
+}
+.admin-faq__q { font-weight: 500; }
+.admin-faq__a { min-height: 64px; resize: vertical; line-height: 1.5; }
+.admin-faq__q:focus,
+.admin-faq__a:focus {
+  outline: none;
+  border-color: #1A1916;
+  box-shadow: 0 0 0 3px rgba(26, 25, 22, 0.07);
+}
+.admin-faq__remove {
+  flex: none;
+  margin-top: 8px;
+  width: 30px;
+  height: 30px;
+  border: 1px solid #E6E4DF;
+  border-radius: 8px;
+  background: #fff;
+  color: rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+}
+.admin-faq__remove:hover { border-color: #D4564E; color: #D4564E; }
+.admin-faq__add { margin-top: 6px; font-size: 13px; }

@@ -36,6 +36,8 @@ export default function PostForm({ post }: Props) {
   const [metaDesc,    setMetaDesc]    = useState(post?.meta_description ?? '')
   const [ogImage,     setOgImage]     = useState(post?.og_image ?? '')
   const [keyword,     setKeyword]     = useState(post?.focus_keyword ?? '')
+  const [coverFocal,  setCoverFocal]  = useState<'top' | 'center' | 'bottom'>(post?.cover_focal ?? 'center')
+  const [faqs,        setFaqs]        = useState<{ q: string; a: string }[]>(post?.faqs ?? [])
   const [pickerOpen,  setPickerOpen]  = useState(false)
 
   const [saveState,   setSaveState]   = useState<'idle' | 'dirty' | 'saving' | 'saved' | 'error'>('idle')
@@ -57,6 +59,13 @@ export default function PostForm({ post }: Props) {
     markDirty()
   }
 
+  const updateFaq = (i: number, key: 'q' | 'a', val: string) => {
+    setFaqs(prev => prev.map((f, idx) => (idx === i ? { ...f, [key]: val } : f)))
+    markDirty()
+  }
+  const addFaq = () => { setFaqs(prev => [...prev, { q: '', a: '' }]); markDirty() }
+  const removeFaq = (i: number) => { setFaqs(prev => prev.filter((_, idx) => idx !== i)); markDirty() }
+
   const save = useCallback((targetStatus: 'draft' | 'published') => {
     startTransition(async () => {
       setSaveState('saving')
@@ -64,6 +73,8 @@ export default function PostForm({ post }: Props) {
       const result = await savePostAction(post?.id ?? null, {
         title, slug, excerpt, content, category,
         cover_image: coverImage || null,
+        cover_focal: coverFocal,
+        faqs: faqs.filter(f => f.q.trim() || f.a.trim()),
         meta_title: metaTitle || null,
         meta_description: metaDesc || null,
         og_image: ogImage || null,
@@ -83,7 +94,7 @@ export default function PostForm({ post }: Props) {
         }
       }
     })
-  }, [title, slug, excerpt, content, category, coverImage, metaTitle, metaDesc, ogImage, keyword, post, router])
+  }, [title, slug, excerpt, content, category, coverImage, coverFocal, faqs, metaTitle, metaDesc, ogImage, keyword, post, router])
 
   // Auto-save: debounce 3s for existing posts
   useEffect(() => {
@@ -161,6 +172,38 @@ export default function PostForm({ post }: Props) {
           <PostEditor content={content} onChange={v => { setContent(v); markDirty() }} />
           <div className="admin-wordcount">
             {wordCount} word{wordCount !== 1 ? 's' : ''} · ~{readTime} min read
+          </div>
+
+          {/* FAQ editor — renders an accordion + FAQPage schema on the live post */}
+          <div className="admin-faq">
+            <div className="admin-faq__head">
+              <span className="admin-faq__title">FAQ</span>
+              <span className="admin-faq__hint">Shown at the end of the post and surfaced to Google &amp; AI search.</span>
+            </div>
+            {faqs.map((f, i) => (
+              <div key={i} className="admin-faq__row">
+                <div className="admin-faq__num">{i + 1}</div>
+                <div className="admin-faq__fields">
+                  <input
+                    type="text"
+                    className="admin-faq__q"
+                    placeholder="Question"
+                    value={f.q}
+                    onChange={e => updateFaq(i, 'q', e.target.value)}
+                  />
+                  <textarea
+                    className="admin-faq__a"
+                    placeholder="Answer"
+                    value={f.a}
+                    onChange={e => updateFaq(i, 'a', e.target.value)}
+                  />
+                </div>
+                <button type="button" className="admin-faq__remove" onClick={() => removeFaq(i)} aria-label="Remove question">✕</button>
+              </div>
+            ))}
+            <button type="button" className="admin-btn-secondary admin-faq__add" onClick={addFaq}>
+              + Add question
+            </button>
           </div>
         </div>
 
@@ -246,6 +289,17 @@ export default function PostForm({ post }: Props) {
                   placeholder="or paste URL…"
                   style={{ marginTop: '6px' }}
                 />
+                {coverImage && (
+                  <div style={{ marginTop: '10px' }}>
+                    <label>Focal point</label>
+                    <select value={coverFocal} onChange={e => { setCoverFocal(e.target.value as 'top' | 'center' | 'bottom'); markDirty() }}>
+                      <option value="top">Top</option>
+                      <option value="center">Center</option>
+                      <option value="bottom">Bottom</option>
+                    </select>
+                    <span className="admin-field__hint">Which part of the image to keep when it&apos;s cropped.</span>
+                  </div>
+                )}
               </div>
               <ImagePicker open={pickerOpen} onClose={() => setPickerOpen(false)} onSelect={url => { setCoverImage(url); setPickerOpen(false); markDirty() }} />
               <div className="admin-field">

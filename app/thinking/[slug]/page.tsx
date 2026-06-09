@@ -8,6 +8,7 @@ import NewsletterForm from '@/components/NewsletterForm'
 import JsonLd from '@/components/JsonLd'
 import TableOfContents from '@/components/thinking/TableOfContents'
 import ShareButton from '@/components/thinking/ShareButton'
+import PostFaq from '@/components/thinking/PostFaq'
 import { extractHeadings } from '@/lib/toc'
 import { SITE_URL } from '@/lib/site'
 
@@ -136,6 +137,9 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
       ) : (
         <PostRenderer content={post.content} />
       )}
+
+      {/* FAQ — only renders when the post has questions */}
+      <PostFaq faqs={post.faqs ?? []} />
 
       {/* Subscribe */}
       <section className="container" style={{ paddingBottom: 'var(--s-section)' }}>
