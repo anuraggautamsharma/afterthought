@@ -57,6 +57,36 @@ export async function getPublishedPosts(): Promise<Post[]> {
   return (data ?? []) as Post[]
 }
 
+/** Lightweight shape for index/listing pages — no heavy `content` payload. */
+export type PostListItem = Pick<
+  Post,
+  'id' | 'title' | 'slug' | 'excerpt' | 'category' | 'cover_image' | 'cover_focal' | 'read_time' | 'published_at'
+>
+
+const LIST_COLUMNS = 'id, title, slug, excerpt, category, cover_image, cover_focal, read_time, published_at'
+
+/**
+ * Paginated published posts for the journal index. Selects only listing
+ * columns (not the full article body) and returns the total count so the page
+ * can render pagination. Scales to hundreds of posts without fetching bodies.
+ */
+export async function getPublishedPostsIndex(
+  page = 1,
+  perPage = 12,
+): Promise<{ posts: PostListItem[]; total: number }> {
+  const safePage = Math.max(1, Math.floor(page))
+  const from = (safePage - 1) * perPage
+  const to = from + perPage - 1
+  const { data, count, error } = await supabase
+    .from('posts')
+    .select(LIST_COLUMNS, { count: 'exact' })
+    .eq('status', 'published')
+    .order('published_at', { ascending: false })
+    .range(from, to)
+  if (error) { console.error('[getPublishedPostsIndex]', error.message); return { posts: [], total: 0 } }
+  return { posts: (data ?? []) as unknown as PostListItem[], total: count ?? 0 }
+}
+
 export async function getPostBySlug(slug: string): Promise<Post | null> {
   const { data, error } = await supabase
     .from('posts')
