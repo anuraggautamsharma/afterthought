@@ -2,22 +2,23 @@
 
 import { useState } from 'react'
 import { type Editor } from '@tiptap/react'
+import { FloatingMenu } from '@tiptap/react/menus'
 import ImagePicker from './ImagePicker'
+import VideoModal from './VideoModal'
 
 interface Props { editor: Editor | null }
 
 export default function Toolbar({ editor }: Props) {
   const [pickerOpen, setPickerOpen] = useState(false)
+  const [videoOpen, setVideoOpen] = useState(false)
 
   if (!editor) return null
 
-  const handleImageSelect = (url: string) => {
+  const insertImage = (url: string) => {
     editor.chain().focus().setImage({ src: url }).run()
   }
-
-  const addYoutube = () => {
-    const url = prompt('YouTube URL:')
-    if (url) editor.chain().focus().setYoutubeVideo({ src: url }).run()
+  const insertVideo = (url: string) => {
+    editor.chain().focus().setYoutubeVideo({ src: url }).run()
   }
 
   const setLink = () => {
@@ -26,6 +27,14 @@ export default function Toolbar({ editor }: Props) {
     if (url === null) return
     if (url === '') { editor.chain().focus().unsetLink().run(); return }
     editor.chain().focus().setLink({ href: url }).run()
+  }
+
+  // Only show the floating insert menu on a truly empty paragraph line.
+  const showInsertMenu = () => {
+    const { selection } = editor.state
+    if (!selection.empty) return false
+    const node = selection.$anchor.parent
+    return node.type.name === 'paragraph' && node.content.size === 0
   }
 
   return (
@@ -93,19 +102,43 @@ export default function Toolbar({ editor }: Props) {
 
         <div className="admin-toolbar__group">
           <button type="button" aria-label="Insert image"
-            className="admin-toolbar-btn admin-toolbar-btn--wide"
+            className="admin-toolbar-btn admin-toolbar-btn--icon"
             onClick={() => setPickerOpen(true)}>
+            <span className="material-symbols-outlined" aria-hidden>image</span>
             Image
           </button>
           <button type="button" aria-label="Embed video"
-            className="admin-toolbar-btn admin-toolbar-btn--wide"
-            onClick={addYoutube}>
+            className="admin-toolbar-btn admin-toolbar-btn--icon"
+            onClick={() => setVideoOpen(true)}>
+            <span className="material-symbols-outlined" aria-hidden>smart_display</span>
             Video
           </button>
         </div>
       </div>
 
-      <ImagePicker open={pickerOpen} onClose={() => setPickerOpen(false)} onSelect={handleImageSelect} />
+      {/* Floating insert menu — appears on empty lines (Notion-style) */}
+      <FloatingMenu editor={editor} shouldShow={showInsertMenu} options={{ placement: 'bottom-start', offset: 6 }}>
+        <div className="editor-insert">
+          <button type="button" className="editor-insert__btn" onClick={() => setPickerOpen(true)}>
+            <span className="material-symbols-outlined" aria-hidden>image</span>Image
+          </button>
+          <button type="button" className="editor-insert__btn" onClick={() => setVideoOpen(true)}>
+            <span className="material-symbols-outlined" aria-hidden>smart_display</span>Video
+          </button>
+          <button type="button" className="editor-insert__btn" onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}>
+            <span className="material-symbols-outlined" aria-hidden>title</span>Heading
+          </button>
+          <button type="button" className="editor-insert__btn" onClick={() => editor.chain().focus().toggleBlockquote().run()}>
+            <span className="material-symbols-outlined" aria-hidden>format_quote</span>Quote
+          </button>
+          <button type="button" className="editor-insert__btn" onClick={() => editor.chain().focus().setHorizontalRule().run()}>
+            <span className="material-symbols-outlined" aria-hidden>horizontal_rule</span>Divider
+          </button>
+        </div>
+      </FloatingMenu>
+
+      <ImagePicker open={pickerOpen} onClose={() => setPickerOpen(false)} onSelect={insertImage} />
+      <VideoModal open={videoOpen} onClose={() => setVideoOpen(false)} onSubmit={insertVideo} />
     </>
   )
 }
