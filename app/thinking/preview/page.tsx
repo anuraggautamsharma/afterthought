@@ -1,8 +1,16 @@
 import type { Metadata } from 'next'
 import PostRenderer from '@/components/thinking/PostRenderer'
 import TableOfContents from '@/components/thinking/TableOfContents'
-import ShareRow from '@/components/thinking/ShareRow'
+import ShareButton from '@/components/thinking/ShareButton'
+import PostFaq from '@/components/thinking/PostFaq'
 import { extractHeadings } from '@/lib/toc'
+
+const sampleFaqs = [
+  { q: 'How long does a typical engagement take?', a: 'Most brand identity projects run twelve to twenty weeks, depending on scope. We share a clear timeline after the first call.' },
+  { q: 'Do you work with clients outside India?', a: 'Yes — roughly half our work is for clients in another country. Most kickoffs happen on a call, with two or three working visits a project.' },
+  { q: 'What does a project cost?', a: 'A full identity sits between ₹40L–1Cr (about $50–125k). Smaller pieces such as naming or a single deliverable start lower.' },
+  { q: 'Will we work directly with the founders?', a: 'Always. Every engagement is led by a founder, backed by a focused team brought in for motion, illustration or production at scale.' },
+]
 
 // TEMPORARY preview route — exercises every content element the editor/MCP can
 // emit, so the public post styling can be reviewed on real markup. Unlisted
@@ -84,11 +92,14 @@ export default function PreviewPage() {
           </div>
           <h1 className="display-xl post-title__h1">Every element, one page</h1>
           <div className="post-title__byline">
-            <span>Afterthought</span>
-            <span className="post-title__sep">·</span>
-            <span>Internal preview</span>
-            <span className="post-title__sep">·</span>
-            <span>3 min read</span>
+            <span className="post-title__meta">
+              <span>Afterthought</span>
+              <span className="post-title__sep">·</span>
+              <span>Internal preview</span>
+              <span className="post-title__sep">·</span>
+              <span>3 min read</span>
+            </span>
+            <ShareButton url="https://www.afterthought.design/thinking/preview/" title="Every element, one page" />
           </div>
         </div>
       </div>
@@ -98,9 +109,7 @@ export default function PreviewPage() {
         <PostRenderer content={sample} bare />
       </div>
 
-      <div className="container">
-        <ShareRow url="https://www.afterthought.design/thinking/preview/" title="Every element, one page" />
-      </div>
+      <PostFaq faqs={sampleFaqs} />
     </article>
   )
 }

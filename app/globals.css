@@ -1570,15 +1570,44 @@ img { max-width: 100%; display: block; }
 .post-title__byline {
   display: flex;
   align-items: center;
-  gap: 0;
+  gap: 14px;
   flex-wrap: wrap;
   font-family: var(--font-mono);
   font-size: 11px;
   letter-spacing: 0.5px;
   text-transform: uppercase;
+}
+.post-title__meta {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
   opacity: 0.44;
 }
 .post-title__sep { margin: 0 14px; opacity: 0.4; }
+
+/* Top share button — sits at the right of the byline */
+.post-share-btn {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  padding: 7px 13px 7px 11px;
+  border: 1px solid var(--c-hairline);
+  border-radius: var(--r-sm);
+  background: var(--c-canvas);
+  color: var(--c-ink);
+  cursor: pointer;
+  transition: border-color 0.18s, background 0.18s;
+}
+.post-share-btn:hover { border-color: var(--c-ink); }
+.post-share-btn .material-symbols-outlined {
+  font-size: 16px;
+  line-height: 1;
+}
 
 /* Legacy alias — keep so old GSAP selector doesn't break */
 .post-header { display: contents; }
@@ -1907,39 +1936,66 @@ img { max-width: 100%; display: block; }
   font-weight: 520;
 }
 
-/* Share row */
-.post-share {
+/* ── Per-post FAQ (accordion + FAQPage schema) ────────────────────────────── */
+.post-faq {
+  padding: 16px var(--gutter) 80px;
+}
+.post-faq__inner {
   max-width: 720px;
   margin: 0 auto;
-  padding: 8px 0 64px;
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  flex-wrap: wrap;
 }
-.post-share__label {
+.post-faq__label {
   font-family: var(--font-mono);
   font-size: 10px;
   letter-spacing: 1px;
   text-transform: uppercase;
   opacity: 0.44;
+  display: block;
+  margin-bottom: 14px;
 }
-.post-share__row { display: flex; gap: 8px; flex-wrap: wrap; }
-.post-share__btn {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.4px;
-  text-transform: uppercase;
-  padding: 9px 14px;
-  border: 1px solid var(--c-hairline);
-  border-radius: var(--r-sm);
-  background: var(--c-canvas);
-  color: var(--c-ink);
+.post-faq__title {
+  font-size: 28px;
+  letter-spacing: -0.5px;
+  line-height: 1.2;
+  font-variation-settings: "wght" 560;
+  font-weight: 560;
+  margin-bottom: 28px;
+}
+.post-faq__item { border-top: 1px solid var(--c-hairline); }
+.post-faq__item:last-child { border-bottom: 1px solid var(--c-hairline); }
+.post-faq__q {
   cursor: pointer;
-  text-decoration: none;
-  transition: border-color 0.18s, background 0.18s;
+  list-style: none;
+  position: relative;
+  padding: 22px 40px 22px 0;
+  font-size: 18px;
+  letter-spacing: -0.2px;
+  font-variation-settings: "wght" 500;
+  font-weight: 500;
+  color: var(--c-ink);
 }
-.post-share__btn:hover { border-color: var(--c-ink); }
+.post-faq__q::-webkit-details-marker { display: none; }
+.post-faq__q::after {
+  content: '+';
+  position: absolute;
+  right: 4px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 22px;
+  font-weight: 300;
+  opacity: 0.5;
+}
+.post-faq__item[open] .post-faq__q::after { content: '−'; }
+.post-faq__a { padding: 0 40px 26px 0; }
+.post-faq__a p {
+  font-size: 17px;
+  line-height: 1.7;
+  font-variation-settings: "wght" 360;
+  font-weight: 360;
+  color: var(--c-ink);
+  opacity: 0.82;
+  margin: 0;
+}
 
 /* In-article pull quote — wider than reading column */
 .post-pullquote {

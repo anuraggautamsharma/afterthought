@@ -5,7 +5,7 @@ import PostRenderer from '@/components/thinking/PostRenderer'
 import NewsletterForm from '@/components/NewsletterForm'
 import JsonLd from '@/components/JsonLd'
 import TableOfContents from '@/components/thinking/TableOfContents'
-import ShareRow from '@/components/thinking/ShareRow'
+import ShareButton from '@/components/thinking/ShareButton'
 import { extractHeadings } from '@/lib/toc'
 import { SITE_URL } from '@/lib/site'
 
@@ -109,11 +109,14 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
           </div>
           <h1 className="display-xl post-title__h1">{post.title}</h1>
           <div className="post-title__byline">
-            <span>{post.author}</span>
-            <span className="post-title__sep">·</span>
-            <span>{formatDate(post.published_at)}</span>
-            <span className="post-title__sep">·</span>
-            <span>{post.read_time} min read</span>
+            <span className="post-title__meta">
+              <span>{post.author}</span>
+              <span className="post-title__sep">·</span>
+              <span>{formatDate(post.published_at)}</span>
+              <span className="post-title__sep">·</span>
+              <span>{post.read_time} min read</span>
+            </span>
+            <ShareButton url={url} title={post.title} />
           </div>
         </div>
       </div>
@@ -127,11 +130,6 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
       ) : (
         <PostRenderer content={post.content} />
       )}
-
-      {/* Share */}
-      <div className="container">
-        <ShareRow url={url} title={post.title} />
-      </div>
 
       {/* Subscribe */}
       <section className="container" style={{ paddingBottom: 'var(--s-section)' }}>
