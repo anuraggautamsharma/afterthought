@@ -2,6 +2,8 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { getProjectBySlug, stripEmphasis } from '@/lib/projects'
 import PostRenderer from '@/components/thinking/PostRenderer'
+import JsonLd from '@/components/JsonLd'
+import { SITE_URL } from '@/lib/site'
 
 export const dynamic = 'force-dynamic'
 
@@ -17,11 +19,18 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   return {
     title: `${title} — Afterthought`,
     description,
+    alternates: { canonical: `/work/${slug}/` },
     openGraph: {
       title,
       description: description ?? undefined,
       images: image ? [{ url: image }] : undefined,
       type: 'article',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description: description ?? undefined,
+      images: image ? [image] : undefined,
     },
   }
 }
@@ -37,8 +46,33 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
 
   if (!project || project.status !== 'published') notFound()
 
+  const url = `${SITE_URL}/work/${project.slug}/`
+  const image = project.og_image || project.cover_image
+  const creativeWork = {
+    '@context': 'https://schema.org',
+    '@type': 'CreativeWork',
+    '@id': `${url}#work`,
+    name: stripEmphasis(project.title),
+    description: project.meta_description || project.summary || undefined,
+    ...(image ? { image } : {}),
+    url,
+    creator: { '@id': `${SITE_URL}/#organization` },
+    ...(project.year ? { dateCreated: project.year } : {}),
+    about: project.scope || undefined,
+  }
+  const breadcrumb = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE_URL}/` },
+      { '@type': 'ListItem', position: 2, name: 'Work', item: `${SITE_URL}/work/` },
+      { '@type': 'ListItem', position: 3, name: stripEmphasis(project.title), item: url },
+    ],
+  }
+
   return (
     <>
+      <JsonLd data={[creativeWork, breadcrumb]} />
       {/* ── HERO ── */}
       <div className="cs-hero">
         <div

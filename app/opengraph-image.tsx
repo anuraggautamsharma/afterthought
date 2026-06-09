@@ -37,7 +37,7 @@ export default function OpengraphImage() {
         </div>
 
         <div style={{ display: 'flex', justifyContent: 'flex-end', color: '#6E6E66', fontSize: '24px' }}>
-          afterthought.studio
+          afterthought.design
         </div>
       </div>
     ),

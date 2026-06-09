@@ -7,6 +7,7 @@ export const dynamic = 'force-dynamic'
 export const metadata: Metadata = {
   title: 'Careers — Afterthought',
   description: 'Work with Afterthought — open roles and freelance collaborations at an independent design studio in Bangalore.',
+  alternates: { canonical: '/careers/' },
 }
 
 export default async function Careers() {

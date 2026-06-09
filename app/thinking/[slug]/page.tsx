@@ -3,6 +3,8 @@ import { notFound } from 'next/navigation'
 import { getPostBySlug } from '@/lib/posts'
 import PostRenderer from '@/components/thinking/PostRenderer'
 import NewsletterForm from '@/components/NewsletterForm'
+import JsonLd from '@/components/JsonLd'
+import { SITE_URL } from '@/lib/site'
 
 export const dynamic = 'force-dynamic'
 
@@ -18,6 +20,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   return {
     title: `${title} — Afterthought`,
     description,
+    alternates: { canonical: `/thinking/${slug}/` },
     openGraph: {
       title,
       description: description ?? undefined,
@@ -46,8 +49,37 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
 
   if (!post || post.status !== 'published') notFound()
 
+  const url = `${SITE_URL}/thinking/${post.slug}/`
+  const image = post.og_image || post.cover_image
+  const blogPosting = {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    '@id': `${url}#article`,
+    headline: post.meta_title || post.title,
+    description: post.meta_description || post.excerpt || undefined,
+    ...(image ? { image } : {}),
+    author: { '@type': 'Person', name: post.author },
+    publisher: { '@id': `${SITE_URL}/#organization` },
+    datePublished: post.published_at || undefined,
+    dateModified: post.updated_at || post.published_at || undefined,
+    mainEntityOfPage: url,
+    url,
+    articleSection: post.category || undefined,
+    ...(post.focus_keyword ? { keywords: post.focus_keyword } : {}),
+  }
+  const breadcrumb = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE_URL}/` },
+      { '@type': 'ListItem', position: 2, name: 'Thinking', item: `${SITE_URL}/thinking/` },
+      { '@type': 'ListItem', position: 3, name: post.title, item: url },
+    ],
+  }
+
   return (
     <article>
+      <JsonLd data={[blogPosting, breadcrumb]} />
       {/* Hero */}
       {post.cover_image ? (
         <div className="post-hero-full" style={{ backgroundImage: `url(${post.cover_image})`, backgroundSize: 'cover', backgroundPosition: 'center' }} />

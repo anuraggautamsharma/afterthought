@@ -6,6 +6,7 @@ export const dynamic = 'force-dynamic'
 export const metadata: Metadata = {
   title: 'Work — Afterthought',
   description: 'Selected projects by Afterthought — brand identity, naming, motion design and visual systems for founders and growing businesses.',
+  alternates: { canonical: '/work/' },
 }
 
 export default async function Work() {

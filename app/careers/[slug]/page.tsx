@@ -3,6 +3,8 @@ import { notFound } from 'next/navigation'
 import { getJobBySlug } from '@/lib/jobs'
 import RoleApplyForm from '@/components/RoleApplyForm'
 import EmbeddedForm from '@/components/forms/EmbeddedForm'
+import JsonLd from '@/components/JsonLd'
+import { SITE_URL, SITE_NAME } from '@/lib/site'
 
 export const dynamic = 'force-dynamic'
 
@@ -13,7 +15,19 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   return {
     title: `${role.title} — Careers at Afterthought`,
     description: role.summary,
+    alternates: { canonical: `/careers/${slug}/` },
   }
+}
+
+/** Map our free-text job type to a schema.org employmentType enum, best-effort. */
+function employmentType(type: string): string | undefined {
+  const t = type.toLowerCase()
+  if (t.includes('full')) return 'FULL_TIME'
+  if (t.includes('part')) return 'PART_TIME'
+  if (t.includes('contract')) return 'CONTRACTOR'
+  if (t.includes('intern')) return 'INTERN'
+  if (t.includes('freelance') || t.includes('temp')) return 'TEMPORARY'
+  return undefined
 }
 
 export default async function RolePage({ params }: { params: Promise<{ slug: string }> }) {
@@ -21,8 +35,47 @@ export default async function RolePage({ params }: { params: Promise<{ slug: str
   const role = await getJobBySlug(slug)
   if (!role || role.status !== 'open') notFound()
 
+  const url = `${SITE_URL}/careers/${role.slug}/`
+  const isRemote = /remote|anywhere/i.test(role.location)
+  const empType = employmentType(role.type)
+  const jobPosting = {
+    '@context': 'https://schema.org',
+    '@type': 'JobPosting',
+    title: role.title,
+    description: role.description || role.summary,
+    datePosted: role.created_at,
+    ...(empType ? { employmentType: empType } : {}),
+    hiringOrganization: {
+      '@type': 'Organization',
+      name: SITE_NAME,
+      sameAs: SITE_URL,
+      '@id': `${SITE_URL}/#organization`,
+    },
+    jobLocation: {
+      '@type': 'Place',
+      address: {
+        '@type': 'PostalAddress',
+        addressLocality: 'Bangalore',
+        addressCountry: 'IN',
+      },
+    },
+    ...(isRemote ? { jobLocationType: 'TELECOMMUTE', applicantLocationRequirements: { '@type': 'Country', name: 'India' } } : {}),
+    directApply: true,
+    url,
+  }
+  const breadcrumb = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE_URL}/` },
+      { '@type': 'ListItem', position: 2, name: 'Careers', item: `${SITE_URL}/careers/` },
+      { '@type': 'ListItem', position: 3, name: role.title, item: url },
+    ],
+  }
+
   return (
     <>
+      <JsonLd data={[jobPosting, breadcrumb]} />
       {/* ── ROLE HEADER ── */}
       <section className="page-header container">
         <div className="page-header__eyebrow eyebrow">

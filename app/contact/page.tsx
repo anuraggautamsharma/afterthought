@@ -1,18 +1,38 @@
 import type { Metadata } from 'next'
 import EmbeddedForm from '@/components/forms/EmbeddedForm'
 import { getSettings } from '@/lib/settings'
+import JsonLd from '@/components/JsonLd'
 
 export const dynamic = 'force-dynamic'
+
+const FAQ: { q: string; a: string }[] = [
+  { q: 'Are you taking on new work?', a: 'Yes — we’re currently reading briefs for Summer 2026. We have room for roughly two more projects this year.' },
+  { q: 'Do you work outside India?', a: 'Often — and increasingly. Roughly half our work to date has been for clients in another country. Most kickoffs happen on a call, with two or three working visits a project.' },
+  { q: 'What’s a typical engagement worth?', a: 'A full identity sits between ₹40L–1Cr (about $50–125k). Smaller pieces — naming, a single deliverable, a campaign — start lower. We share a clear estimate after the first call.' },
+  { q: 'Will we be working with you, or a team?', a: 'Us. Always. We bring in collaborators for motion, illustration or production at scale, and tell you who they are at the kickoff.' },
+]
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: FAQ.map(({ q, a }) => ({
+    '@type': 'Question',
+    name: q,
+    acceptedAnswer: { '@type': 'Answer', text: a },
+  })),
+}
 
 export const metadata: Metadata = {
   title: 'Contact — Afterthought',
   description: 'Start a project with Afterthought. We read every note ourselves.',
+  alternates: { canonical: '/contact/' },
 }
 
 export default async function Contact() {
   const settings = await getSettings()
   return (
     <>
+      <JsonLd data={faqSchema} />
       <section className="page-header container">
         <div className="page-header__eyebrow eyebrow">
           <span className="pulse" style={{ background: 'var(--c-semantic-success)', width: '8px', height: '8px', borderRadius: '50%', display: 'inline-block' }}></span>

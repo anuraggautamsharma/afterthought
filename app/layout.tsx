@@ -8,6 +8,7 @@ import Footer from '@/components/Footer'
 import GsapAnimations from '@/components/GsapAnimations'
 import { getSettings } from '@/lib/settings'
 import { SITE_URL, SITE_NAME, SITE_DESCRIPTION } from '@/lib/site'
+import JsonLd from '@/components/JsonLd'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -64,6 +65,46 @@ export default async function RootLayout({
 }) {
   const settings = await getSettings()
 
+  const organization = {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    '@id': `${SITE_URL}/#organization`,
+    name: SITE_NAME,
+    url: SITE_URL,
+    logo: `${SITE_URL}/assets/favicon.png`,
+    description: SITE_DESCRIPTION,
+    ...(settings.email_general ? { email: settings.email_general } : {}),
+    founder: [
+      { '@type': 'Person', name: 'Anurag Gautam' },
+      { '@type': 'Person', name: 'Tina Gidwani' },
+    ],
+    ...(settings.studio_address
+      ? {
+          address: {
+            '@type': 'PostalAddress',
+            streetAddress: settings.studio_address,
+            addressLocality: 'Bangalore',
+            addressCountry: 'IN',
+          },
+        }
+      : {}),
+    sameAs: [
+      settings.social_instagram,
+      settings.social_linkedin,
+      settings.social_behance,
+      settings.social_medium,
+    ].filter(Boolean),
+  }
+
+  const website = {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    '@id': `${SITE_URL}/#website`,
+    name: SITE_NAME,
+    url: SITE_URL,
+    publisher: { '@id': `${SITE_URL}/#organization` },
+  }
+
   return (
     <html lang="en" className={`${inter.variable} ${jetbrainsMono.variable} ${instrumentSerif.variable}`}>
       <head>
@@ -76,6 +117,7 @@ export default async function RootLayout({
         />
       </head>
       <body>
+        <JsonLd data={[organization, website]} />
         <SiteNav><Nav settings={settings} /></SiteNav>
         {children}
         <SiteFooter><Footer settings={settings} /></SiteFooter>

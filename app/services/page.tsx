@@ -2,12 +2,15 @@ import type { Metadata } from 'next'
 import { ServiceCards } from '@/components/ServiceCards'
 import type { Service as ServiceCard } from '@/components/ServiceCards'
 import { getServices } from '@/lib/services'
+import JsonLd from '@/components/JsonLd'
+import { SITE_URL, SITE_NAME } from '@/lib/site'
 
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'Services — Afterthought',
   description: 'Brand identity, naming, motion, packaging, and digital — what Afterthought does, how it works, and what we don\'t take on.',
+  alternates: { canonical: '/services/' },
 }
 
 export default async function Services() {
@@ -27,8 +30,27 @@ export default async function Services() {
     services = []
   }
 
+  const serviceList = {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: 'Services — Afterthought',
+    itemListElement: services.map((s, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      item: {
+        '@type': 'Service',
+        name: s.title,
+        description: s.description,
+        serviceType: s.title,
+        provider: { '@type': 'Organization', name: SITE_NAME, '@id': `${SITE_URL}/#organization` },
+        areaServed: 'Worldwide',
+      },
+    })),
+  }
+
   return (
     <>
+      {services.length > 0 && <JsonLd data={serviceList} />}
       <section className="page-header container">
         <div className="page-header__eyebrow eyebrow">
           <span className="pulse"></span>

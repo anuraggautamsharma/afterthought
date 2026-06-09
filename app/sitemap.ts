@@ -10,8 +10,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticRoutes = ['', '/work', '/services', '/studio', '/thinking', '/careers', '/careers/freelance', '/contact']
   const now = new Date()
 
+  // Pages are served with a trailing slash (trailingSlash:true), so emit
+  // canonical trailing-slash URLs to avoid a redirect hop on every crawl.
   const entries: MetadataRoute.Sitemap = staticRoutes.map(path => ({
-    url: `${SITE_URL}${path}`,
+    url: `${SITE_URL}${path === '' ? '/' : `${path}/`}`,
     lastModified: now,
     changeFrequency: path === '' ? 'weekly' : 'monthly',
     priority: path === '' ? 1 : 0.7,
@@ -21,7 +23,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const posts = await getPublishedPosts()
     for (const p of posts) {
       entries.push({
-        url: `${SITE_URL}/thinking/${p.slug}`,
+        url: `${SITE_URL}/thinking/${p.slug}/`,
         lastModified: p.updated_at ? new Date(p.updated_at) : now,
         changeFrequency: 'monthly',
         priority: 0.6,
@@ -33,7 +35,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const projects = await getPublishedProjects()
     for (const pr of projects) {
       entries.push({
-        url: `${SITE_URL}/work/${pr.slug}`,
+        url: `${SITE_URL}/work/${pr.slug}/`,
         lastModified: pr.updated_at ? new Date(pr.updated_at) : now,
         changeFrequency: 'monthly',
         priority: 0.8,
@@ -45,7 +47,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const jobs = await getOpenJobs()
     for (const j of jobs) {
       entries.push({
-        url: `${SITE_URL}/careers/${j.slug}`,
+        url: `${SITE_URL}/careers/${j.slug}/`,
         lastModified: j.updated_at ? new Date(j.updated_at) : now,
         changeFrequency: 'weekly',
         priority: 0.5,

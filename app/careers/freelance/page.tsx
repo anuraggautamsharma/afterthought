@@ -6,6 +6,7 @@ export const dynamic = 'force-dynamic'
 export const metadata: Metadata = {
   title: 'Freelance & Collaborations — Afterthought',
   description: 'Work with Afterthought on a project basis. We collaborate with independent designers, writers, strategists, and makers.',
+  alternates: { canonical: '/careers/freelance/' },
 }
 
 const lookingFor = [

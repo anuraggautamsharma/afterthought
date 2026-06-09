@@ -8,6 +8,7 @@ export const metadata: Metadata = {
   title: 'Studio — Afterthought',
   description:
     'About Afterthought — a design studio led by Anurag Gautam and Tina Gidwani, based in Bangalore, working internationally across brand identity, naming, motion, and digital.',
+  alternates: { canonical: '/studio/' },
 }
 
 export default async function Studio() {

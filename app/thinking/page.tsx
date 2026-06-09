@@ -8,6 +8,7 @@ export const dynamic = 'force-dynamic'
 export const metadata: Metadata = {
   title: 'Thinking — Afterthought',
   description: 'The Afterthought journal — essays on design, craft, and practice from the studio.',
+  alternates: { canonical: '/thinking/' },
 }
 
 function formatDate(str: string | null) {
