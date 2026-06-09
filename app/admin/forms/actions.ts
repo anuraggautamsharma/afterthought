@@ -1,5 +1,7 @@
 'use server'
 
+
+import { requireSession } from '@/lib/auth'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import {
@@ -19,6 +21,7 @@ import { supabase } from '@/lib/supabase'
 // ── Forms ────────────────────────────────────────────────────────────────────
 
 export async function createFormAction(): Promise<{ id: string }> {
+  await requireSession()
   const form = await createForm({ title: 'Untitled form', status: 'draft' })
   // Create default first section
   await createSection({ form_id: form.id, title: '', description: '', sort_order: 0, skip_logic: [] })
@@ -27,6 +30,7 @@ export async function createFormAction(): Promise<{ id: string }> {
 }
 
 export async function updateFormAction(id: string, input: FormInput) {
+  await requireSession()
   await updateForm(id, input)
   revalidatePath('/admin/forms')
   revalidatePath(`/admin/forms/${id}/edit`)
@@ -34,6 +38,7 @@ export async function updateFormAction(id: string, input: FormInput) {
 }
 
 export async function deleteFormAction(id: string) {
+  await requireSession()
   await deleteForm(id)
   revalidatePath('/admin/forms')
   redirect('/admin/forms')
@@ -41,24 +46,28 @@ export async function deleteFormAction(id: string) {
 
 /** Delete used from the forms list (already on the page) — refresh, no redirect. */
 export async function deleteFormFromListAction(id: string) {
+  await requireSession()
   await deleteForm(id)
   revalidatePath('/admin/forms')
   revalidatePath('/admin/inbox')
 }
 
 export async function bulkDeleteFormsAction(ids: string[]) {
+  await requireSession()
   await Promise.all(ids.map(id => deleteForm(id).catch(() => {})))
   revalidatePath('/admin/forms')
   revalidatePath('/admin/inbox')
 }
 
 export async function bulkSetFormStatusAction(ids: string[], status: 'published' | 'draft' | 'closed') {
+  await requireSession()
   await Promise.all(ids.map(id => updateForm(id, { status }).catch(() => {})))
   revalidatePath('/admin/forms')
   revalidatePath('/admin/inbox')
 }
 
 export async function duplicateFormAction(id: string): Promise<{ id?: string; error?: string }> {
+  await requireSession()
   try {
     const copy = await duplicateForm(id)
     revalidatePath('/admin/forms')
@@ -69,12 +78,14 @@ export async function duplicateFormAction(id: string): Promise<{ id?: string; er
 }
 
 export async function publishFormAction(id: string) {
+  await requireSession()
   await updateForm(id, { status: 'published' })
   revalidatePath('/admin/forms')
   revalidatePath(`/admin/forms/${id}/edit`)
 }
 
 export async function closeFormAction(id: string) {
+  await requireSession()
   await updateForm(id, { status: 'closed' })
   revalidatePath('/admin/forms')
   revalidatePath(`/admin/forms/${id}/edit`)
@@ -85,6 +96,7 @@ export async function closeFormAction(id: string) {
  * for that site role doesn't already exist. Safe to call repeatedly.
  */
 export async function ensureSystemFormsAction(): Promise<{ created: string[] }> {
+  await requireSession()
   const created: string[] = []
   for (const seed of SYSTEM_FORM_SEEDS) {
     if (!seed.site_role) continue
@@ -103,6 +115,7 @@ export async function ensureSystemFormsAction(): Promise<{ created: string[] }> 
 // ── Sections ──────────────────────────────────────────────────────────────────
 
 export async function createSectionAction(formId: string, sortOrder: number) {
+  await requireSession()
   const section = await createSection({
     form_id: formId,
     title: '',
@@ -115,11 +128,13 @@ export async function createSectionAction(formId: string, sortOrder: number) {
 }
 
 export async function updateSectionAction(id: string, formId: string, input: Partial<SectionInput>) {
+  await requireSession()
   await updateSection(id, input)
   revalidatePath(`/admin/forms/${formId}/edit`)
 }
 
 export async function deleteSectionAction(id: string, formId: string) {
+  await requireSession()
   await deleteSection(id)
   revalidatePath(`/admin/forms/${formId}/edit`)
 }
@@ -127,6 +142,7 @@ export async function deleteSectionAction(id: string, formId: string) {
 // ── Fields ────────────────────────────────────────────────────────────────────
 
 export async function createFieldAction(input: FieldInput) {
+  await requireSession()
   const defaults = defaultFieldProps(input.type)
   const field = await createField({ ...defaults, ...input } as FieldInput)
   revalidatePath(`/admin/forms/${input.form_id}/edit`)
@@ -134,11 +150,13 @@ export async function createFieldAction(input: FieldInput) {
 }
 
 export async function updateFieldAction(id: string, formId: string, input: Partial<FormField>) {
+  await requireSession()
   await updateField(id, input)
   revalidatePath(`/admin/forms/${formId}/edit`)
 }
 
 export async function deleteFieldAction(id: string, formId: string) {
+  await requireSession()
   await deleteField(id)
   revalidatePath(`/admin/forms/${formId}/edit`)
 }
@@ -146,6 +164,7 @@ export async function deleteFieldAction(id: string, formId: string) {
 export async function reorderFieldsAction(
   updates: { id: string; sort_order: number; section_id?: string | null }[]
 ): Promise<{ ok: boolean; error?: string }> {
+  await requireSession()
   try {
     await reorderFields(updates)
     return { ok: true }
@@ -158,6 +177,7 @@ export async function reorderFieldsAction(
 // ── Slug uniqueness check ──────────────────────────────────────────────────
 
 export async function checkSlugAction(slug: string, excludeId?: string): Promise<boolean> {
+  await requireSession()
   const base = slugify(slug)
   const { data } = await supabase
     .from('forms')
@@ -183,6 +203,7 @@ export interface FormShareInfo {
 
 /** Resolves where a form is surfaced on the site, for the Share panel. */
 export async function getFormUsageAction(formId: string): Promise<FormShareInfo | null> {
+  await requireSession()
   const form = await getFormById(formId)
   if (!form) return null
 
@@ -202,6 +223,7 @@ export async function getFormUsageAction(formId: string): Promise<FormShareInfo 
 // ── CSV Export ────────────────────────────────────────────────────────────────
 
 export async function getFormCsvAction(formId: string): Promise<string> {
+  await requireSession()
   const { data: form } = await supabase.from('forms').select('*').eq('id', formId).single()
   const { data: fields } = await supabase
     .from('form_fields').select('*').eq('form_id', formId).order('sort_order')

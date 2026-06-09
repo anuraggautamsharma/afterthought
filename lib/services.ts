@@ -22,7 +22,7 @@ export async function getServices(): Promise<Service[]> {
     .select('*')
     .order('sort_order', { ascending: true })
     .order('created_at', { ascending: true })
-  if (error) throw error
+  if (error) { console.error('[getServices]', error.message); return [] }
   return (data ?? []) as Service[]
 }
 

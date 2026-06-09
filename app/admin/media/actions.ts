@@ -1,5 +1,7 @@
 'use server'
 
+
+import { requireSession } from '@/lib/auth'
 import { getSupabase } from '@/lib/supabase'
 
 const BUCKET = 'media'
@@ -20,6 +22,7 @@ async function ensureBucket() {
 export async function uploadMediaAction(
   formData: FormData
 ): Promise<{ url: string; name: string } | { error: string }> {
+  await requireSession()
   try {
     await ensureBucket()
     const supabase = getClient()
@@ -49,6 +52,7 @@ export async function listMediaAction(): Promise<Array<{
   size: number
   createdAt: string
 }>> {
+  await requireSession()
   try {
     await ensureBucket()
     const supabase = getClient()
@@ -74,6 +78,7 @@ export async function listMediaAction(): Promise<Array<{
 export async function deleteMediaAction(
   filename: string
 ): Promise<{ success: true } | { error: string }> {
+  await requireSession()
   try {
     const supabase = getClient()
     const { error } = await supabase.storage.from(BUCKET).remove([filename])

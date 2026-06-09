@@ -4,7 +4,7 @@ import {
   createUser, updateUser, deleteUser, setUserPassword,
   getUserAuthByEmail, getUserById, type UserRole,
 } from '@/lib/users'
-import { getSession } from '@/lib/auth'
+import { getSession, requireSession } from '@/lib/auth'
 import { revalidatePath } from 'next/cache'
 
 type Result = { ok?: boolean; error?: string }
@@ -12,6 +12,7 @@ type Result = { ok?: boolean; error?: string }
 export async function createUserAction(input: {
   email: string; name: string; role: UserRole; password: string
 }): Promise<Result> {
+  await requireSession()
   const email = input.email.trim().toLowerCase()
   if (!email || !input.password) return { error: 'Email and password are required.' }
   if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return { error: 'Please enter a valid email.' }
@@ -33,6 +34,7 @@ export async function createUserAction(input: {
 }
 
 export async function updateUserAction(id: string, input: { name: string; role: UserRole }): Promise<Result> {
+  await requireSession()
   try {
     await updateUser(id, input)
     revalidatePath('/admin/users')
@@ -43,6 +45,7 @@ export async function updateUserAction(id: string, input: { name: string; role: 
 }
 
 export async function setPasswordAction(id: string, password: string): Promise<Result> {
+  await requireSession()
   if (password.length < 8) return { error: 'Password must be at least 8 characters.' }
   try {
     await setUserPassword(id, password)
@@ -54,6 +57,7 @@ export async function setPasswordAction(id: string, password: string): Promise<R
 }
 
 export async function deleteUserAction(id: string): Promise<Result> {
+  await requireSession()
   const [session, target] = await Promise.all([getSession(), getUserById(id)])
   if (target && session && target.email.toLowerCase() === session.email.toLowerCase()) {
     return { error: 'You can’t delete your own account.' }

@@ -1,5 +1,7 @@
 'use server'
 
+
+import { requireSession } from '@/lib/auth'
 import { createJob, updateJob, deleteJob, countJobs, getAllJobs, getJobById, type JobInput } from '@/lib/jobs'
 import { createFullForm, getAllForms, duplicateForm } from '@/lib/forms'
 import { applicationFormSpec } from '@/lib/forms-seed'
@@ -19,6 +21,7 @@ async function ensureJobApplicationForm(jobId: string, jobTitle: string): Promis
 export async function createApplicationFormAction(
   jobId: string
 ): Promise<{ formId?: string; error?: string }> {
+  await requireSession()
   try {
     const job = await getJobById(jobId)
     if (!job) return { error: 'Job not found' }
@@ -36,6 +39,7 @@ export async function createApplicationFormAction(
 export async function createNewApplicationFormAction(
   jobId: string
 ): Promise<{ formId?: string; error?: string }> {
+  await requireSession()
   try {
     const job = await getJobById(jobId)
     if (!job) return { error: 'Job not found' }
@@ -57,6 +61,7 @@ export interface FormPickerOption {
 }
 
 export async function listFormsForPickerAction(): Promise<FormPickerOption[]> {
+  await requireSession()
   try {
     const forms = await getAllForms()
     return forms.map(f => ({
@@ -75,6 +80,7 @@ export async function setJobApplicationFormAction(
   jobId: string,
   formId: string | null
 ): Promise<{ ok: boolean; error?: string }> {
+  await requireSession()
   try {
     await updateJob(jobId, { application_form_id: formId })
     revalidatePath(`/admin/jobs/${jobId}`)
@@ -90,6 +96,7 @@ export async function duplicateFormForJobAction(
   jobId: string,
   sourceFormId: string
 ): Promise<{ formId?: string; error?: string }> {
+  await requireSession()
   try {
     const copy = await duplicateForm(sourceFormId)
     await updateJob(jobId, { application_form_id: copy.id })
@@ -105,6 +112,7 @@ export async function saveJobAction(
   id: string | null,
   data: JobInput
 ): Promise<{ id?: string; error?: string }> {
+  await requireSession()
   try {
     const slug = data.slug?.trim() || slugify(data.title ?? '')
     const input: JobInput = { ...data, slug }
@@ -133,6 +141,7 @@ export async function saveJobAction(
 }
 
 export async function deleteJobAction(id: string) {
+  await requireSession()
   try {
     await deleteJob(id)
     revalidatePath('/careers')
@@ -143,6 +152,7 @@ export async function deleteJobAction(id: string) {
 }
 
 export async function reorderJobAction(id: string, direction: 'up' | 'down'): Promise<void> {
+  await requireSession()
   const all = await getAllJobs()
   const idx = all.findIndex(j => j.id === id)
   if (idx === -1) return
@@ -159,6 +169,7 @@ export async function reorderJobAction(id: string, direction: 'up' | 'down'): Pr
 
 /** One-time migration: seed the jobs table from the legacy hardcoded roles. */
 export async function seedJobsAction(): Promise<{ error?: string; count?: number }> {
+  await requireSession()
   try {
     const existing = await countJobs()
     if (existing > 0) return { error: 'Jobs already exist — import skipped.' }
@@ -189,11 +200,13 @@ export async function seedJobsAction(): Promise<{ error?: string; count?: number
 }
 
 export async function bulkDeleteJobsAction(ids: string[]) {
+  await requireSession()
   await Promise.all(ids.map(id => deleteJob(id).catch(() => {})))
   revalidatePath('/admin/jobs'); revalidatePath('/careers')
 }
 
 export async function bulkSetJobStatusAction(ids: string[], status: 'open' | 'closed') {
+  await requireSession()
   await Promise.all(ids.map(id => updateJob(id, { status }).catch(() => {})))
   revalidatePath('/admin/jobs'); revalidatePath('/careers')
 }

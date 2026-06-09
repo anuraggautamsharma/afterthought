@@ -1,5 +1,7 @@
 'use server'
 
+
+import { requireSession } from '@/lib/auth'
 import { createProject, updateProject, deleteProject, countProjects, type ProjectInput } from '@/lib/projects'
 import { WORK_SEED } from '@/lib/work-seed'
 import { slugify } from '@/lib/slugify'
@@ -10,6 +12,7 @@ export async function saveProjectAction(
   id: string | null,
   data: ProjectInput
 ): Promise<{ id?: string; error?: string }> {
+  await requireSession()
   try {
     const slug = data.slug?.trim() || slugify((data.title ?? '').replace(/\*/g, ''))
     const input: ProjectInput = { ...data, slug }
@@ -31,6 +34,7 @@ export async function saveProjectAction(
 }
 
 export async function deleteProjectAction(id: string) {
+  await requireSession()
   try {
     await deleteProject(id)
     revalidatePath('/work')
@@ -42,6 +46,7 @@ export async function deleteProjectAction(id: string) {
 
 /** One-time migration: seed the projects table from the legacy case studies. */
 export async function seedProjectsAction(): Promise<{ error?: string; count?: number }> {
+  await requireSession()
   try {
     const existing = await countProjects()
     if (existing > 0) return { error: 'Projects already exist — import skipped.' }
@@ -58,11 +63,13 @@ export async function seedProjectsAction(): Promise<{ error?: string; count?: nu
 }
 
 export async function bulkDeleteProjectsAction(ids: string[]) {
+  await requireSession()
   await Promise.all(ids.map(id => deleteProject(id).catch(() => {})))
   revalidatePath('/admin/work'); revalidatePath('/work')
 }
 
 export async function bulkSetProjectStatusAction(ids: string[], status: 'published' | 'draft') {
+  await requireSession()
   await Promise.all(ids.map(id => updateProject(id, { status }).catch(() => {})))
   revalidatePath('/admin/work'); revalidatePath('/work')
 }

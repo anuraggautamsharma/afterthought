@@ -1,5 +1,7 @@
 'use server'
 
+
+import { requireSession } from '@/lib/auth'
 import { createTeamMember, updateTeamMember, deleteTeamMember, countTeam, getTeam, type TeamInput } from '@/lib/team'
 import { TEAM_SEED } from '@/lib/team-seed'
 import { revalidatePath } from 'next/cache'
@@ -9,6 +11,7 @@ export async function saveTeamAction(
   id: string | null,
   data: TeamInput
 ): Promise<{ id?: string; error?: string }> {
+  await requireSession()
   try {
     if (id) {
       await updateTeamMember(id, data)
@@ -25,6 +28,7 @@ export async function saveTeamAction(
 }
 
 export async function deleteTeamAction(id: string) {
+  await requireSession()
   try {
     await deleteTeamMember(id)
     revalidatePath('/studio')
@@ -35,6 +39,7 @@ export async function deleteTeamAction(id: string) {
 }
 
 export async function reorderTeamAction(id: string, direction: 'up' | 'down'): Promise<void> {
+  await requireSession()
   const all = await getTeam()
   const idx = all.findIndex(m => m.id === id)
   if (idx === -1) return
@@ -50,6 +55,7 @@ export async function reorderTeamAction(id: string, direction: 'up' | 'down'): P
 }
 
 export async function seedTeamAction(): Promise<{ error?: string; count?: number }> {
+  await requireSession()
   try {
     const existing = await countTeam()
     if (existing > 0) return { error: 'Team already exists — import skipped.' }
@@ -63,6 +69,7 @@ export async function seedTeamAction(): Promise<{ error?: string; count?: number
 }
 
 export async function bulkDeleteTeamAction(ids: string[]) {
+  await requireSession()
   await Promise.all(ids.map(id => deleteTeamMember(id).catch(() => {})))
   revalidatePath('/admin/team'); revalidatePath('/studio'); revalidatePath('/')
 }

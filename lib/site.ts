@@ -2,8 +2,7 @@
 // Set NEXT_PUBLIC_SITE_URL in Vercel to your production domain.
 export const SITE_URL = (
   process.env.NEXT_PUBLIC_SITE_URL ||
-  (process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : '') ||
-  'https://afterthought.studio'
+  'https://www.afterthought.design'
 ).replace(/\/$/, '')
 
 export const SITE_NAME = 'Afterthought'

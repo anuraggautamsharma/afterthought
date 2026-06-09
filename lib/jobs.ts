@@ -28,7 +28,7 @@ export async function getOpenJobs(): Promise<Job[]> {
     .eq('status', 'open')
     .order('sort_order', { ascending: true })
     .order('created_at', { ascending: false })
-  if (error) throw error
+  if (error) { console.error('[getOpenJobs]', error.message); return [] }
   return (data ?? []) as Job[]
 }
 
@@ -38,7 +38,7 @@ export async function getAllJobs(): Promise<Job[]> {
     .select('*')
     .order('sort_order', { ascending: true })
     .order('created_at', { ascending: false })
-  if (error) throw error
+  if (error) { console.error('[getAllJobs]', error.message); return [] }
   return (data ?? []) as Job[]
 }
 

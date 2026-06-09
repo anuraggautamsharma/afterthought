@@ -1,11 +1,14 @@
 'use server'
 
+
+import { requireSession } from '@/lib/auth'
 import { createPost, updatePost, deletePost, PostInput } from '@/lib/posts'
 import { estimateReadTime, slugify } from '@/lib/slugify'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 
 export async function savePostAction(id: string | null, data: PostInput): Promise<{ id?: string; error?: string }> {
+  await requireSession()
   try {
     const content   = data.content ?? {}
     const readTime  = estimateReadTime(content)
@@ -36,6 +39,7 @@ export async function savePostAction(id: string | null, data: PostInput): Promis
 }
 
 export async function deletePostAction(id: string) {
+  await requireSession()
   try {
     await deletePost(id)
     revalidatePath('/thinking')
@@ -46,12 +50,14 @@ export async function deletePostAction(id: string) {
 }
 
 export async function bulkDeletePostsAction(ids: string[]) {
+  await requireSession()
   await Promise.all(ids.map(id => deletePost(id).catch(() => {})))
   revalidatePath('/admin/posts')
   revalidatePath('/thinking')
 }
 
 export async function bulkSetPostStatusAction(ids: string[], status: 'published' | 'draft') {
+  await requireSession()
   await Promise.all(ids.map(id =>
     updatePost(id, {
       status,

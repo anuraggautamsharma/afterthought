@@ -527,13 +527,18 @@ const verifyToken = async (_req: Request, bearer?: string): Promise<AuthInfo | u
   }
 
   // WorkOS AuthKit access token (JWT) — accept if any candidate JWKS verifies it.
+  // Fail closed: the WorkOS path is only open to explicitly allowlisted users.
   const allowed = (process.env.MCP_ALLOWED_SUBS || '').split(',').map(s => s.trim()).filter(Boolean)
+  if (allowed.length === 0) {
+    console.error('[MCP auth] MCP_ALLOWED_SUBS is empty — WorkOS auth disabled (fail-closed).')
+    return undefined
+  }
   const list = await getJwksList()
   for (const jwks of list) {
     try {
       const { payload } = await jwtVerify(bearer, jwks)
-      // Lock down to specific WorkOS users when an allowlist is configured.
-      if (allowed.length > 0 && !allowed.includes(String(payload.sub))) {
+      // Lock down to specific WorkOS users.
+      if (!allowed.includes(String(payload.sub))) {
         console.error('[MCP auth] user not allowed:', payload.sub)
         return undefined
       }

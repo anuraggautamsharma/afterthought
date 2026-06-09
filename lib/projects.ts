@@ -42,7 +42,7 @@ export async function getAllProjects(): Promise<Project[]> {
     .select('*')
     .order('sort_order', { ascending: true })
     .order('created_at', { ascending: false })
-  if (error) throw error
+  if (error) { console.error('[getAllProjects]', error.message); return [] }
   return (data ?? []) as Project[]
 }
 

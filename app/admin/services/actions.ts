@@ -1,5 +1,7 @@
 'use server'
 
+
+import { requireSession } from '@/lib/auth'
 import { createService, updateService, deleteService, countServices, getServices, type ServiceInput } from '@/lib/services'
 import { SERVICES_SEED } from '@/lib/services-seed'
 import { revalidatePath } from 'next/cache'
@@ -9,6 +11,7 @@ export async function saveServiceAction(
   id: string | null,
   data: ServiceInput
 ): Promise<{ id?: string; error?: string }> {
+  await requireSession()
   try {
     if (id) {
       await updateService(id, data)
@@ -25,6 +28,7 @@ export async function saveServiceAction(
 }
 
 export async function deleteServiceAction(id: string) {
+  await requireSession()
   try {
     await deleteService(id)
     revalidatePath('/services')
@@ -35,6 +39,7 @@ export async function deleteServiceAction(id: string) {
 }
 
 export async function reorderServiceAction(id: string, direction: 'up' | 'down'): Promise<void> {
+  await requireSession()
   const all = await getServices()
   const idx = all.findIndex(s => s.id === id)
   if (idx === -1) return
@@ -50,6 +55,7 @@ export async function reorderServiceAction(id: string, direction: 'up' | 'down')
 }
 
 export async function seedServicesAction(): Promise<{ error?: string; count?: number }> {
+  await requireSession()
   try {
     const existing = await countServices()
     if (existing > 0) return { error: 'Services already exist — import skipped.' }
@@ -63,6 +69,7 @@ export async function seedServicesAction(): Promise<{ error?: string; count?: nu
 }
 
 export async function bulkDeleteServicesAction(ids: string[]) {
+  await requireSession()
   await Promise.all(ids.map(id => deleteService(id).catch(() => {})))
   revalidatePath('/admin/services'); revalidatePath('/services')
 }

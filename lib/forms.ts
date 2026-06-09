@@ -327,7 +327,7 @@ export function defaultFieldProps(type: FieldType): Partial<FormField> {
 export async function getAllForms(): Promise<Form[]> {
   const { data, error } = await supabase
     .from('forms').select('*').order('created_at', { ascending: false })
-  if (error) throw error
+  if (error) { console.error('[getAllForms]', error.message); return [] }
   return (data ?? []) as Form[]
 }
 

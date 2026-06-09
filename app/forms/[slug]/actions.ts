@@ -10,6 +10,36 @@ export interface UploadResult {
   error?: string
 }
 
+/** Server-side check that a file matches a field's accepted types. */
+function fileMatchesAccepted(file: File, accepted: string[]): boolean {
+  if (!accepted || accepted.length === 0) return true
+  const name = file.name.toLowerCase()
+  const type = (file.type || '').toLowerCase()
+  return accepted.some(a => {
+    const t = a.trim().toLowerCase()
+    if (!t) return false
+    if (t.startsWith('.')) return name.endsWith(t)             // ".pdf"
+    if (t.endsWith('/*')) return type.startsWith(t.slice(0, -1)) // "image/*"
+    if (t.includes('/')) return type === t                      // "application/pdf"
+    return name.endsWith('.' + t)                               // "pdf"
+  })
+}
+
+/** Block non-https and internal/private hosts to prevent webhook SSRF. */
+function isSafeWebhookUrl(raw: string): boolean {
+  try {
+    const u = new URL(raw)
+    if (u.protocol !== 'https:') return false
+    const h = u.hostname.toLowerCase()
+    if (h === 'localhost' || h.endsWith('.localhost') || h === '::1') return false
+    if (/^(127\.|10\.|192\.168\.|169\.254\.|0\.)/.test(h)) return false
+    if (/^172\.(1[6-9]|2\d|3[01])\./.test(h)) return false
+    return true
+  } catch {
+    return false
+  }
+}
+
 /**
  * Uploads a single file selected in a form's file field to private storage.
  * Enforces the field's size limit (capped at the global hard cap). Returns the
@@ -21,6 +51,7 @@ export async function uploadFormFileAction(formData: FormData): Promise<UploadRe
     if (!(file instanceof File)) return { ok: false, error: 'No file received' }
 
     const formId = String(formData.get('formId') ?? '')
+    const fieldId = String(formData.get('fieldId') ?? '')
     const requestedMb = Number(formData.get('maxMb') ?? 10) || 10
     const limitMb = Math.min(requestedMb, FORM_UPLOAD_HARD_CAP_MB)
 
@@ -28,6 +59,15 @@ export async function uploadFormFileAction(formData: FormData): Promise<UploadRe
       return { ok: false, error: `File is too large. Max ${limitMb} MB.` }
     }
     if (file.size === 0) return { ok: false, error: 'File is empty' }
+
+    // Enforce the field's accepted file types on the server (not just client UI).
+    if (formId && fieldId) {
+      const fields = await getFields(formId).catch(() => [])
+      const accepted = fields.find(f => f.id === fieldId)?.file_config?.accepted_types ?? []
+      if (accepted.length > 0 && !fileMatchesAccepted(file, accepted)) {
+        return { ok: false, error: `File type not allowed. Accepted: ${accepted.join(', ')}` }
+      }
+    }
 
     const meta = await uploadFormFile(formId, file)
     return { ok: true, file: meta }
@@ -115,8 +155,8 @@ export async function submitFormAction(
       responses,
     })
 
-    // Fire webhook if configured
-    if (form.webhook_url) {
+    // Fire webhook if configured (https + public host only — SSRF guard)
+    if (form.webhook_url && isSafeWebhookUrl(form.webhook_url)) {
       try {
         await fetch(form.webhook_url, {
           method: 'POST',

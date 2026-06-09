@@ -27,7 +27,7 @@ export async function getAllPosts(): Promise<Post[]> {
     .from('posts')
     .select('*')
     .order('created_at', { ascending: false })
-  if (error) throw error
+  if (error) { console.error('[getAllPosts]', error.message); return [] }
   return (data ?? []) as Post[]
 }
 
@@ -37,7 +37,7 @@ export async function getPublishedPosts(): Promise<Post[]> {
     .select('*')
     .eq('status', 'published')
     .order('published_at', { ascending: false })
-  if (error) throw error
+  if (error) { console.error('[getPublishedPosts]', error.message); return [] }
   return (data ?? []) as Post[]
 }
 

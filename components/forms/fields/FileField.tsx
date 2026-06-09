@@ -66,6 +66,7 @@ export default function FileField({ field, value, onChange, readOnly }: FieldPro
       const fd = new FormData()
       fd.append('file', f)
       fd.append('formId', field.form_id)
+      fd.append('fieldId', field.id)
       fd.append('maxMb', String(maxSizeMb))
       try {
         const res = await uploadFormFileAction(fd)
