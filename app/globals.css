@@ -1685,6 +1685,14 @@ img { max-width: 100%; display: block; }
   padding-top: 72px;
   padding-bottom: 80px;
 }
+/* Hide raw mermaid source until MermaidClient swaps it for an SVG diagram. */
+.post-body pre:has(> code.language-mermaid) { display: none; }
+.post-mermaid {
+  display: flex;
+  justify-content: center;
+  margin: 40px 0;
+}
+.post-mermaid svg { max-width: 100%; height: auto; }
 .post-body p {
   font-size: 18px;
   line-height: 1.74;

@@ -9,6 +9,7 @@ import JsonLd from '@/components/JsonLd'
 import TableOfContents from '@/components/thinking/TableOfContents'
 import ShareButton from '@/components/thinking/ShareButton'
 import PostFaq from '@/components/thinking/PostFaq'
+import MermaidClient from '@/components/thinking/MermaidClient'
 import { extractHeadings } from '@/lib/toc'
 import { SITE_URL } from '@/lib/site'
 
@@ -137,6 +138,9 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
       ) : (
         <PostRenderer content={post.content} />
       )}
+
+      {/* Renders any mermaid code blocks in the body into SVG diagrams. */}
+      <MermaidClient />
 
       {/* FAQ — only renders when the post has questions */}
       <PostFaq faqs={post.faqs ?? []} />

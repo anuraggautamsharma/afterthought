@@ -2,7 +2,7 @@
 // Inline text supports **bold**, *italic* and [label](url).
 
 export interface PostBlock {
-  type: 'paragraph' | 'heading' | 'image' | 'video' | 'quote' | 'bullet_list' | 'ordered_list' | 'divider'
+  type: 'paragraph' | 'heading' | 'image' | 'video' | 'quote' | 'bullet_list' | 'ordered_list' | 'divider' | 'mermaid'
   text?: string
   level?: number
   url?: string
@@ -62,6 +62,10 @@ function blockToNode(b: PostBlock): object | null {
       return { type: 'orderedList', content: listItems(b.items) }
     case 'divider':
       return { type: 'horizontalRule' }
+    case 'mermaid':
+      if (!b.text?.trim()) return null
+      // Stored as a fenced code block; the post page renders it to SVG.
+      return { type: 'codeBlock', attrs: { language: 'mermaid' }, content: [{ type: 'text', text: b.text }] }
     default:
       return null
   }
