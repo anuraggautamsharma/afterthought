@@ -19,6 +19,9 @@ import { deleteFormFiles } from '@/lib/storage'
 import { getAllJobs, getJobById, createJob, updateJob } from '@/lib/jobs'
 import { applicationFormSpec } from '@/lib/forms-seed'
 import { slugify } from '@/lib/slugify'
+import { estimateReadTime } from '@/lib/slugify'
+import { buildPostContent, plainTextToContent, type PostBlock } from '@/lib/mcp/postBlocks'
+import { listMedia, uploadImageFromUrl } from '@/lib/media'
 
 export const maxDuration = 60
 
@@ -274,28 +277,78 @@ const handler = createMcpHandler(
     // ── Posts (rich content from plain text) ─────────────────────────────────
     server.tool(
       'create_post',
-      'Create a blog post. `body` is plain text — separate paragraphs with blank lines. `faqs` (optional) adds an FAQ section at the end of the post and emits FAQPage structured data for Google & AI search. status "published" makes it live; default "draft".',
+      'Create a fully-formatted blog post. Prefer `blocks` for rich content: an ordered array of { type, ... }. Block types: paragraph {text}, heading {text, level 2|3}, image {url, alt?, ratio? natural|16-9|square}, video {url} (YouTube/Vimeo), quote {text}, bullet_list {items[]}, ordered_list {items[]}, divider {}. Text supports **bold**, *italic*, [label](url). Image/video urls must be publicly hosted — use upload_image_from_url first for external images, or list_media to reuse existing ones. `cover_image` is the hero (recommend 1600x900); `cover_focal` crops it. `faqs` adds an FAQ section + FAQPage schema. status "published" makes it live; default "draft". If you have only plain text, pass `body` instead of `blocks`.',
       {
         title: z.string(),
-        body: z.string().describe('Plain-text body; blank lines separate paragraphs'),
+        blocks: z.array(z.object({
+          type: z.enum(['paragraph', 'heading', 'image', 'video', 'quote', 'bullet_list', 'ordered_list', 'divider']),
+          text: z.string().optional(),
+          level: z.number().optional(),
+          url: z.string().optional(),
+          alt: z.string().optional(),
+          ratio: z.enum(['natural', '16-9', 'square']).optional(),
+          items: z.array(z.string()).optional(),
+        })).optional().describe('Rich content blocks, in order'),
+        body: z.string().optional().describe('Plain-text fallback if blocks are not used; blank lines separate paragraphs'),
         excerpt: z.string().optional(),
         category: z.string().optional(),
+        cover_image: z.string().optional().describe('Hero image URL (publicly hosted)'),
+        cover_focal: z.enum(['top', 'center', 'bottom']).optional(),
+        meta_title: z.string().optional(),
+        meta_description: z.string().optional(),
+        focus_keyword: z.string().optional(),
         status: z.enum(['draft', 'published']).optional(),
         faqs: z.array(z.object({ question: z.string(), answer: z.string() })).optional()
           .describe('Optional Q&A pairs shown at the end of the post'),
       },
       async (a) => {
         const c = getCollection('posts')!
-        const paras = a.body.split(/\n\n+/).map(p => p.trim()).filter(Boolean)
-        const content = { type: 'doc', content: paras.map(p => ({ type: 'paragraph', content: [{ type: 'text', text: p }] })) }
+        const content = a.blocks && a.blocks.length
+          ? buildPostContent(a.blocks as PostBlock[])
+          : plainTextToContent(a.body ?? '')
         const post = await c.create!({
           title: a.title, slug: slugify(a.title), excerpt: a.excerpt ?? '',
           content, category: a.category ?? 'General', status: a.status ?? 'draft',
+          cover_image: a.cover_image ?? null,
+          cover_focal: a.cover_focal ?? 'center',
+          meta_title: a.meta_title ?? null,
+          meta_description: a.meta_description ?? null,
+          focus_keyword: a.focus_keyword ?? null,
+          read_time: estimateReadTime(content),
           faqs: (a.faqs ?? []).map(f => ({ q: f.question, a: f.answer })),
           published_at: a.status === 'published' ? new Date().toISOString() : null,
         }) as { id: string; slug: string }
         touch('/thinking', '/admin/posts')
         return text({ ok: true, id: post.id, slug: post.slug, public_url: `${SITE}/thinking/${post.slug}`, admin_url: `${SITE}/admin/posts/${post.id}` })
+      },
+    )
+
+    // ── Media (images for posts) ──────────────────────────────────────────────
+    server.tool(
+      'list_media',
+      'List images already in the media library (name + public URL). Reuse these as post images or covers.',
+      {},
+      async () => {
+        const items = await listMedia()
+        return text({ count: items.length, media: items.map(m => ({ name: m.name, url: m.url })) })
+      },
+    )
+
+    server.tool(
+      'upload_image_from_url',
+      'Fetch an external image URL and host it in the media library, returning a public URL you can use as a post image or cover. Use this for any image not already hosted on our domain.',
+      {
+        url: z.string().describe('Source image URL to fetch and host'),
+        name: z.string().optional().describe('Optional base filename'),
+      },
+      async (a) => {
+        try {
+          const r = await uploadImageFromUrl(a.url, a.name)
+          touch('/admin/media')
+          return text({ ok: true, url: r.url, name: r.name })
+        } catch (e) {
+          return text({ ok: false, error: e instanceof Error ? e.message : 'Upload failed' })
+        }
       },
     )
 
