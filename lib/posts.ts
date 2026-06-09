@@ -18,9 +18,19 @@ export interface Post {
   og_image: string | null
   focus_keyword: string | null
   read_time: number
+  // Optional until the `cover_focal` column exists in Supabase; reads undefined
+  // → 'center'. Controls how the contained cover image is cropped.
+  cover_focal?: 'top' | 'center' | 'bottom' | null
 }
 
 export type PostInput = Partial<Omit<Post, 'id' | 'created_at' | 'updated_at'>>
+
+/** Maps a cover focal point to a CSS object-position value. */
+export function focalToPosition(focal?: string | null): string {
+  if (focal === 'top') return 'center top'
+  if (focal === 'bottom') return 'center bottom'
+  return 'center'
+}
 
 export async function getAllPosts(): Promise<Post[]> {
   const { data, error } = await supabase

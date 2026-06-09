@@ -73,16 +73,6 @@ export default function PreviewPage() {
   const headings = extractHeadings(sample)
   return (
     <article>
-      <div className="post-hero-full" style={{ background: 'var(--c-block-navy)' }}>
-        <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '48px' }}>
-          <div style={{ textAlign: 'center', maxWidth: '800px' }}>
-            <div style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', fontSize: 'clamp(40px, 6vw, 88px)', lineHeight: 1.0, letterSpacing: '-3px', color: 'rgba(255,255,255,0.92)' }}>
-              Content styling preview
-            </div>
-          </div>
-        </div>
-      </div>
-
       <div className="container">
         <div className="post-title">
           <div className="post-title__eyebrow">
@@ -100,6 +90,19 @@ export default function PreviewPage() {
               <span>3 min read</span>
             </span>
             <ShareButton url="https://www.afterthought.design/thinking/preview/" title="Every element, one page" />
+          </div>
+        </div>
+      </div>
+
+      <div className="container">
+        <div className="post-cover">
+          <div className="post-cover__frame">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="https://picsum.photos/1200/675"
+              alt="Sample cover"
+              style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center' }}
+            />
           </div>
         </div>
       </div>

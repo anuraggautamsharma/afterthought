@@ -1,6 +1,8 @@
 import type { Metadata } from 'next'
+import Image from 'next/image'
 import { notFound } from 'next/navigation'
 import { getPostBySlug } from '@/lib/posts'
+import { focalToPosition } from '@/lib/posts'
 import PostRenderer from '@/components/thinking/PostRenderer'
 import NewsletterForm from '@/components/NewsletterForm'
 import JsonLd from '@/components/JsonLd'
@@ -84,22 +86,8 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
   return (
     <article>
       <JsonLd data={[blogPosting, breadcrumb]} />
-      {/* Hero */}
-      {post.cover_image ? (
-        <div className="post-hero-full" style={{ backgroundImage: `url(${post.cover_image})`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
-      ) : (
-        <div className="post-hero-full" style={{ background: 'var(--c-block-navy)' }}>
-          <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '48px' }}>
-            <div style={{ textAlign: 'center', maxWidth: '800px' }}>
-              <div style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', fontSize: 'clamp(40px, 6vw, 88px)', lineHeight: 1.0, letterSpacing: '-3px', color: 'rgba(255,255,255,0.92)' }}>
-                {post.title}
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
 
-      {/* Title strip */}
+      {/* Title strip — comes first (editorial layout) */}
       <div className="container">
         <div className="post-title">
           <div className="post-title__eyebrow">
@@ -120,6 +108,24 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
           </div>
         </div>
       </div>
+
+      {/* Contained cover image — focal point controls the crop */}
+      {post.cover_image && (
+        <div className="container">
+          <div className="post-cover">
+            <div className="post-cover__frame">
+              <Image
+                src={post.cover_image}
+                alt={post.title}
+                fill
+                priority
+                sizes="(max-width: 760px) 100vw, 720px"
+                style={{ objectFit: 'cover', objectPosition: focalToPosition(post.cover_focal) }}
+              />
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Body — with table of contents on longer posts */}
       {headings.length >= 3 ? (

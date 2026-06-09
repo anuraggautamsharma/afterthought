@@ -1537,13 +1537,27 @@ img { max-width: 100%; display: block; }
   position: relative;
 }
 
-/* Title area — appears below the hero, centered on the reading axis */
+/* Title area — first element, centered on the reading axis */
 .post-title {
   max-width: 720px;
   margin: 0 auto;
-  padding-top: 56px;
-  padding-bottom: 52px;
+  padding-top: 72px;
+  padding-bottom: 44px;
   border-bottom: 1px solid var(--c-hairline);
+}
+
+/* Contained cover image (editorial hero) — centered on the reading axis */
+.post-cover {
+  padding-top: 40px;
+}
+.post-cover__frame {
+  position: relative;
+  max-width: 720px;
+  margin: 0 auto;
+  aspect-ratio: 16 / 9;
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  background: var(--c-surface-soft);
 }
 .post-title__eyebrow {
   display: flex;
