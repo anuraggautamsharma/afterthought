@@ -149,10 +149,10 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
       <section className="container" style={{ paddingBottom: 'var(--s-section)' }}>
         <div className="color-block color-block--lime">
           <span className="eyebrow cb-eyebrow">The newsletter</span>
-          <h2 className="cb-title display-lg">Once a quarter. Not a minute earlier.</h2>
-          <p className="body-lg cb-body">We send a short letter four times a year — one of the essays above, two or three sentences about what we&apos;re making, and the occasional book recommendation.</p>
+          <h2 className="cb-title display-lg">One short letter. Only the good stuff.</h2>
+          <p className="body-lg cb-body">We send a short letter with the strongest of what we publish — an essay or two, a few sentences about what we&apos;re making, and the occasional book recommendation.</p>
           <NewsletterForm />
-          <p className="caption" style={{ opacity: 0.6, marginTop: '16px' }}>Four notes a year. Unsubscribe in one click.</p>
+          <p className="caption" style={{ opacity: 0.6, marginTop: '16px' }}>No noise. Unsubscribe in one click.</p>
         </div>
       </section>
     </article>

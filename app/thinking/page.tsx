@@ -38,10 +38,10 @@ export default async function Thinking({
       <section className="page-header container">
         <div className="page-header__eyebrow eyebrow">
           <span className="pulse"></span>
-          <span>The journal · Vol. 01 · Quarterly</span>
+          <span>The journal · Vol. 01 · New essays weekly</span>
         </div>
         <h1 className="display-xl page-header__title">Essays, process notes and the occasional <em>strong opinion</em>.</h1>
-        <p className="page-header__sub body-lg">We write when something is worth saying. Four times a year, roughly — essays on practice, notes on process, and opinions we&apos;re willing to put our name on.</p>
+        <p className="page-header__sub body-lg">We write when something is worth saying — essays on practice, notes on process, and opinions we&apos;re willing to put our name on. New pieces every week.</p>
       </section>
 
       <div className="container" style={{ paddingBottom: 'var(--s-section)' }}>
@@ -90,7 +90,7 @@ export default async function Thinking({
         ) : page === 1 ? (
           <div className="j-more-box" style={{ padding: '48px', background: 'var(--c-surface-soft)', borderRadius: 'var(--r-lg)', textAlign: 'center' }}>
             <div style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', fontSize: 'clamp(22px, 3vw, 32px)', letterSpacing: '-0.5px', marginBottom: '16px' }}>First essay coming soon.</div>
-            <p className="body-sm" style={{ opacity: 0.6, maxWidth: '440px', margin: '0 auto' }}>We publish four times a year — subscribe below and we&apos;ll send it when it&apos;s ready.</p>
+            <p className="body-sm" style={{ opacity: 0.6, maxWidth: '440px', margin: '0 auto' }}>New essays land every week — subscribe below and we&apos;ll send the first one when it&apos;s ready.</p>
           </div>
         ) : null}
 
@@ -139,17 +139,17 @@ export default async function Thinking({
         {total === 0 && page === 1 && (
           <div className="j-more-box" style={{ padding: '48px', background: 'var(--c-surface-soft)', borderRadius: 'var(--r-lg)', textAlign: 'center', marginTop: '48px' }}>
             <div style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', fontSize: 'clamp(22px, 3vw, 32px)', letterSpacing: '-0.5px', marginBottom: '16px' }}>More on the way.</div>
-            <p className="body-sm" style={{ opacity: 0.6, maxWidth: '440px', margin: '0 auto' }}>We publish four times a year — essays on practice, process, and the occasional opinion we&apos;re willing to defend. Subscribe below and we&apos;ll send the next one when it&apos;s ready.</p>
+            <p className="body-sm" style={{ opacity: 0.6, maxWidth: '440px', margin: '0 auto' }}>We publish every week — essays on practice, process, and the occasional opinion we&apos;re willing to defend. Subscribe below and we&apos;ll send the next one when it&apos;s ready.</p>
           </div>
         )}
 
         <div id="newsletter" style={{ marginTop: '96px' }}>
           <div className="color-block color-block--lime">
             <span className="eyebrow cb-eyebrow">The newsletter</span>
-            <h2 className="cb-title display-lg">Once a quarter. Not a minute earlier.</h2>
-            <p className="body-lg cb-body">We send a short letter four times a year — one of the essays above, two or three sentences about what we&apos;re making, and the occasional book recommendation. We don&apos;t sell the list, run a tracker, or write a tenth note about Q4 trends.</p>
+            <h2 className="cb-title display-lg">One short letter. Only the good stuff.</h2>
+            <p className="body-lg cb-body">We send a short letter with the strongest of what we publish — an essay or two, a few sentences about what we&apos;re making, and the occasional book recommendation. We don&apos;t sell the list, run a tracker, or write a tenth note about Q4 trends.</p>
             <NewsletterForm />
-            <p className="caption" style={{ opacity: 0.6, marginTop: '16px' }}>Four notes a year. Unsubscribe in one click.</p>
+            <p className="caption" style={{ opacity: 0.6, marginTop: '16px' }}>No noise. Unsubscribe in one click.</p>
           </div>
         </div>
       </div>

@@ -9,6 +9,7 @@ import GsapAnimations from '@/components/GsapAnimations'
 import { getSettings } from '@/lib/settings'
 import { SITE_URL, SITE_NAME, SITE_DESCRIPTION } from '@/lib/site'
 import JsonLd from '@/components/JsonLd'
+import { Analytics } from '@vercel/analytics/next'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -42,6 +43,9 @@ export const metadata: Metadata = {
   },
   alternates: {
     canonical: '/',
+    types: {
+      'application/rss+xml': [{ url: '/feed.xml', title: 'Afterthought — Thinking' }],
+    },
   },
   openGraph: {
     type: 'website',
@@ -122,6 +126,7 @@ export default async function RootLayout({
         {children}
         <SiteFooter><Footer settings={settings} /></SiteFooter>
         <SiteNav><GsapAnimations /></SiteNav>
+        <Analytics />
       </body>
     </html>
   )

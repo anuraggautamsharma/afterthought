@@ -144,7 +144,7 @@ export default async function Studio() {
             <div className="contact-meta">
               <div className="contact-meta__row"><span className="caption">Studio</span><a href="/contact">Indiranagar, Bangalore 560038</a></div>
               <div className="contact-meta__row"><span className="caption">Hours</span><a href="/contact">IST · We answer on a working week</a></div>
-              <div className="contact-meta__row"><span className="caption">Newsletter</span><a href="/thinking">Quarterly · 4 a year</a></div>
+              <div className="contact-meta__row"><span className="caption">Newsletter</span><a href="/thinking">The journal · new essays weekly</a></div>
             </div>
           </div>
         </div>
