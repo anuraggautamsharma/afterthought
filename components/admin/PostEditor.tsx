@@ -2,10 +2,10 @@
 
 import { useEditor, EditorContent } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
-import Image from '@tiptap/extension-image'
 import Youtube from '@tiptap/extension-youtube'
 import Link from '@tiptap/extension-link'
 import Placeholder from '@tiptap/extension-placeholder'
+import { RichImage } from '@/lib/tiptap/richImage'
 import Toolbar from './Toolbar'
 
 interface Props {
@@ -17,7 +17,7 @@ export default function PostEditor({ content, onChange }: Props) {
   const editor = useEditor({
     extensions: [
       StarterKit,
-      Image.configure({ inline: false, allowBase64: false }),
+      RichImage.configure({ inline: false, allowBase64: false }),
       Youtube.configure({ controls: true, nocookie: true }),
       Link.configure({ openOnClick: false, autolink: true }),
       Placeholder.configure({ placeholder: 'Start writing your essay…' }),

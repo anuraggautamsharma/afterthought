@@ -37,6 +37,7 @@ export default function PostForm({ post }: Props) {
   const [ogImage,     setOgImage]     = useState(post?.og_image ?? '')
   const [keyword,     setKeyword]     = useState(post?.focus_keyword ?? '')
   const [coverFocal,  setCoverFocal]  = useState<'top' | 'center' | 'bottom'>(post?.cover_focal ?? 'center')
+  const [coverDims,   setCoverDims]   = useState<{ w: number; h: number } | null>(null)
   const [faqs,        setFaqs]        = useState<{ q: string; a: string }[]>(post?.faqs ?? [])
   const [pickerOpen,  setPickerOpen]  = useState(false)
 
@@ -275,9 +276,21 @@ export default function PostForm({ post }: Props) {
                 {coverImage && (
                   <div className="admin-cover-preview">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={coverImage} alt="Cover" />
+                    <img
+                      src={coverImage}
+                      alt="Cover"
+                      onLoad={e => setCoverDims({ w: e.currentTarget.naturalWidth, h: e.currentTarget.naturalHeight })}
+                    />
                     <button type="button" className="admin-cover-remove" onClick={() => { setCoverImage(''); markDirty() }}>✕</button>
                   </div>
+                )}
+                {coverImage && coverDims ? (
+                  <div className={`admin-dim-hint ${coverDims.w < 1200 ? 'admin-dim-hint--warn' : ''}`}>
+                    {coverDims.w}×{coverDims.h}px
+                    {coverDims.w < 1200 ? ' · low resolution — use ≥1200px wide' : ' · looks crisp'}
+                  </div>
+                ) : (
+                  <span className="admin-field__hint">Recommended: 1600×900px (16:9).</span>
                 )}
                 <div className="admin-cover-actions">
                   <button type="button" className="admin-btn-secondary" style={{ fontSize: '12px', padding: '8px 14px' }} onClick={() => setPickerOpen(true)}>

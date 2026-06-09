@@ -1823,6 +1823,9 @@ img { max-width: 100%; display: block; }
   border-radius: var(--r-lg);
   margin: 48px 0;
 }
+/* Per-image ratio crop (chosen in the editor) */
+.post-body img[data-ratio="16-9"] { aspect-ratio: 16 / 9; object-fit: cover; object-position: center; }
+.post-body img[data-ratio="square"] { aspect-ratio: 1 / 1; object-fit: cover; object-position: center; }
 
 /* Video embeds — TipTap Youtube wraps the iframe in div[data-youtube-video] */
 .post-body div[data-youtube-video] {

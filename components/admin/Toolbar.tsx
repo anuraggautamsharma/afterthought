@@ -2,9 +2,15 @@
 
 import { useState } from 'react'
 import { type Editor } from '@tiptap/react'
-import { FloatingMenu } from '@tiptap/react/menus'
+import { FloatingMenu, BubbleMenu } from '@tiptap/react/menus'
 import ImagePicker from './ImagePicker'
 import VideoModal from './VideoModal'
+
+const RATIOS: { value: string; label: string }[] = [
+  { value: 'natural', label: 'Natural' },
+  { value: '16-9', label: '16:9' },
+  { value: 'square', label: 'Square' },
+]
 
 interface Props { editor: Editor | null }
 
@@ -136,6 +142,23 @@ export default function Toolbar({ editor }: Props) {
           </button>
         </div>
       </FloatingMenu>
+
+      {/* Image control bar — appears when an image is selected */}
+      <BubbleMenu editor={editor} shouldShow={({ editor }) => editor.isActive('image')} options={{ placement: 'top' }}>
+        <div className="editor-imgbar">
+          <span className="editor-imgbar__label">Size</span>
+          {RATIOS.map(r => (
+            <button
+              key={r.value}
+              type="button"
+              className={`editor-imgbar__btn ${editor.isActive('image', { ratio: r.value }) ? 'is-active' : ''}`}
+              onClick={() => editor.chain().focus().updateAttributes('image', { ratio: r.value }).run()}
+            >
+              {r.label}
+            </button>
+          ))}
+        </div>
+      </BubbleMenu>
 
       <ImagePicker open={pickerOpen} onClose={() => setPickerOpen(false)} onSelect={insertImage} />
       <VideoModal open={videoOpen} onClose={() => setVideoOpen(false)} onSubmit={insertVideo} />

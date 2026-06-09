@@ -31,6 +31,7 @@ export default function ImagePicker({ open, onClose, onSelect }: Props) {
       <div className="image-picker-modal" onClick={e => e.stopPropagation()}>
         <div className="image-picker-header">
           <span className="image-picker-title">Select image</span>
+          <span className="image-picker-hint">Use images ~1600px wide for crisp results</span>
           <button type="button" className="image-picker-close" onClick={onClose}>✕</button>
         </div>
         <div className="image-picker-body">

@@ -1,11 +1,11 @@
 import { generateHTML } from '@tiptap/html'
 import StarterKit from '@tiptap/starter-kit'
-import Image from '@tiptap/extension-image'
 import Youtube from '@tiptap/extension-youtube'
 import Link from '@tiptap/extension-link'
+import { RichImage } from '@/lib/tiptap/richImage'
 import { extractHeadings } from '@/lib/toc'
 
-const extensions = [StarterKit, Image, Youtube, Link]
+const extensions = [StarterKit, RichImage, Youtube, Link]
 
 export default function PostRenderer({ content, bare = false }: { content: object; bare?: boolean }) {
   if (!content || !Object.keys(content).length) return null
