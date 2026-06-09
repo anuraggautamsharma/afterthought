@@ -21,7 +21,8 @@ import { applicationFormSpec } from '@/lib/forms-seed'
 import { slugify } from '@/lib/slugify'
 import { estimateReadTime } from '@/lib/slugify'
 import { buildPostContent, plainTextToContent, type PostBlock } from '@/lib/mcp/postBlocks'
-import { listMedia, uploadImageFromUrl, uploadImageFromBase64 } from '@/lib/media'
+import { listMedia, uploadImageFromUrl, uploadImageFromBase64, uploadImageBuffer } from '@/lib/media'
+import { renderHero, type HeroTheme } from '@/lib/hero'
 
 export const maxDuration = 60
 
@@ -277,7 +278,7 @@ const handler = createMcpHandler(
     // ── Posts (rich content from plain text) ─────────────────────────────────
     server.tool(
       'create_post',
-      'Create a fully-formatted blog post. Prefer `blocks` for rich content: an ordered array of { type, ... }. Block types: paragraph {text}, heading {text, level 2|3}, image {url, alt?, ratio? natural|16-9|square}, video {url} (YouTube/Vimeo), quote {text}, bullet_list {items[]}, ordered_list {items[]}, divider {}. Text supports **bold**, *italic*, [label](url). Image/video urls must be publicly hosted — use upload_image_from_url first for external images, or list_media to reuse existing ones. `cover_image` is the hero (recommend 1600x900); `cover_focal` crops it. `faqs` adds an FAQ section + FAQPage schema. status "published" makes it live; default "draft". If you have only plain text, pass `body` instead of `blocks`.',
+      'Create a fully-formatted blog post in ONE call. Prefer `blocks` for rich content: an ordered array of { type, ... }. Block types: paragraph {text}, heading {text, level 2|3}, image {url, alt?, ratio? natural|16-9|square}, video {url} (YouTube/Vimeo), quote {text}, bullet_list {items[]}, ordered_list {items[]}, divider {}. Text supports **bold**, *italic*, [label](url). For a COVER you have two easy options: (a) set `auto_cover: true` and the server instantly renders an on-brand hero from the title — no image work needed (recommended default); or (b) pass a hosted `cover_image` URL. Body image/video urls must be publicly hosted (use upload_image_from_url or list_media). `faqs` adds an FAQ section + FAQPage schema. status "published" makes it live; default "draft". If you only have plain text, pass `body` instead of `blocks`.',
       {
         title: z.string(),
         blocks: z.array(z.object({
@@ -292,7 +293,9 @@ const handler = createMcpHandler(
         body: z.string().optional().describe('Plain-text fallback if blocks are not used; blank lines separate paragraphs'),
         excerpt: z.string().optional(),
         category: z.string().optional(),
-        cover_image: z.string().optional().describe('Hero image URL (publicly hosted)'),
+        cover_image: z.string().optional().describe('Hero image URL (publicly hosted). Omit if using auto_cover.'),
+        auto_cover: z.boolean().optional().describe('If true and no cover_image is given, the server renders an on-brand hero from the title — the fast, zero-effort way to get a cover.'),
+        cover_theme: z.enum(['navy', 'lime', 'ink']).optional().describe('Colour theme for the auto-rendered cover (default navy).'),
         cover_focal: z.enum(['top', 'center', 'bottom']).optional(),
         meta_title: z.string().optional(),
         meta_description: z.string().optional(),
@@ -306,10 +309,23 @@ const handler = createMcpHandler(
         const content = a.blocks && a.blocks.length
           ? buildPostContent(a.blocks as PostBlock[])
           : plainTextToContent(a.body ?? '')
+
+        let cover = a.cover_image ?? null
+        let coverNote: string | undefined
+        if (!cover && a.auto_cover) {
+          try {
+            const png = await renderHero({ title: a.title, eyebrow: a.category ?? 'The Journal', theme: a.cover_theme })
+            const up = await uploadImageBuffer(png, slugify(a.title) || 'hero')
+            cover = up.url
+          } catch (e) {
+            coverNote = `auto_cover failed: ${e instanceof Error ? e.message : 'render error'}`
+          }
+        }
+
         const post = await c.create!({
           title: a.title, slug: slugify(a.title), excerpt: a.excerpt ?? '',
           content, category: a.category ?? 'General', status: a.status ?? 'draft',
-          cover_image: a.cover_image ?? null,
+          cover_image: cover,
           cover_focal: a.cover_focal ?? 'center',
           meta_title: a.meta_title ?? null,
           meta_description: a.meta_description ?? null,
@@ -319,7 +335,29 @@ const handler = createMcpHandler(
           published_at: a.status === 'published' ? new Date().toISOString() : null,
         }) as { id: string; slug: string }
         touch('/thinking', '/admin/posts')
-        return text({ ok: true, id: post.id, slug: post.slug, public_url: `${SITE}/thinking/${post.slug}`, admin_url: `${SITE}/admin/posts/${post.id}` })
+        return text({ ok: true, id: post.id, slug: post.slug, cover_image: cover, ...(coverNote ? { warning: coverNote } : {}), public_url: `${SITE}/thinking/${post.slug}`, admin_url: `${SITE}/admin/posts/${post.id}` })
+      },
+    )
+
+    // ── Hero image generator (on-brand, server-side, no sandbox needed) ───────
+    server.tool(
+      'generate_hero_image',
+      'Render an on-brand Afterthought hero image (1600x900 PNG) from a few words and host it — returns a public URL for use as a post cover. Fast: the server composes it with the real brand fonts and colours, so you never render or upload an image yourself. Use this when you want a cover but want to preview/control it; otherwise just pass auto_cover:true to create_post.',
+      {
+        title: z.string().describe('Headline shown large on the hero'),
+        eyebrow: z.string().optional().describe('Small label top-left, e.g. the category (default "The Journal")'),
+        caption: z.string().optional().describe('Small caption bottom-left (default "afterthought.design")'),
+        theme: z.enum(['navy', 'lime', 'ink']).optional().describe('Colour theme (default navy)'),
+      },
+      async (a) => {
+        try {
+          const png = await renderHero({ title: a.title, eyebrow: a.eyebrow, caption: a.caption, theme: a.theme as HeroTheme | undefined })
+          const up = await uploadImageBuffer(png, slugify(a.title) || 'hero')
+          touch('/admin/media')
+          return text({ ok: true, url: up.url, name: up.name })
+        } catch (e) {
+          return text({ ok: false, error: e instanceof Error ? e.message : 'Render failed' })
+        }
       },
     )
 

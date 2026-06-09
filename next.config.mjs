@@ -14,6 +14,11 @@ const config = {
     // Allow form file uploads through server actions (default is 1 MB).
     serverActions: { bodySizeLimit: '25mb' },
   },
+  // Bundle brand fonts into the MCP route so the server-side hero renderer
+  // can read them at runtime.
+  outputFileTracingIncludes: {
+    '/api/[transport]': ['./assets/fonts/**'],
+  },
   async rewrites() {
     return [
       // RFC 9728 protected-resource metadata. Next ignores dot-folders in app/,

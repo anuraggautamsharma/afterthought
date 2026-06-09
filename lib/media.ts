@@ -72,6 +72,15 @@ export async function uploadImageFromUrl(srcUrl: string, baseName?: string): Pro
   return storeImage(buf, contentType, baseName)
 }
 
+/** Stores raw image bytes (e.g. a rendered hero PNG) in the media bucket. */
+export async function uploadImageBuffer(
+  buf: Buffer,
+  baseName: string,
+  contentType = 'image/png',
+): Promise<{ url: string; name: string }> {
+  return storeImage(buf, contentType, baseName)
+}
+
 /**
  * Stores an image supplied as base64 (or a `data:` URI) in the public media
  * bucket. Lets automation upload an image it generated itself — no public URL
