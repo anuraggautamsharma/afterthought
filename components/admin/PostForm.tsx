@@ -152,6 +152,7 @@ export default function PostForm({ post }: Props) {
       </div>
 
       <div className="admin-editor-shell">
+        <div className="admin-editor-col">
         {/* Main editor */}
         <div className="admin-editor-main">
           <div className="admin-editor-title-wrap">
@@ -173,9 +174,10 @@ export default function PostForm({ post }: Props) {
           <div className="admin-wordcount">
             {wordCount} word{wordCount !== 1 ? 's' : ''} · ~{readTime} min read
           </div>
+        </div>
 
-          {/* FAQ editor — renders an accordion + FAQPage schema on the live post */}
-          <div className="admin-faq">
+        {/* FAQ editor — its own card; renders an accordion + FAQPage schema on the live post */}
+        <div className="admin-faq admin-sidebar-card">
             <div className="admin-faq__head">
               <span className="admin-faq__title">FAQ</span>
               <span className="admin-faq__hint">Shown at the end of the post and surfaced to Google &amp; AI search.</span>

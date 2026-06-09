@@ -3640,11 +3640,14 @@ details[open] > .admin-sidebar-card__summary { border-bottom: 1px solid #EDEAE3;
 .admin-modal__footer { display: flex; justify-content: flex-end; gap: 8px; margin-top: 24px; }
 
 /* ── Post FAQ editor ────────────────────────────────────────────────────── */
-.admin-faq {
-  margin-top: 40px;
-  padding-top: 28px;
-  border-top: 1px solid #E6E4DF;
+/* Left column holds the editor card + the FAQ card, stacked. */
+.admin-editor-col {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-width: 0;
 }
+/* .admin-faq is itself a card (.admin-sidebar-card) */
 .admin-faq__head { margin-bottom: 18px; }
 .admin-faq__title {
   font-size: 13px;
@@ -3711,4 +3714,4 @@ details[open] > .admin-sidebar-card__summary { border-bottom: 1px solid #EDEAE3;
   transition: border-color 0.15s, color 0.15s;
 }
 .admin-faq__remove:hover { border-color: #D4564E; color: #D4564E; }
-.admin-faq__add { margin-top: 6px; font-size: 13px; }
+.admin-faq__add { margin-top: 6px; font-size: 13px; display: inline-flex; width: auto; }
