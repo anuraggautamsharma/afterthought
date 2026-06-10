@@ -7,7 +7,7 @@ export default function PostCta() {
       <div className="color-block color-block--navy">
         <span className="eyebrow cb-eyebrow">Work with us</span>
         <h2 className="cb-title display-lg">Have a project in mind?</h2>
-        <p className="body-lg cb-body">We take on a small number of projects at a time — identity, naming, packaging, digital. Tell us what you&apos;re making and we&apos;ll tell you honestly whether we&apos;re the right studio for it.</p>
+        <p className="body-lg cb-body">Identity, naming, packaging, digital — partner-led from the first conversation to launch. Tell us what you&apos;re building and where it needs to go.</p>
         <div style={{ marginTop: '32px', display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
           <a className="btn btn-on-color" style={{ background: 'var(--c-block-lime)', color: 'var(--c-ink)' }} href="/contact">Start a project →</a>
           <a className="btn btn-on-color" style={{ background: 'rgba(255,255,255,0.12)', color: '#fff' }} href="/work">See our work →</a>

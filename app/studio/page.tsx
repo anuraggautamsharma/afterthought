@@ -28,8 +28,8 @@ export default async function Studio() {
         <div className="page-header__eyebrow eyebrow">
           <span>The studio · Bangalore — Working internationally</span>
         </div>
-        <h1 className="display-xl page-header__title">A focused studio, two stubborn opinions, and a long list of things we won&apos;t <em>quite</em> do.</h1>
-        <p className="page-header__sub body-lg">Afterthought is a design and creative studio led by Anurag Gautam and Tina Gidwani, based in Bangalore. We work on brand identity, naming, packaging and digital — with startups, enterprises, institutions and the occasional well-meaning monopoly.</p>
+        <h1 className="display-xl page-header__title">A partner-led design studio for companies at <em>decisive</em> moments.</h1>
+        <p className="page-header__sub body-lg">Afterthought is an independent design and creative studio founded by Anurag Gautam and Tina Gidwani, based in Bangalore and working internationally. We build brand identities, naming systems, packaging and digital experiences for startups, enterprises and institutions.</p>
       </section>
 
       <section className="container">
@@ -38,8 +38,8 @@ export default async function Studio() {
             <span className="eyebrow">A short introduction</span>
           </div>
           <div className="studio-intro__body">
-            <p>We are a studio of ten, led by two designers who spent their careers in other people&apos;s studios before starting their own. Most of what we learned there was useful. Some of it was that the best work happens when the people doing the brief are the people who wrote it — and that the work suffers when the brief is handed off too many times.</p>
-            <p>So we built a studio where that doesn&apos;t happen. Two founders lead every engagement, backed by a ten-person team across strategy, design, motion and production. We work across two cities because that is where we live; we work in two languages because that is who we are; and we do most of our best thinking on the second pass, which is where the name comes from.</p>
+            <p>We spent our careers inside large studios and client organisations before founding our own. The lesson we kept: the best work happens when the people who win the work are the people who do the work — and it degrades every time the brief is handed down a layer.</p>
+            <p>So Afterthought runs on the partner-led model. A founder leads every engagement from the first conversation to final delivery, backed by a senior team across strategy, design, motion and production. The structure is deliberate — clients deal with principals, decisions happen in the room, and nothing is lost in translation. We do most of our best thinking on the second pass, which is where the name comes from.</p>
             <p><em>Afterthought</em> — the thing you would have said, if you&apos;d had a minute more.</p>
           </div>
         </div>
@@ -48,11 +48,11 @@ export default async function Studio() {
       <section id="founders" className="container section">
         <div className="section-head">
           <div className="section-head__left">
-            <span className="caption">The founders</span>
-            <h2 className="display-lg section-head__title">Two of us. We answer the email ourselves.</h2>
+            <span className="caption">The partners</span>
+            <h2 className="display-lg section-head__title">Partner-led, <em>by design</em>.</h2>
           </div>
           <div className="section-head__right">
-            <p className="body-sm">We met in 2018 on a re-brand neither of us were quite leading. We&apos;ve worked on the same projects since — client-side, then together. Eventually it made more sense to run the studio than to work for someone else&apos;s.</p>
+            <p className="body-sm">We met in 2018 on a major re-brand and have worked the same projects since — client-side, studio-side, and now as partners. Afterthought exists to run engagements the way we believe serious brand work should be run: principals in the room, start to finish.</p>
           </div>
         </div>
 
@@ -122,7 +122,7 @@ export default async function Studio() {
         <div className="color-block color-block--lime">
           <span className="eyebrow cb-eyebrow">What we make</span>
           <h2 className="cb-title display-lg">Seven disciplines. <em>One clear point of view.</em></h2>
-          <p className="body-lg cb-body">Brand identity, naming, motion, packaging, digital, campaigns, and social — led by two founders, backed by a team of ten.</p>
+          <p className="body-lg cb-body">Brand identity, naming, motion, packaging, digital, campaigns, and social — partner-led engagements, from strategy through implementation.</p>
           <div style={{ marginTop: '40px' }}>
             <a className="btn btn-primary" href="/services">See all services →</a>
           </div>
@@ -131,11 +131,11 @@ export default async function Studio() {
 
       <section className="container" style={{ paddingBottom: 'var(--s-section)' }}>
         <div className="color-block color-block--lilac contact-block">
-          <span className="eyebrow cb-eyebrow">Tell us a thing</span>
+          <span className="eyebrow cb-eyebrow">Start a conversation</span>
           <div className="contact-block__grid">
             <div>
-              <h2 className="contact-block__title">If this sounds like a studio you&apos;d want on the <em>third</em> draft, write to us.</h2>
-              <p className="contact-block__sub body-lg">We answer every email ourselves. A short, honest reply within a week — even when the answer is &quot;not us, but try them.&quot;</p>
+              <h2 className="contact-block__title">If your brand is approaching a <em>decisive</em> moment, we should talk.</h2>
+              <p className="contact-block__sub body-lg">Every enquiry is read by a partner and answered within the week — with a considered view on the work, not a sales deck.</p>
               <div className="contact-block__cta">
                 <a className="btn btn-primary" href="/contact">Send a brief →</a>
                 <a className="btn btn-magenta" href="mailto:hello@afterthought.studio">hello@afterthought.studio</a>

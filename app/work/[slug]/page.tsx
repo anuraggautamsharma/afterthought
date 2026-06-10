@@ -129,8 +129,8 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
       <section className="container" style={{ paddingBottom: 'var(--s-section)' }}>
         <div className="color-block color-block--lime">
           <span className="eyebrow cb-eyebrow">Have a project?</span>
-          <h2 className="cb-title display-lg">The shelf has room for one more.</h2>
-          <p className="body-lg cb-body">We take on a small number of projects at a time. If you have a naming challenge, an identity that needs rethinking, or a brand to build from scratch — we&apos;d like to hear from you.</p>
+          <h2 className="cb-title display-lg">The next one could be <em>yours</em>.</h2>
+          <p className="body-lg cb-body">A naming challenge, an identity that needs rethinking, or a brand whose visual language hasn&apos;t caught up with its scale — if your company is approaching that moment, we should talk.</p>
           <div style={{ marginTop: '32px', display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
             <a className="btn btn-primary" href="/contact">Send a brief →</a>
             <a className="btn btn-on-color" style={{ background: 'rgba(0,0,0,0.08)', color: 'var(--c-ink)' }} href="/work">See all work →</a>

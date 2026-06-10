@@ -31,7 +31,7 @@ export default async function Home() {
             <span className="hero__clip"><span>thoughts that brands</span></span>
             <span className="hero__clip"><span>wish they&apos;d had <em>first</em>.</span></span>
           </h1>
-          <p className="hero__sub">Brand identity, naming & motion — for brands that know what they stand for but haven&apos;t yet found how it looks.</p>
+          <p className="hero__sub">Brand identity, naming and motion for companies at decisive moments — launching, repositioning, or defining a category.</p>
         </div>
         <div className="hero__ticker" aria-hidden="true">
           <div className="hero__ticker-track">
@@ -97,10 +97,10 @@ export default async function Home() {
         <div className="section-head">
           <div className="section-head__left">
             <span className="caption">Selected work</span>
-            <h2 className="display-lg section-head__title">Two projects. Identity, script, and motion.</h2>
+            <h2 className="display-lg section-head__title">Identity, script, and motion.</h2>
           </div>
           <div className="section-head__right">
-            <p className="body-sm">Two recent engagements — a brand identity for a men&apos;s salon and a motion piece for a B2B GTM agency.</p>
+            <p className="body-sm">A selection of recent engagements — every one led by a partner, from first conversation to launch.</p>
           </div>
         </div>
 
@@ -159,9 +159,9 @@ export default async function Home() {
 
       <section className="container" style={{ paddingBottom: 'var(--s-section)' }}>
         <div className="color-block color-block--navy">
-          <span className="eyebrow cb-eyebrow">What we&apos;re after</span>
+          <span className="eyebrow cb-eyebrow">Who we work with</span>
           <h2 className="cb-title display-lg">The brands that don&apos;t know what they look like <em>yet</em>.</h2>
-          <p className="body-lg cb-body" style={{ opacity: 0.85 }}>We&apos;re most interested in the moment before a category has a visual language — across D2C, AI, SaaS, healthcare, hospitality, aerospace, and wherever the work is honest. Whether you&apos;re launching or rebuilding, the brief that arrives without all the answers is the one we want. We&apos;re less useful when the solution is already obvious.</p>
+          <p className="body-lg cb-body" style={{ opacity: 0.85 }}>We work with ambitious companies — from venture-backed to enterprise — across D2C, AI, SaaS, healthcare, hospitality and aerospace, at the moment before a category has a visual language. Whether you&apos;re launching, repositioning, or rebuilding a brand operating at scale, the brief that arrives without all the answers is the one we want.</p>
           <div style={{ marginTop: '56px', paddingTop: '24px', borderTop: '1px solid rgba(255,255,255,0.20)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '24px' }}>
             <span className="caption" style={{ opacity: 0.7 }}>Bangalore · Working internationally</span>
             <a className="btn btn-secondary-dark" href="/work">See the work →</a>
